@@ -1,0 +1,21 @@
+plugins {
+    id 'java'
+}
+
+group 'by.epam'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
+    implementation group: 'createLibraryUtils', name: 'utils', version: '1.3.5'
+    //implementation 'createLibraryUtils:utils:1.3.5'
+}
+
+test {
+    useJUnitPlatform()
+}

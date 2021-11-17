@@ -1,0 +1,24 @@
+plugins {
+    id 'java'
+}
+
+group 'by.epam'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
+
+    compile project(":core")
+    compile project(":api")
+
+}
+
+test {
+    useJUnitPlatform()
+}

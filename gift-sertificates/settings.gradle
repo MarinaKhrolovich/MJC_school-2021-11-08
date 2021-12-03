@@ -1,5 +1,0 @@
-rootProject.name = 'GiftSertificatesApp'
-include 'web'
-include 'service'
-include 'model'
-

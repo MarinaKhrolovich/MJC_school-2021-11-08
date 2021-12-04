@@ -2,15 +2,18 @@ package com.epam.esm.service;
 
 import com.epam.esm.bean.Certificate;
 
-public interface CertificateService {
+import java.util.List;
 
-    void delete(int id);
+public interface CertificateService {
 
     void add(Certificate certificate);
 
-    void update(Certificate certificate);
-
     Certificate get(int id);
 
-    Certificate get(String name);
+    List<Certificate> get();
+
+    void update(Certificate certificate);
+
+    void delete(int id);
+
 }

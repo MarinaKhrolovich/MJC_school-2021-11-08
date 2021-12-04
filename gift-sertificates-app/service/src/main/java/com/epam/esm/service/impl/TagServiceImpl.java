@@ -4,13 +4,10 @@ import com.epam.esm.service.TagService;
 import com.epam.esm.bean.Tag;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TagServiceImpl implements TagService {
-
-    @Override
-    public void delete(int id) {
-
-    }
 
     @Override
     public void add(Tag tag) {
@@ -23,7 +20,12 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Tag get(String name) {
+    public List<Tag> get() {
         return null;
+    }
+
+    @Override
+    public void delete(int id) {
+
     }
 }

@@ -5,7 +5,10 @@ import com.epam.esm.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@RestController("/tags")
+import java.util.List;
+
+@RestController
+@RequestMapping("/tags")
 public class TagController {
 
     private TagService tagService;
@@ -26,6 +29,10 @@ public class TagController {
         return tagService.get(id);
     }
 
+    @GetMapping
+    public List<Tag> getTags(){
+        return tagService.get();
+    }
 
     @DeleteMapping("/{id}")
     public void deleteTag(@PathVariable int id){

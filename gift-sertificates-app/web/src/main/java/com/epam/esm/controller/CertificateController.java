@@ -2,9 +2,9 @@ package com.epam.esm.controller;
 
 import com.epam.esm.bean.Certificate;
 import com.epam.esm.service.CertificateService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 
 @RestController
 @RequestMapping("/certificates")
@@ -26,6 +26,11 @@ public class CertificateController {
     @GetMapping("/{id}")
     public Certificate getCertificate(@PathVariable int id) {
         return certificateService.get(id);
+    }
+
+    @GetMapping()
+    public List<Certificate> getCertificates() {
+        return certificateService.get();
     }
 
     @PutMapping

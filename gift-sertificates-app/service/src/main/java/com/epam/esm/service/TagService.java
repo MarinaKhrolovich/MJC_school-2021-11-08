@@ -2,13 +2,15 @@ package com.epam.esm.service;
 
 import com.epam.esm.bean.Tag;
 
-public interface TagService {
+import java.util.List;
 
-    void delete(int id);
+public interface TagService {
 
     void add(Tag tag);
 
     Tag get(int id);
 
-    Tag get(String name);
+    List<Tag> get();
+
+    void delete(int id);
 }

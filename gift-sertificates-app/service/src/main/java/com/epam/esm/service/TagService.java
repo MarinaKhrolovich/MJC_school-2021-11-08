@@ -1,6 +1,6 @@
 package com.epam.esm.service;
 
-import com.epam.esm.model.bean.Tag;
+import com.epam.esm.bean.Tag;
 
 public interface TagService {
 

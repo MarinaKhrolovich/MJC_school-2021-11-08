@@ -1,13 +1,13 @@
 package com.epam.esm.controller;
 
-import com.epam.esm.model.bean.Certificate;
+import com.epam.esm.bean.Certificate;
 import com.epam.esm.service.CertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/certificate")
+@RequestMapping("/certificates")
 public class CertificateController {
 
     private final CertificateService certificateService;

@@ -1,7 +1,7 @@
 package com.epam.esm.model.impl;
 
 import com.epam.esm.model.CertificateDAO;
-import com.epam.esm.model.bean.Certificate;
+import com.epam.esm.bean.Certificate;
 import org.springframework.stereotype.Repository;
 
 @Repository

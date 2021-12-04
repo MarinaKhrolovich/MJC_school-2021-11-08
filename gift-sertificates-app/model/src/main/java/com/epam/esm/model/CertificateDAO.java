@@ -1,6 +1,6 @@
 package com.epam.esm.model;
 
-import com.epam.esm.model.bean.Certificate;
+import com.epam.esm.bean.Certificate;
 
 public interface CertificateDAO {
 

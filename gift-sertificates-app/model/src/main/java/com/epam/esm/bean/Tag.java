@@ -1,4 +1,4 @@
-package com.epam.esm.model.bean;
+package com.epam.esm.bean;
 
 import java.io.Serializable;
 

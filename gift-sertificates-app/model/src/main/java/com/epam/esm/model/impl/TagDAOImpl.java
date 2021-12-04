@@ -1,7 +1,7 @@
 package com.epam.esm.model.impl;
 
 import com.epam.esm.model.TagDAO;
-import com.epam.esm.model.bean.Tag;
+import com.epam.esm.bean.Tag;
 import org.springframework.stereotype.Repository;
 
 @Repository

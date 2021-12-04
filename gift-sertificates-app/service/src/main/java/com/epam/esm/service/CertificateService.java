@@ -1,6 +1,6 @@
 package com.epam.esm.service;
 
-import com.epam.esm.model.bean.Certificate;
+import com.epam.esm.bean.Certificate;
 
 public interface CertificateService {
 

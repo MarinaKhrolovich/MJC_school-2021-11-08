@@ -1,7 +1,7 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.service.CertificateService;
-import com.epam.esm.model.bean.Certificate;
+import com.epam.esm.bean.Certificate;
 import org.springframework.stereotype.Service;
 
 @Service

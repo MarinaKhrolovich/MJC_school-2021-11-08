@@ -1,7 +1,7 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.service.TagService;
-import com.epam.esm.model.bean.Tag;
+import com.epam.esm.bean.Tag;
 import org.springframework.stereotype.Service;
 
 @Service

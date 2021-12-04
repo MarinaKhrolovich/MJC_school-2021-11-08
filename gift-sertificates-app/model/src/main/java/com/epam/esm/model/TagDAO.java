@@ -1,6 +1,6 @@
 package com.epam.esm.model;
 
-import com.epam.esm.model.bean.Tag;
+import com.epam.esm.bean.Tag;
 
 public interface TagDAO {
     void delete(int id);

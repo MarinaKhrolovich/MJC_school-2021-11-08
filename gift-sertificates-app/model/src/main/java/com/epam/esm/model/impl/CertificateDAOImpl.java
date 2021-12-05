@@ -1,9 +1,9 @@
 package com.epam.esm.model.impl;
 
 import com.epam.esm.bean.Certificate;
-import com.epam.esm.mapper.CertificateMapper;
 import com.epam.esm.model.CertificateDAO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -29,12 +29,12 @@ public class CertificateDAOImpl implements CertificateDAO {
 
     @Override
     public Certificate get(int id) {
-        return jdbcTemplate.queryForObject(SELECT_FROM_CERTIFICATE_WHERE_ID, new CertificateMapper(), id);
+        return jdbcTemplate.queryForObject(SELECT_FROM_CERTIFICATE_WHERE_ID, new BeanPropertyRowMapper<>(Certificate.class), id);
     }
 
     @Override
     public List<Certificate> get() {
-        return jdbcTemplate.query(SELECT_FROM_CERTIFICATE, new CertificateMapper());
+        return jdbcTemplate.query(SELECT_FROM_CERTIFICATE, new BeanPropertyRowMapper<>(Certificate.class));
     }
 
     @Override

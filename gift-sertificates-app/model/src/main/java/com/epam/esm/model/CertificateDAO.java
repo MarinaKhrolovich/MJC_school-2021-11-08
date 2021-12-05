@@ -1,16 +1,19 @@
 package com.epam.esm.model;
 
 import com.epam.esm.bean.Certificate;
+import com.epam.esm.bean.Tag;
+
+import java.util.List;
 
 public interface CertificateDAO {
 
-    void delete(int id);
-
     void add(Certificate certificate);
+
+    Certificate get(int id);
+
+    List<Certificate> get();
 
     void update(Certificate certificate);
 
-    void get(int id);
-
-    Certificate get(String name);
+    void delete(int id);
 }

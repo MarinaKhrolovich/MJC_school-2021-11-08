@@ -11,7 +11,7 @@ import java.util.List;
 @RequestMapping("/tags")
 public class TagController {
 
-    private TagService tagService;
+    private final TagService tagService;
 
     @Autowired
     public TagController(TagService tagService) {

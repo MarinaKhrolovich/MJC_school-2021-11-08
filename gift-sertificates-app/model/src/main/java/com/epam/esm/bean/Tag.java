@@ -9,6 +9,10 @@ public class Tag implements Serializable {
     private int id;
     private String name;
 
+    public Tag() {
+
+    }
+
     public Tag(int id) {
         this.id = id;
     }

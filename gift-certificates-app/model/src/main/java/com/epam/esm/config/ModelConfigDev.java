@@ -3,19 +3,16 @@ package com.epam.esm.config;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
 
 @Configuration
-@PropertySource("classpath:properties/db.properties")
+@Profile("dev")
+@PropertySource("classpath:properties/dev.properties")
 @ComponentScan("com.epam.esm")
-public class ModelConfig {
+public class ModelConfigDev {
 
     @Value("${db.driverClassName}")
     private String DB_DRIVER_CLASS_NAME;
@@ -29,6 +26,9 @@ public class ModelConfig {
     @Value("${db.password}")
     private String DB_PASSWORD;
 
+    @Value("${db.poolsize}")
+    private int DB_POOL_SIZE;
+
     @Bean
     public DataSource dataSource() {
 
@@ -37,14 +37,13 @@ public class ModelConfig {
         config.setUsername(DB_USERNAME);
         config.setPassword(DB_PASSWORD);
         config.setJdbcUrl(DB_JDBC_URL);
+        config.setMaximumPoolSize(DB_POOL_SIZE);
 
-        HikariDataSource dataSource = new HikariDataSource(config);
-
-        return dataSource;
+        return new HikariDataSource(config);
     }
-
     @Bean
-    public JdbcTemplate jdbcTemplate() {
+    public JdbcTemplate jdbcTemplateDev() {
         return new JdbcTemplate(dataSource());
     }
+
 }

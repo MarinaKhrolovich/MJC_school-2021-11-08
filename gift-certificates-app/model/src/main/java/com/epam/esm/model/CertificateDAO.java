@@ -13,7 +13,7 @@ public interface CertificateDAO {
 
     List<Certificate> get();
 
-    void update(Certificate certificate);
+    void update(int id, Certificate certificate);
 
     void delete(int id);
 }

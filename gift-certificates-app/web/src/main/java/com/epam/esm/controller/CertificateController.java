@@ -33,9 +33,9 @@ public class CertificateController {
         return certificateService.get();
     }
 
-    @PutMapping
-    public Certificate updateCertificate(@RequestBody Certificate certificate) {
-        certificateService.update(certificate);
+    @PutMapping("/{id}")
+    public Certificate updateCertificate(@PathVariable int id, @RequestBody Certificate certificate) {
+        certificateService.update(id, certificate);
         return certificate;
     }
 

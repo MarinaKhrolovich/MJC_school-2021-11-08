@@ -35,7 +35,7 @@ public class CertificateServiceImpl implements CertificateService {
     }
 
     @Override
-    public void update(Certificate certificate) {
+    public void update(int id, Certificate certificate) {
 
     }
 

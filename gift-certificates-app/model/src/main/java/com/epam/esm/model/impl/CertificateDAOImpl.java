@@ -49,11 +49,11 @@ public class CertificateDAOImpl implements CertificateDAO {
     }
 
     @Override
-    public void update(Certificate certificate) {
+    public void update(int id, Certificate certificate) {
         //TODO update list of tags
         jdbcTemplate.update(UPDATE_CERTIFICATE,
                 certificate.getName(), certificate.getDescription(), certificate.getDuration(), certificate.getPrice(),
-                Timestamp.from(Instant.now()));
+                Timestamp.from(Instant.now()),id);
     }
 
     @Override

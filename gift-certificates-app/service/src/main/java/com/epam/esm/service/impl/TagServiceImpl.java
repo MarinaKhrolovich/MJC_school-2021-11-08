@@ -22,7 +22,7 @@ public class TagServiceImpl implements TagService {
     @Override
     @Transactional
     public void add(Tag tag) {
-
+        tagDAO.add(tag);
     }
 
     @Override
@@ -40,6 +40,7 @@ public class TagServiceImpl implements TagService {
     @Override
     @Transactional
     public void delete(int id) {
+        tagDAO.delete(id);
 
     }
 }

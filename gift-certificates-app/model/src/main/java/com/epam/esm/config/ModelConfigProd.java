@@ -23,8 +23,6 @@ public class ModelConfigProd {
     @Autowired
     private Environment env;
 
-    private Logger logger = Logger.getLogger(getClass().getName());
-
     @Bean
     public DataSource dataSource() {
 

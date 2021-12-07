@@ -31,7 +31,6 @@ public class CertificateDAOImpl implements CertificateDAO {
 
     @Override
     public void add(Certificate certificate) {
-        //TODO add list of tags
         jdbcTemplate.update(CREATE_CERTIFICATE,
                 certificate.getName(), certificate.getDescription(), certificate.getDuration(), certificate.getPrice(),
                 Timestamp.from(Instant.now()),Timestamp.from(Instant.now()));
@@ -39,20 +38,17 @@ public class CertificateDAOImpl implements CertificateDAO {
 
     @Override
     public Certificate get(int id) {
-        //TODO get list of tags
         return jdbcTemplate.queryForObject(SELECT_FROM_CERTIFICATE_WHERE_ID, new CertificateMapper(), id);
 
     }
 
     @Override
-    public List<Certificate> get() {
-        //TODO get list of tags
+    public List<Certificate> get(String orderByDate, String orderByName, String tagName, String certificateName, String certificateDescription) {
         return jdbcTemplate.query(SELECT_FROM_CERTIFICATE, new CertificateMapper());
     }
 
     @Override
     public void update(int id, Certificate certificate) {
-        //TODO update list of tags
         jdbcTemplate.update(UPDATE_CERTIFICATE,
                 certificate.getName(), certificate.getDescription(), certificate.getDuration(), certificate.getPrice(),
                 Timestamp.from(Instant.now()),id);

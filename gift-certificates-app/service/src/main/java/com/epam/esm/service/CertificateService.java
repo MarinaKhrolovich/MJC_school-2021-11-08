@@ -10,7 +10,7 @@ public interface CertificateService {
 
     Certificate get(int id);
 
-    List<Certificate> get();
+    List<Certificate> get(String orderByDate, String orderByName, String tagName, String certificateName, String certificateDescription);
 
     void update(int id, Certificate certificate);
 

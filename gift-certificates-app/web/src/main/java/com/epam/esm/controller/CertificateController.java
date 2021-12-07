@@ -29,8 +29,13 @@ public class CertificateController {
     }
 
     @GetMapping()
-    public List<Certificate> getCertificates() {
-        return certificateService.get();
+    public List<Certificate> getCertificates(@RequestParam(required = false) String orderByDate,
+                                             @RequestParam(required = false) String orderByName,
+                                             @RequestParam(required = false) String tagName,
+                                             @RequestParam(required = false) String certificateName,
+                                             @RequestParam(required = false) String certificateDescription
+                                             ) {
+        return certificateService.get(orderByDate, orderByName, tagName, certificateName, certificateDescription);
     }
 
     @PutMapping("/{id}")

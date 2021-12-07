@@ -29,13 +29,14 @@ public class CertificateServiceImpl implements CertificateService {
     @Override
     @Transactional
     public Certificate get(int id) {
+        //TODO get list of tags
         return certificateDAO.get(id);
     }
 
     @Override
     @Transactional
-    public List<Certificate> get() {
-        return certificateDAO.get();
+    public List<Certificate> get(String orderByDate, String orderByName, String tagName, String certificateName, String certificateDescription) {
+        return certificateDAO.get(orderByDate, orderByName, tagName, certificateName, certificateDescription);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.bean.Certificate;
+import com.epam.esm.bean.Tag;
 import com.epam.esm.model.CertificateDAO;
 import com.epam.esm.service.CertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,19 +24,23 @@ public class CertificateServiceImpl implements CertificateService {
     @Override
     @Transactional
     public void add(Certificate certificate) {
+        //TODO add to tag (check by name) and  add to certificate_tag
         certificateDAO.add(certificate);
     }
 
     @Override
     @Transactional
     public Certificate get(int id) {
-        //TODO get list of tags
-        return certificateDAO.get(id);
+        Certificate certificate = certificateDAO.get(id);
+        List<Tag> tagList = certificateDAO.getTagsOfCertificate(id);
+        certificate.setTagList(tagList);
+        return certificate;
     }
 
     @Override
     @Transactional
     public List<Certificate> get(String orderByDate, String orderByName, String tagName, String certificateName, String certificateDescription) {
+        //TODO get list of tags
         return certificateDAO.get(orderByDate, orderByName, tagName, certificateName, certificateDescription);
     }
 

@@ -16,4 +16,6 @@ public interface CertificateDAO {
     void update(int id, Certificate certificate);
 
     void delete(int id);
+
+    List<Tag> getTagsOfCertificate(int id);
 }

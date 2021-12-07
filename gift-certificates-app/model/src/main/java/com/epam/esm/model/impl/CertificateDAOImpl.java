@@ -1,6 +1,7 @@
 package com.epam.esm.model.impl;
 
 import com.epam.esm.bean.Certificate;
+import com.epam.esm.bean.Tag;
 import com.epam.esm.mapper.CertificateMapper;
 import com.epam.esm.model.CertificateDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ public class CertificateDAOImpl implements CertificateDAO {
     public static final String DELETE_FROM_CERTIFICATE_WHERE_ID = "DELETE FROM certificate WHERE id = ?";
     public static final String CREATE_CERTIFICATE = "INSERT INTO certificate(name,description,duration,price,create_date,last_update_date) VALUES(?,?,?,?,?)";
     public static final String UPDATE_CERTIFICATE = "UPDATE certificate set name =?, description = ?,duration =?, price =?, last_update_date = ? WHERE id =?";
+
+    public static final String SELECT_TAGS_OF_CERTIFICATE = "SELECT tag.id, tag.name FROM certificate_tag LEFT JOIN tag ON certificate_tag.tag_id = tag.id WHERE certificate_tag.certificate_id = ?";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -59,5 +62,8 @@ public class CertificateDAOImpl implements CertificateDAO {
         jdbcTemplate.update(DELETE_FROM_CERTIFICATE_WHERE_ID, id);
     }
 
-
+    @Override
+    public List<Tag> getTagsOfCertificate(int id) {
+        return jdbcTemplate.query(SELECT_TAGS_OF_CERTIFICATE, new BeanPropertyRowMapper<>(Tag.class),id);
+    }
 }

@@ -1,5 +1,7 @@
 package com.epam.esm.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.List;

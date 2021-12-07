@@ -2,48 +2,48 @@ package com.epam.esm.config;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
+import java.util.logging.Logger;
 
 @Configuration
 @Profile("dev")
 @PropertySource("classpath:properties/dev.properties")
 @ComponentScan("com.epam.esm")
+@EnableTransactionManagement
 public class ModelConfigDev {
 
-    @Value("${db.driverClassName}")
-    private String DB_DRIVER_CLASS_NAME;
-
-    @Value("${db.jdbcUrl}")
-    private String DB_JDBC_URL;
-
-    @Value("${db.username}")
-    private String DB_USERNAME;
-
-    @Value("${db.password}")
-    private String DB_PASSWORD;
-
-    @Value("${db.poolsize}")
-    private int DB_POOL_SIZE;
+    @Autowired
+    private  Environment env;
 
     @Bean
     public DataSource dataSource() {
 
         HikariConfig config = new HikariConfig();
-        config.setDriverClassName(DB_DRIVER_CLASS_NAME);
-        config.setUsername(DB_USERNAME);
-        config.setPassword(DB_PASSWORD);
-        config.setJdbcUrl(DB_JDBC_URL);
-        config.setMaximumPoolSize(DB_POOL_SIZE);
+        config.setDriverClassName(env.getProperty("db.driverClassName"));
+        config.setUsername(env.getProperty("db.username"));
+        config.setPassword(env.getProperty("db.password"));
+        config.setJdbcUrl(env.getProperty("db.jdbcUrl"));
+        config.setMaximumPoolSize(Integer.parseInt(env.getProperty("db.poolsize")));
 
         return new HikariDataSource(config);
     }
     @Bean
     public JdbcTemplate jdbcTemplateDev() {
         return new JdbcTemplate(dataSource());
+    }
+
+    @Bean
+    public DataSourceTransactionManager transactionManager(DataSource dataSource) {
+        DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager();
+        dataSourceTransactionManager.setDataSource(dataSource);
+        return dataSourceTransactionManager;
     }
 
 }

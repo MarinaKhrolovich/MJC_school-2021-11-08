@@ -5,6 +5,7 @@ import com.epam.esm.service.CertificateService;
 import com.epam.esm.bean.Certificate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,26 +21,31 @@ public class CertificateServiceImpl implements CertificateService {
     }
 
     @Override
+    @Transactional
     public void add(Certificate certificate) {
 
     }
 
     @Override
+    @Transactional
     public Certificate get(int id) {
         return certificateDAO.get(id);
     }
 
     @Override
+    @Transactional
     public List<Certificate> get() {
         return certificateDAO.get();
     }
 
     @Override
+    @Transactional
     public void update(int id, Certificate certificate) {
 
     }
 
     @Override
+    @Transactional
     public void delete(int id) {
 
     }

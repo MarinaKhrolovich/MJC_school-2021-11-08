@@ -5,6 +5,7 @@ import com.epam.esm.model.TagDAO;
 import com.epam.esm.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,21 +20,25 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    @Transactional
     public void add(Tag tag) {
 
     }
 
     @Override
+    @Transactional
     public Tag get(int id) {
         return tagDAO.get(id);
     }
 
     @Override
+    @Transactional
     public List<Tag> get() {
         return tagDAO.get();
     }
 
     @Override
+    @Transactional
     public void delete(int id) {
 
     }

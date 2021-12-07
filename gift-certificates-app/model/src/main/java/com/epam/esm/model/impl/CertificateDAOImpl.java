@@ -41,6 +41,7 @@ public class CertificateDAOImpl implements CertificateDAO {
     public Certificate get(int id) {
         //TODO get list of tags
         return jdbcTemplate.queryForObject(SELECT_FROM_CERTIFICATE_WHERE_ID, new CertificateMapper(), id);
+
     }
 
     @Override
@@ -61,4 +62,6 @@ public class CertificateDAOImpl implements CertificateDAO {
     public void delete(int id) {
         jdbcTemplate.update(DELETE_FROM_CERTIFICATE_WHERE_ID, id);
     }
+
+
 }

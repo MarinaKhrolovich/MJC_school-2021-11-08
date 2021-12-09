@@ -25,7 +25,6 @@ public class CertificateServiceImpl implements CertificateService {
     @Override
     @Transactional
     public void add(Certificate certificate) {
-        //TODO add to tag (check by name) and  add to certificate_tag
         certificateDAO.add(certificate);
     }
 

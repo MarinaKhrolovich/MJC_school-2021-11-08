@@ -10,6 +10,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 
 @Repository
@@ -18,6 +20,9 @@ public class TagDAOImpl implements TagDAO {
     public static final String SELECT_FROM_TAG = "SELECT * FROM tag";
     public static final String SELECT_FROM_TAG_WHERE_ID = "SELECT * FROM tag WHERE id = ?";
     public static final String SELECT_FROM_TAG_WHERE_NAME = "SELECT * FROM tag WHERE name = ?";
+    public static final String CREATE_TAG = "INSERT INTO tag(name) VALUES(?)";
+    public static final String DELETE_FROM_TAG_WHERE_ID = "DELETE FROM tag WHERE id = ?";
+
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -30,7 +35,7 @@ public class TagDAOImpl implements TagDAO {
     @Override
     @Transactional
     public void add(Tag tag) {
-
+        jdbcTemplate.update(CREATE_TAG, tag.getName());
     }
 
     @Override
@@ -57,6 +62,6 @@ public class TagDAOImpl implements TagDAO {
     @Override
     @Transactional
     public void delete(int id) {
-
+        jdbcTemplate.update(DELETE_FROM_TAG_WHERE_ID, id);
     }
 }

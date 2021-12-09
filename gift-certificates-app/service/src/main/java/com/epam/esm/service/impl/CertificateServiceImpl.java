@@ -3,7 +3,7 @@ package com.epam.esm.service.impl;
 import com.epam.esm.bean.Certificate;
 import com.epam.esm.bean.Tag;
 import com.epam.esm.exception.ResourceNotFoundException;
-import com.epam.esm.model.CertificateDAO;
+import com.epam.esm.dao.CertificateDAO;
 import com.epam.esm.service.CertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

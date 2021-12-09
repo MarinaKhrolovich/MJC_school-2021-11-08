@@ -3,7 +3,6 @@ package com.epam.esm.config;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -11,17 +10,15 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
-import java.util.logging.Logger;
 
 @Configuration
-@Profile("prod")
-@PropertySource("classpath:properties/prod.properties")
+@PropertySource("classpath:properties/${spring.profiles.active}.properties")
 @ComponentScan("com.epam.esm")
 @EnableTransactionManagement
-public class ModelConfigProd {
+public class ModelConfigDev {
 
     @Autowired
-    private Environment env;
+    private  Environment env;
 
     @Bean
     public DataSource dataSource() {
@@ -46,4 +43,5 @@ public class ModelConfigProd {
         dataSourceTransactionManager.setDataSource(dataSource);
         return dataSourceTransactionManager;
     }
+
 }

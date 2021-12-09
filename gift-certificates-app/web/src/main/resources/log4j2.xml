@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<Properties>
+
+		<Property name="filename">C:\Users\Acer\IdeaProjects\MJC_school-2021-11-08\gift-certificates-app\web\src\main\resources\logs\log.log</Property>
+		<Property name="basePatterLayout">%d{yyyy-MM-dd HH:mm:ss} [%-5p] (%F:%L) - %m%n</Property>
+
+	</Properties>
+
+	<appenders>
+
+		<Console name="STDOUT" target="SYSTEM_OUT">
+			<PatternLayout pattern="${basePatterLayout}" />
+		</Console>
+
+		<RollingFile name="fileLog" fileName="${filename}" filePattern="logs/%d{dd-MM-yyyy}.log.gz">
+			<PatternLayout pattern="${basePatterLayout}" />
+			<Policies>
+				<SizeBasedTriggeringPolicy size="5 MB" />
+			</Policies>
+		</RollingFile>
+
+
+	</appenders>
+
+	<loggers>
+
+		<logger name="com.epam.esm" level="warn"
+			additivity="true">
+			<appender-ref ref="STDOUT" />
+			<appender-ref ref="fileLog" />
+		</logger>
+		<root level="info">
+			<appender-ref ref="fileLog" />
+		</root>
+	</loggers>
+</configuration>

@@ -1,7 +1,7 @@
-package com.epam.esm.model.impl;
+package com.epam.esm.dao.impl;
 
 import com.epam.esm.bean.Tag;
-import com.epam.esm.model.TagDAO;
+import com.epam.esm.dao.TagDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;

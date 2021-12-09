@@ -1,4 +1,4 @@
-package com.epam.esm.model;
+package com.epam.esm.dao;
 
 import com.epam.esm.bean.Tag;
 

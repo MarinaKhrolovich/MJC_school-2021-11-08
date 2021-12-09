@@ -16,6 +16,9 @@ public class GlobalExceptionHandler {
 
     private final static Logger LOG = LogManager.getLogger(GlobalExceptionHandler.class);
     public static final String MESSAGE_RESOURCE_NOT_FOUND = "message.resourceNotFound";
+    public static final String MESSAGE_SOMETHING_WRONG = "message.somethingWrong";
+    public static final String MESSAGE_RESOURCE_ALREADY_EXISTS = "message.resourceAlreadyExists";
+
     private final MessageSource messageSource;
 
     @Autowired
@@ -28,7 +31,7 @@ public class GlobalExceptionHandler {
 
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
-        errorResponse.setMessage("Something wrong, try again!");
+        errorResponse.setMessage(messageSource.getMessage(MESSAGE_SOMETHING_WRONG, new Object[]{}, locale));
         errorResponse.setCode(HttpStatus.BAD_REQUEST.value() + "0");
         LOG.error(exception);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
@@ -44,6 +47,17 @@ public class GlobalExceptionHandler {
         errorResponse.setCode(HttpStatus.NOT_FOUND.value() + exception.getMessage());
         LOG.error(exception);
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ResourceAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleException(ResourceAlreadyExistsException exception, Locale locale) {
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setStatus(HttpStatus.CONFLICT.value());
+        errorResponse.setMessage(messageSource.getMessage(MESSAGE_RESOURCE_ALREADY_EXISTS, new Object[]{}, locale) + " (id = " + exception.getMessage() + ")");
+        errorResponse.setCode(HttpStatus.CONFLICT.value() + exception.getMessage());
+        LOG.error(exception);
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
 
 }

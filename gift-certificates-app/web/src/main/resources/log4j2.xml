@@ -2,7 +2,7 @@
 <configuration>
 	<Properties>
 
-		<Property name="filename">C:\Users\Acer\IdeaProjects\MJC_school-2021-11-08\gift-certificates-app\web\src\main\resources\logs\log.log</Property>
+		<Property name="filename">logs\log.log</Property>
 		<Property name="basePatterLayout">%d{yyyy-MM-dd HH:mm:ss} [%-5p] (%F:%L) - %m%n</Property>
 
 	</Properties>

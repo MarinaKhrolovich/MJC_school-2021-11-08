@@ -2,6 +2,7 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.bean.Tag;
 import com.epam.esm.dao.TagDAO;
+import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,8 @@ public class TagServiceImpl implements TagService {
     @Override
     @Transactional
     public Tag get(int id) {
-        return tagDAO.get(id);
+        Tag tag = tagDAO.get(id);
+        return tag;
     }
 
     @Override

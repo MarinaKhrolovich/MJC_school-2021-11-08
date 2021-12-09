@@ -33,9 +33,6 @@ public class CertificateServiceImpl implements CertificateService {
     @Transactional
     public Certificate get(int id) {
         Certificate certificate = certificateDAO.get(id);
-        if (certificate == null) {
-            throw new ResourceNotFoundException(Integer.toString(id));
-        }
         List<Tag> tagList = certificateDAO.getTagsOfCertificate(id);
         certificate.setTagList(tagList);
         return certificate;

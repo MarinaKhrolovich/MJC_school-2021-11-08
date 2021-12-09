@@ -2,6 +2,8 @@ package com.epam.esm.dao.impl;
 
 import com.epam.esm.bean.Tag;
 import com.epam.esm.dao.TagDAO;
+import com.epam.esm.exception.ResourceNotFoundException;
+import com.epam.esm.mapper.CertificateMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -34,13 +36,15 @@ public class TagDAOImpl implements TagDAO {
     @Override
     @Transactional
     public Tag get(int id) {
-        return jdbcTemplate.queryForObject(SELECT_FROM_TAG_WHERE_ID, new BeanPropertyRowMapper<>(Tag.class), id);
+        return jdbcTemplate.query(SELECT_FROM_TAG_WHERE_ID, new BeanPropertyRowMapper<>(Tag.class),id)
+                .stream().findAny().orElseThrow(() -> new ResourceNotFoundException());
     }
 
     @Override
     @Transactional
     public Tag get(String name) {
-        return jdbcTemplate.queryForObject(SELECT_FROM_TAG_WHERE_NAME, new BeanPropertyRowMapper<>(Tag.class), name);
+        return jdbcTemplate.query(SELECT_FROM_TAG_WHERE_NAME, new BeanPropertyRowMapper<>(Tag.class),name)
+                .stream().findAny().orElse(null);
     }
 
     @Override

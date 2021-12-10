@@ -31,16 +31,18 @@ public class CertificateServiceImpl implements CertificateService {
     @Transactional
     public Certificate get(int id) {
         Certificate certificate = certificateDAO.get(id);
-        List<Tag> tagList = certificateDAO.getTagsOfCertificate(id);
-        certificate.setTagList(tagList);
+        addTagsToCertificate(id, certificate);
         return certificate;
     }
 
     @Override
     @Transactional
     public List<Certificate> get(String orderByDate, String orderByName, String tagName, String certificateName, String certificateDescription) {
-        //TODO get list of tags
-        return certificateDAO.get(orderByDate, orderByName, tagName, certificateName, certificateDescription);
+        List<Certificate> certificateList = certificateDAO.get(orderByDate, orderByName, tagName, certificateName, certificateDescription);
+        for (Certificate certificate : certificateList) {
+            addTagsToCertificate(certificate.getId(), certificate);
+        }
+        return certificateList;
     }
 
     @Override
@@ -55,5 +57,10 @@ public class CertificateServiceImpl implements CertificateService {
         certificateDAO.get(id);
         certificateDAO.deleteTagsOfCertificate(id);
         certificateDAO.delete(id);
+    }
+
+    private void addTagsToCertificate(int id, Certificate certificate) {
+        List<Tag> tagList = certificateDAO.getTagsOfCertificate(id);
+        certificate.setTagList(tagList);
     }
 }

@@ -3,15 +3,12 @@ package com.epam.esm.dao.impl;
 import com.epam.esm.bean.Tag;
 import com.epam.esm.dao.TagDAO;
 import com.epam.esm.exception.ResourceNotFoundException;
-import com.epam.esm.mapper.CertificateMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.List;
 
 @Repository
@@ -22,6 +19,7 @@ public class TagDAOImpl implements TagDAO {
     public static final String SELECT_FROM_TAG_WHERE_NAME = "SELECT * FROM tag WHERE name = ?";
     public static final String CREATE_TAG = "INSERT INTO tag(name) VALUES(?)";
     public static final String DELETE_FROM_TAG_WHERE_ID = "DELETE FROM tag WHERE id = ?";
+    public static final String DELETE_FROM_CERTIFICATE_TAG_WHERE_ID = "DELETE FROM certificate_tag WHERE tag_id = ?";
 
 
     private final JdbcTemplate jdbcTemplate;
@@ -33,35 +31,36 @@ public class TagDAOImpl implements TagDAO {
 
 
     @Override
-    @Transactional
     public void add(Tag tag) {
         jdbcTemplate.update(CREATE_TAG, tag.getName());
     }
 
     @Override
-    @Transactional
     public Tag get(int id) {
         return jdbcTemplate.query(SELECT_FROM_TAG_WHERE_ID, new BeanPropertyRowMapper<>(Tag.class),id)
                 .stream().findAny().orElseThrow(() -> new ResourceNotFoundException());
     }
 
     @Override
-    @Transactional
     public Tag get(String name) {
         return jdbcTemplate.query(SELECT_FROM_TAG_WHERE_NAME, new BeanPropertyRowMapper<>(Tag.class),name)
                 .stream().findAny().orElse(null);
     }
 
     @Override
-    @Transactional
     public List<Tag> get() {
 
         return jdbcTemplate.query(SELECT_FROM_TAG, new BeanPropertyRowMapper<>(Tag.class));
     }
 
     @Override
-    @Transactional
     public void delete(int id) {
         jdbcTemplate.update(DELETE_FROM_TAG_WHERE_ID, id);
     }
+
+    @Override
+    public void deleteFromCertificates(int id) {
+        jdbcTemplate.update(DELETE_FROM_CERTIFICATE_TAG_WHERE_ID, id);
+    }
+
 }

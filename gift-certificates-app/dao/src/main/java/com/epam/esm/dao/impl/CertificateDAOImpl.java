@@ -20,6 +20,7 @@ public class CertificateDAOImpl implements CertificateDAO {
     public static final String SELECT_FROM_CERTIFICATE = "SELECT * FROM certificate";
     public static final String SELECT_FROM_CERTIFICATE_WHERE_ID = "SELECT * FROM certificate WHERE id = ?";
     public static final String DELETE_FROM_CERTIFICATE_WHERE_ID = "DELETE FROM certificate WHERE id = ?";
+    public static final String DELETE_FROM_CERTIFICATE_TAG_WHERE_ID = "DELETE FROM certificate_tag WHERE certificate_id = ?";
     public static final String CREATE_CERTIFICATE = "INSERT INTO certificate(name,description,duration,price,create_date,last_update_date) VALUES(?,?,?,?,?)";
     public static final String UPDATE_CERTIFICATE = "UPDATE certificate set name =?, description = ?,duration =?, price =?, last_update_date = ? WHERE id =?";
 
@@ -61,6 +62,11 @@ public class CertificateDAOImpl implements CertificateDAO {
     @Override
     public void delete(int id) {
         jdbcTemplate.update(DELETE_FROM_CERTIFICATE_WHERE_ID, id);
+    }
+
+    @Override
+    public void deleteTagsOfCertificate(int id) {
+        jdbcTemplate.update(DELETE_FROM_CERTIFICATE_TAG_WHERE_ID, id);
     }
 
     @Override

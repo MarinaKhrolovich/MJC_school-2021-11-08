@@ -2,7 +2,6 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.bean.Certificate;
 import com.epam.esm.bean.Tag;
-import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.dao.CertificateDAO;
 import com.epam.esm.service.CertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +52,8 @@ public class CertificateServiceImpl implements CertificateService {
     @Override
     @Transactional
     public void delete(int id) {
+        certificateDAO.get(id);
+        certificateDAO.deleteTagsOfCertificate(id);
         certificateDAO.delete(id);
     }
 }

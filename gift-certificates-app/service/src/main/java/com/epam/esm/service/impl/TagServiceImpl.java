@@ -3,7 +3,6 @@ package com.epam.esm.service.impl;
 import com.epam.esm.bean.Tag;
 import com.epam.esm.dao.TagDAO;
 import com.epam.esm.exception.ResourceAlreadyExistsException;
-import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,7 @@ public class TagServiceImpl implements TagService {
     @Transactional
     public void add(Tag tag) {
         Tag tagFromBase = tagDAO.get(tag.getName());
-        if(tagFromBase != null){
+        if (tagFromBase != null) {
             throw new ResourceAlreadyExistsException(Integer.toString(tag.getId()));
         }
         tagDAO.add(tag);
@@ -47,6 +46,8 @@ public class TagServiceImpl implements TagService {
     @Override
     @Transactional
     public void delete(int id) {
+        tagDAO.get(id);
+        tagDAO.deleteFromCertificates(id);
         tagDAO.delete(id);
     }
 }

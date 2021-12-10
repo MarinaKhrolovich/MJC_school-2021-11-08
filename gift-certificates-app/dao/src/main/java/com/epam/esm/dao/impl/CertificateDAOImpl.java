@@ -2,9 +2,9 @@ package com.epam.esm.dao.impl;
 
 import com.epam.esm.bean.Certificate;
 import com.epam.esm.bean.Tag;
+import com.epam.esm.dao.CertificateDAO;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.mapper.CertificateMapper;
-import com.epam.esm.dao.CertificateDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -27,7 +27,8 @@ public class CertificateDAOImpl implements CertificateDAO {
     public static final String UPDATE_CERTIFICATE = "UPDATE certificate set name =?, description = ?,duration =?, price =?, last_update_date = ? WHERE id =?";
 
     public static final String DELETE_FROM_CERTIFICATE_TAG_WHERE_ID = "DELETE FROM certificate_tag WHERE certificate_id = ?";
-    public static final String SELECT_TAGS_OF_CERTIFICATE = "SELECT tag.id, tag.name FROM certificate_tag LEFT JOIN tag ON certificate_tag.tag_id = tag.id WHERE certificate_tag.certificate_id = ?";
+    public static final String SELECT_TAGS_OF_CERTIFICATE = "SELECT tag.id, tag.name FROM certificate_tag JOIN tag ON certificate_tag.tag_id = tag.id WHERE certificate_tag.certificate_id = ?";
+    public static final String SELECT_CERTIFICATE_TAG = SELECT_TAGS_OF_CERTIFICATE + " AND certificate_tag.certificate_id = ?";
     public static final String CREATE_CERTIFICATE_TAG = "INSERT INTO certificate_tag(certificate_id,tag_id) VALUES(?,?)";
 
     private final JdbcTemplate jdbcTemplate;
@@ -86,7 +87,7 @@ public class CertificateDAOImpl implements CertificateDAO {
     }
 
     @Override
-    public List<Tag> getTagsOfCertificate(int id) {
+    public List<Tag> getAllTagsOfCertificate(int id) {
         return jdbcTemplate.query(SELECT_TAGS_OF_CERTIFICATE, new BeanPropertyRowMapper<>(Tag.class), id);
     }
 
@@ -94,6 +95,14 @@ public class CertificateDAOImpl implements CertificateDAO {
     public void addTagToCertificate(int certificate_id, int tag_id) {
 
         jdbcTemplate.update(CREATE_CERTIFICATE_TAG, certificate_id, tag_id);
+
+    }
+
+    @Override
+    public Tag getTagOfCertificate(int certificate_id, int tag_id) {
+
+        return jdbcTemplate.query(SELECT_CERTIFICATE_TAG, new BeanPropertyRowMapper<>(Tag.class), certificate_id, tag_id)
+                .stream().findAny().orElse(null);
 
     }
 }

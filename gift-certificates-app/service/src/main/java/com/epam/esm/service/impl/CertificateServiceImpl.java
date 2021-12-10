@@ -30,12 +30,20 @@ public class CertificateServiceImpl implements CertificateService {
     public void add(Certificate certificate) {
         certificate.setCreate_date(Instant.now());
         certificate.setLast_update_date(Instant.now());
+
         List<Tag> tagList = certificate.getTagList();
         certificateDAO.add(certificate);
         if (tagList != null) {
             tagList.forEach(tag -> {
-                tagDAO.add(tag);//TODO check tag
-                certificateDAO.addTagToCertificate(certificate.getId(), tag.getId());
+
+                Tag tagFromBase = tagDAO.get(tag.getName());
+                if (tagFromBase == null) {
+                    tagDAO.add(tag);
+                }
+                Tag tagOfCertificate = certificateDAO.getTagOfCertificate(certificate.getId(), tag.getId());
+                if (tagOfCertificate == null) {
+                    certificateDAO.addTagToCertificate(certificate.getId(), tag.getId());
+                }
             });
         }
 
@@ -72,7 +80,7 @@ public class CertificateServiceImpl implements CertificateService {
     }
 
     private void addTagsToCertificate(int id, Certificate certificate) {
-        List<Tag> tagList = certificateDAO.getTagsOfCertificate(id);
+        List<Tag> tagList = certificateDAO.getAllTagsOfCertificate(id);
         certificate.setTagList(tagList);
     }
 }

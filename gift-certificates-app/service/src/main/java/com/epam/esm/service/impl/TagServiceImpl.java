@@ -25,7 +25,7 @@ public class TagServiceImpl implements TagService {
     public void add(Tag tag) {
         Tag tagFromBase = tagDAO.get(tag.getName());
         if (tagFromBase != null) {
-            throw new ResourceAlreadyExistsException(Integer.toString(tag.getId()));
+            throw new ResourceAlreadyExistsException(tag.getName());
         }
         tagDAO.add(tag);
     }

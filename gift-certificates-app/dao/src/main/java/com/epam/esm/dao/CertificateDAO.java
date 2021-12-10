@@ -20,4 +20,6 @@ public interface CertificateDAO {
     List<Tag> getTagsOfCertificate(int id);
 
     void deleteTagsOfCertificate(int id);
+
+    void addTagToCertificate(int certificate_id, int tag_id);
 }

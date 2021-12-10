@@ -6,9 +6,14 @@ import com.epam.esm.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 @Repository
@@ -19,6 +24,7 @@ public class TagDAOImpl implements TagDAO {
     public static final String SELECT_FROM_TAG_WHERE_NAME = "SELECT * FROM tag WHERE name = ?";
     public static final String CREATE_TAG = "INSERT INTO tag(name) VALUES(?)";
     public static final String DELETE_FROM_TAG_WHERE_ID = "DELETE FROM tag WHERE id = ?";
+
     public static final String DELETE_FROM_CERTIFICATE_TAG_WHERE_ID = "DELETE FROM certificate_tag WHERE tag_id = ?";
 
 
@@ -32,7 +38,18 @@ public class TagDAOImpl implements TagDAO {
 
     @Override
     public void add(Tag tag) {
-        jdbcTemplate.update(CREATE_TAG, tag.getName());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(
+                connection -> {
+                    PreparedStatement ps =
+                            connection.prepareStatement(CREATE_TAG, new String[] {"id"});
+                    ps.setString(1, tag.getName());
+                    return ps;
+                },
+                keyHolder);
+
+        tag.setId(keyHolder.getKey().intValue());
+
     }
 
     @Override

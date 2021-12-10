@@ -32,7 +32,7 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         errorResponse.setMessage(messageSource.getMessage(MESSAGE_SOMETHING_WRONG, new Object[]{}, locale));
-        errorResponse.setCode(HttpStatus.BAD_REQUEST.value() + "0");
+        errorResponse.setCode(HttpStatus.BAD_REQUEST.value() + "000");
         LOG.error(exception);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 
@@ -54,8 +54,8 @@ public class GlobalExceptionHandler {
 
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setStatus(HttpStatus.CONFLICT.value());
-        errorResponse.setMessage(messageSource.getMessage(MESSAGE_RESOURCE_ALREADY_EXISTS, new Object[]{}, locale) + " (id = " + exception.getMessage() + ")");
-        errorResponse.setCode(HttpStatus.CONFLICT.value() + exception.getMessage());
+        errorResponse.setMessage(messageSource.getMessage(MESSAGE_RESOURCE_ALREADY_EXISTS, new Object[]{}, locale) + " (name = " + exception.getMessage() + ")");
+        errorResponse.setCode(HttpStatus.CONFLICT.value()  + "001");
         LOG.error(exception);
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }

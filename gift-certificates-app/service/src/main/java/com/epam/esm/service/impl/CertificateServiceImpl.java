@@ -40,6 +40,9 @@ public class CertificateServiceImpl implements CertificateService {
                 if (tagFromBase == null) {
                     tagDAO.add(tag);
                 }
+                else{
+                    tag.setId(tagFromBase.getId());
+                }
                 Tag tagOfCertificate = certificateDAO.getTagOfCertificate(certificate.getId(), tag.getId());
                 if (tagOfCertificate == null) {
                     certificateDAO.addTagToCertificate(certificate.getId(), tag.getId());

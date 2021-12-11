@@ -21,8 +21,8 @@ public class CertificateTagDAOImpl implements CertificateTagDAO {
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public CertificateTagDAOImpl() {
-        jdbcTemplate = null;
+    public CertificateTagDAOImpl(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override

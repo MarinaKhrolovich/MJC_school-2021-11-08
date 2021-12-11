@@ -77,4 +77,5 @@ public class CertificateDAOImpl implements CertificateDAO {
         jdbcTemplate.update(DELETE_FROM_CERTIFICATE_WHERE_ID, id);
     }
 
+
 }

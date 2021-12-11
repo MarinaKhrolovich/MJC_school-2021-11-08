@@ -3,6 +3,7 @@ package com.epam.esm.service.impl;
 import com.epam.esm.bean.Certificate;
 import com.epam.esm.bean.Tag;
 import com.epam.esm.dao.CertificateDAO;
+import com.epam.esm.dao.CertificateTagDAO;
 import com.epam.esm.dao.TagDAO;
 import com.epam.esm.service.CertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +19,13 @@ public class CertificateServiceImpl implements CertificateService {
 
     private final CertificateDAO certificateDAO;
     private final TagDAO tagDAO;
+    private final CertificateTagDAO certificateTagDAO;
 
     @Autowired
-    public CertificateServiceImpl(CertificateDAO certificateDAO, TagDAO tagDAO) {
+    public CertificateServiceImpl(CertificateDAO certificateDAO, TagDAO tagDAO, CertificateTagDAO certificateTagDAO) {
         this.certificateDAO = certificateDAO;
         this.tagDAO = tagDAO;
+        this.certificateTagDAO = certificateTagDAO;
     }
 
     @Override
@@ -43,9 +46,9 @@ public class CertificateServiceImpl implements CertificateService {
                 else{
                     tag.setId(tagFromBase.getId());
                 }
-                Tag tagOfCertificate = certificateDAO.getTagOfCertificate(certificate.getId(), tag.getId());
+                Tag tagOfCertificate = certificateTagDAO.getTagOfCertificate(certificate.getId(), tag.getId());
                 if (tagOfCertificate == null) {
-                    certificateDAO.addTagToCertificate(certificate.getId(), tag.getId());
+                    certificateTagDAO.addTagToCertificate(certificate.getId(), tag.getId());
                 }
             });
         }
@@ -78,12 +81,12 @@ public class CertificateServiceImpl implements CertificateService {
     @Transactional
     public void delete(int id) {
         certificateDAO.get(id);
-        certificateDAO.deleteTagsOfCertificate(id);
+        certificateTagDAO.deleteTagsOfCertificate(id);
         certificateDAO.delete(id);
     }
 
     private void addTagsToCertificate(int id, Certificate certificate) {
-        List<Tag> tagList = certificateDAO.getAllTagsOfCertificate(id);
+        List<Tag> tagList = certificateTagDAO.getAllTagsOfCertificate(id);
         certificate.setTagList(tagList);
     }
 }

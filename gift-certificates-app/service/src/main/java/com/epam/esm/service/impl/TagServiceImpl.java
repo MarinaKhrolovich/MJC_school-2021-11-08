@@ -1,6 +1,7 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.bean.Tag;
+import com.epam.esm.dao.CertificateTagDAO;
 import com.epam.esm.dao.TagDAO;
 import com.epam.esm.exception.ResourceAlreadyExistsException;
 import com.epam.esm.service.TagService;
@@ -14,10 +15,12 @@ import java.util.List;
 public class TagServiceImpl implements TagService {
 
     private final TagDAO tagDAO;
+    private final CertificateTagDAO certificateTagDAO;
 
     @Autowired
-    public TagServiceImpl(TagDAO tagDAO) {
+    public TagServiceImpl(TagDAO tagDAO, CertificateTagDAO certificateTagDAO) {
         this.tagDAO = tagDAO;
+        this.certificateTagDAO = certificateTagDAO;
     }
 
     @Override
@@ -47,7 +50,7 @@ public class TagServiceImpl implements TagService {
     @Transactional
     public void delete(int id) {
         tagDAO.get(id);
-        tagDAO.deleteFromCertificates(id);
+        certificateTagDAO.deleteTagFromCertificates(id);
         tagDAO.delete(id);
     }
 }

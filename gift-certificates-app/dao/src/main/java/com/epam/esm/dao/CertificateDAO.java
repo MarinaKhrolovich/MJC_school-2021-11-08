@@ -1,7 +1,6 @@
 package com.epam.esm.dao;
 
 import com.epam.esm.bean.Certificate;
-import com.epam.esm.bean.Tag;
 
 import java.util.List;
 
@@ -17,11 +16,4 @@ public interface CertificateDAO {
 
     void delete(int id);
 
-    List<Tag> getAllTagsOfCertificate(int id);
-
-    void deleteTagsOfCertificate(int id);
-
-    void addTagToCertificate(int certificate_id, int tag_id);
-
-    Tag getTagOfCertificate(int certificate_id, int tag_id);
 }

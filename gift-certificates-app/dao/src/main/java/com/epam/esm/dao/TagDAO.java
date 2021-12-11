@@ -16,5 +16,4 @@ public interface TagDAO {
 
     void delete(int id);
 
-    void deleteFromCertificates(int id);
 }

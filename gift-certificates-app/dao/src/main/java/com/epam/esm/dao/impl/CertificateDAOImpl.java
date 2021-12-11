@@ -26,10 +26,6 @@ public class CertificateDAOImpl implements CertificateDAO {
     public static final String CREATE_CERTIFICATE = "INSERT INTO certificate(name,description,duration,price,create_date,last_update_date) VALUES(?,?,?,?,?,?)";
     public static final String UPDATE_CERTIFICATE = "UPDATE certificate set name =?, description = ?,duration =?, price =?, last_update_date = ? WHERE id =?";
 
-    public static final String DELETE_FROM_CERTIFICATE_TAG_WHERE_ID = "DELETE FROM certificate_tag WHERE certificate_id = ?";
-    public static final String SELECT_TAGS_OF_CERTIFICATE = "SELECT tag.id, tag.name FROM certificate_tag JOIN tag ON certificate_tag.tag_id = tag.id WHERE certificate_tag.certificate_id = ?";
-    public static final String SELECT_CERTIFICATE_TAG = SELECT_TAGS_OF_CERTIFICATE + " AND certificate_tag.certificate_id = ?";
-    public static final String CREATE_CERTIFICATE_TAG = "INSERT INTO certificate_tag(certificate_id,tag_id) VALUES(?,?)";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -61,7 +57,7 @@ public class CertificateDAOImpl implements CertificateDAO {
     @Override
     public Certificate get(int id) {
         return jdbcTemplate.query(SELECT_FROM_CERTIFICATE_WHERE_ID, new CertificateMapper(), id)
-                .stream().findAny().orElseThrow(() -> new ResourceNotFoundException());
+                .stream().findAny().orElseThrow(() -> new ResourceNotFoundException(Integer.toString(id)));
     }
 
     @Override
@@ -81,28 +77,4 @@ public class CertificateDAOImpl implements CertificateDAO {
         jdbcTemplate.update(DELETE_FROM_CERTIFICATE_WHERE_ID, id);
     }
 
-    @Override
-    public void deleteTagsOfCertificate(int id) {
-        jdbcTemplate.update(DELETE_FROM_CERTIFICATE_TAG_WHERE_ID, id);
-    }
-
-    @Override
-    public List<Tag> getAllTagsOfCertificate(int id) {
-        return jdbcTemplate.query(SELECT_TAGS_OF_CERTIFICATE, new BeanPropertyRowMapper<>(Tag.class), id);
-    }
-
-    @Override
-    public void addTagToCertificate(int certificate_id, int tag_id) {
-
-        jdbcTemplate.update(CREATE_CERTIFICATE_TAG, certificate_id, tag_id);
-
-    }
-
-    @Override
-    public Tag getTagOfCertificate(int certificate_id, int tag_id) {
-
-        return jdbcTemplate.query(SELECT_CERTIFICATE_TAG, new BeanPropertyRowMapper<>(Tag.class), certificate_id, tag_id)
-                .stream().findAny().orElse(null);
-
-    }
 }

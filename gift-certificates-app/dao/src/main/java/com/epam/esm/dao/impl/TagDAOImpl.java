@@ -25,9 +25,6 @@ public class TagDAOImpl implements TagDAO {
     public static final String CREATE_TAG = "INSERT INTO tag(name) VALUES(?)";
     public static final String DELETE_FROM_TAG_WHERE_ID = "DELETE FROM tag WHERE id = ?";
 
-    public static final String DELETE_FROM_CERTIFICATE_TAG_WHERE_ID = "DELETE FROM certificate_tag WHERE tag_id = ?";
-
-
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -55,7 +52,7 @@ public class TagDAOImpl implements TagDAO {
     @Override
     public Tag get(int id) {
         return jdbcTemplate.query(SELECT_FROM_TAG_WHERE_ID, new BeanPropertyRowMapper<>(Tag.class),id)
-                .stream().findAny().orElseThrow(() -> new ResourceNotFoundException());
+                .stream().findAny().orElseThrow(() -> new ResourceNotFoundException(Integer.toString(id)));
     }
 
     @Override
@@ -73,11 +70,6 @@ public class TagDAOImpl implements TagDAO {
     @Override
     public void delete(int id) {
         jdbcTemplate.update(DELETE_FROM_TAG_WHERE_ID, id);
-    }
-
-    @Override
-    public void deleteFromCertificates(int id) {
-        jdbcTemplate.update(DELETE_FROM_CERTIFICATE_TAG_WHERE_ID, id);
     }
 
 }

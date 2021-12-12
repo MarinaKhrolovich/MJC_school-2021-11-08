@@ -75,7 +75,7 @@ public class CertificateDAOImpl implements CertificateDAO {
     public void update(int id, Certificate certificate) {
         CertificateUpdateParameters parameters = createUpdateSQLRequest(id, certificate);
         if (!parameters.getParameters().isEmpty()) {
-            jdbcTemplate.update(parameters.getSqlRequest(), parameters.getParameters());
+            jdbcTemplate.update(parameters.getSqlRequest(), parameters.getParameters().toArray());
         }
     }
 

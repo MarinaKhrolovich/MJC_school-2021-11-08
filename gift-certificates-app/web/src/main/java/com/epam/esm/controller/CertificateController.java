@@ -39,9 +39,8 @@ public class CertificateController {
     }
 
     @PutMapping("/{id}")
-    public Certificate updateCertificate(@PathVariable int id, @RequestBody Certificate certificate) {
+    public void updateCertificate(@PathVariable int id, @RequestBody Certificate certificate) {
         certificateService.update(id, certificate);
-        return certificate;
     }
 
     @DeleteMapping("/{id}")

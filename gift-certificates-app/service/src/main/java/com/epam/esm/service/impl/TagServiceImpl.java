@@ -27,7 +27,7 @@ public class TagServiceImpl implements TagService {
     @Override
     @Transactional
     public void add(Tag tag) {
-        TagCheck.checkTag(tag);
+        TagCheck.check(tag);
 
         Tag tagFromBase = tagDAO.get(tag.getName());
         if (tagFromBase != null) {

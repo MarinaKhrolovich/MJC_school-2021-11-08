@@ -8,7 +8,7 @@ public final class TagCheck {
     public static final String MESSAGE_TAG_NAME_FILL = "message.tag.name.fill";
     public static final String MESSAGE_TAG_NAME_LENGTH = "message.tag.name.length";
 
-    public static void checkTag(Tag tag) {
+    public static void check(Tag tag) {
         String name = tag.getName();
 
         if (name == null) {

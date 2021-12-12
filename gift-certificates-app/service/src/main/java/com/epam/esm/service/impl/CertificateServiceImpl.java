@@ -33,7 +33,7 @@ public class CertificateServiceImpl implements CertificateService {
     @Override
     @Transactional
     public void add(Certificate certificate) {
-        CertificateCheck.CheckCertificate(certificate, true);
+        CertificateCheck.check(certificate, true);
 
         certificate.setCreate_date(Instant.now());
         certificate.setLast_update_date(Instant.now());
@@ -64,7 +64,7 @@ public class CertificateServiceImpl implements CertificateService {
     public void update(int id, Certificate certificate) {
         certificateDAO.get(id);
         certificate.setId(id);
-        CertificateCheck.CheckCertificate(certificate, false);
+        CertificateCheck.check(certificate, false);
         certificateDAO.update(id, certificate);
         addTagsToCertificate(certificate);
     }
@@ -81,7 +81,7 @@ public class CertificateServiceImpl implements CertificateService {
         List<Tag> tagList = certificate.getTagList();
         if (tagList != null) {
             for (Tag tag : tagList) {
-                TagCheck.checkTag(tag);
+                TagCheck.check(tag);
                 Tag tagFromBase = tagDAO.get(tag.getName());
                 if (tagFromBase == null) {
                     tagDAO.add(tag);

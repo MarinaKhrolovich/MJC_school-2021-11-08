@@ -12,7 +12,7 @@ public final class CertificateCheck {
     public static final String MESSAGE_CERTIFICATE_DURATION = "message.certificate.duration";
     public static final String MESSAGE_CERTIFICATE_PRICE = "message.certificate.price";
 
-    public static void CheckCertificate(Certificate certificate, boolean checkNull) {
+    public static void check(Certificate certificate, boolean checkNull) {
         checkNameCertificate(certificate.getName(), checkNull);
         checkDescriptionCertificate(certificate.getDescription(), checkNull);
         checkDurationCertificate(certificate.getDuration(), checkNull);

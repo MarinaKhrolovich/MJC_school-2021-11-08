@@ -2,6 +2,7 @@ package com.epam.esm.dao.impl;
 
 import com.epam.esm.bean.Certificate;
 import com.epam.esm.dao.CertificateDAO;
+import com.epam.esm.dao.util.CertificateUpdateParameters;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.mapper.CertificateMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,6 @@ public class CertificateDAOImpl implements CertificateDAO {
     public static final String DURATION = "duration = ?, ";
     public static final String PRICE = "price = ?, ";
     public static final String LAST_UPDATE_DATE = "last_update_date = ? ";
-    public static final String EMPTY_STRING = "";
 
 
     private final JdbcTemplate jdbcTemplate;
@@ -73,11 +73,9 @@ public class CertificateDAOImpl implements CertificateDAO {
 
     @Override
     public void update(int id, Certificate certificate) {
-        List<Object> fieldList = new ArrayList<>();
-        String sqlRequest = createUpdateSQLRequest(fieldList, certificate);
-        fieldList.add(id);
-        if (!sqlRequest.isEmpty()) {
-            jdbcTemplate.update(sqlRequest, fieldList.toArray());
+        CertificateUpdateParameters parameters = createUpdateSQLRequest(id, certificate);
+        if (!parameters.getParameters().isEmpty()) {
+            jdbcTemplate.update(parameters.getSqlRequest(), parameters.getParameters());
         }
     }
 
@@ -86,37 +84,35 @@ public class CertificateDAOImpl implements CertificateDAO {
         jdbcTemplate.update(DELETE_FROM_CERTIFICATE_WHERE_ID, id);
     }
 
-    public String createUpdateSQLRequest(List<Object> fieldList, Certificate certificate) {
+    public CertificateUpdateParameters createUpdateSQLRequest(int id, Certificate certificate) {
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(UPDATE_CERTIFICATE);
+        List<Object> fieldList = new ArrayList<>();
 
-        boolean isNeedToUpdate = false;
         if (certificate.getName() != null) {
             stringBuilder.append(NAME);
             fieldList.add(certificate.getName());
-            isNeedToUpdate = true;
         }
         if (certificate.getDescription() != null) {
             stringBuilder.append(DESCRIPTION);
             fieldList.add(certificate.getDescription());
-            isNeedToUpdate = true;
         }
         if (certificate.getDuration() != 0) {
             stringBuilder.append(DURATION);
             fieldList.add(certificate.getDuration());
-            isNeedToUpdate = true;
         }
         if (certificate.getPrice() != 0) {
             stringBuilder.append(PRICE);
             fieldList.add(certificate.getPrice());
-            isNeedToUpdate = true;
         }
 
         stringBuilder.append(LAST_UPDATE_DATE);
         fieldList.add(Timestamp.from(Instant.now()));
-        stringBuilder.append(UPDATE_WHERE);
 
-        return isNeedToUpdate ? stringBuilder.toString() : EMPTY_STRING;
+        stringBuilder.append(UPDATE_WHERE);
+        fieldList.add(id);
+
+        return new CertificateUpdateParameters(stringBuilder.toString(),fieldList);
     }
 }

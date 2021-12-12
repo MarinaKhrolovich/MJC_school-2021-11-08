@@ -1,4 +1,4 @@
-package com.epam.esm.mapper;
+package com.epam.esm.dao.mapper;
 
 import com.epam.esm.bean.Certificate;
 import org.springframework.jdbc.core.RowMapper;

@@ -1,6 +1,7 @@
 package com.epam.esm.service;
 
 import com.epam.esm.bean.Certificate;
+import com.epam.esm.bean.RequestParameters;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ public interface CertificateService {
 
     Certificate get(int id);
 
-    List<Certificate> get(String orderByDate, String orderByName, String tagName, String certificateName, String certificateDescription);
+    List<Certificate> get(RequestParameters requestParameters);
 
     void update(int id, Certificate certificate);
 

@@ -1,8 +1,10 @@
 package com.epam.esm.dao.impl;
 
 import com.epam.esm.bean.Certificate;
+import com.epam.esm.bean.RequestParameters;
 import com.epam.esm.dao.CertificateDAO;
 import com.epam.esm.dao.mapper.CertificateMapper;
+import com.epam.esm.dao.util.CertificateGetSQLRequest;
 import com.epam.esm.dao.util.CertificateUpdateSQLRequest;
 import com.epam.esm.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,8 +58,10 @@ public class CertificateDAOImpl implements CertificateDAO {
     }
 
     @Override
-    public List<Certificate> get(String orderByDate, String orderByName, String tagName, String certificateName, String certificateDescription) {
-        return jdbcTemplate.query(SELECT_FROM_CERTIFICATE, new CertificateMapper());
+    public List<Certificate> get(RequestParameters requestParameters) {
+        CertificateGetSQLRequest sqlRequestParameters = new CertificateGetSQLRequest();
+        sqlRequestParameters.create(requestParameters);
+        return jdbcTemplate.query(sqlRequestParameters.getSqlRequest(), new CertificateMapper(),sqlRequestParameters.getParameters().toArray());
     }
 
     @Override

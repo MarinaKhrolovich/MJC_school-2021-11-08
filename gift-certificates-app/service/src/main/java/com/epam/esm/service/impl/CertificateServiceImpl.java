@@ -1,6 +1,7 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.bean.Certificate;
+import com.epam.esm.bean.RequestParameters;
 import com.epam.esm.bean.Tag;
 import com.epam.esm.dao.CertificateDAO;
 import com.epam.esm.dao.CertificateTagDAO;
@@ -53,8 +54,8 @@ public class CertificateServiceImpl implements CertificateService {
 
     @Override
     @Transactional
-    public List<Certificate> get(String orderByDate, String orderByName, String tagName, String certificateName, String certificateDescription) {
-        List<Certificate> certificateList = certificateDAO.get(orderByDate, orderByName, tagName, certificateName, certificateDescription);
+    public List<Certificate> get(RequestParameters requestParameters) {
+        List<Certificate> certificateList = certificateDAO.get(requestParameters);
         certificateList.forEach(certificate -> setTagList(certificate.getId(), certificate));
         return certificateList;
     }

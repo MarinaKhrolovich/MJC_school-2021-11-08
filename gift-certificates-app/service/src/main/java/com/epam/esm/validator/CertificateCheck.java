@@ -25,7 +25,7 @@ public final class CertificateCheck {
                 throw new ValidatorException(MESSAGE_CERTIFICATE_NAME_FILL);
             }
         } else {
-            if (name.length() < 3 || name.length() > 100) {
+            if (name.trim().isEmpty() || name.length() < 3 || name.length() > 100) {
                 throw new ValidatorException(MESSAGE_CERTIFICATE_NAME_LENGTH);
             }
         }
@@ -37,7 +37,7 @@ public final class CertificateCheck {
                 throw new ValidatorException(MESSAGE_CERTIFICATE_DESCRIPTION_FILL);
             }
         } else {
-            if (description.length() < 3 || description.length() > 1000) {
+            if (description.trim().isEmpty() || description.length() < 3 || description.length() > 1000) {
                 throw new ValidatorException(MESSAGE_CERTIFICATE_DESCRIPTION_LENGTH);
             }
         }

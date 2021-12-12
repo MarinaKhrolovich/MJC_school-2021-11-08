@@ -15,9 +15,9 @@ import java.util.Locale;
 public class GlobalExceptionHandler {
 
     private final static Logger LOG = LogManager.getLogger(GlobalExceptionHandler.class);
-    public static final String MESSAGE_RESOURCE_NOT_FOUND = "message.resourceNotFound";
+    public static final String MESSAGE_RESOURCE_NOT_FOUND = "message.resource.NotFound";
     public static final String MESSAGE_SOMETHING_WRONG = "message.somethingWrong";
-    public static final String MESSAGE_RESOURCE_ALREADY_EXISTS = "message.resourceAlreadyExists";
+    public static final String MESSAGE_RESOURCE_ALREADY_EXISTS = "message.resource.AlreadyExists";
 
     private final MessageSource messageSource;
 
@@ -58,6 +58,17 @@ public class GlobalExceptionHandler {
         errorResponse.setCode(HttpStatus.CONFLICT.value()  + "001");
         LOG.error(exception);
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(ValidatorException.class)
+    public ResponseEntity<ErrorResponse> handleException(ValidatorException exception, Locale locale) {
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorResponse.setMessage(messageSource.getMessage(exception.getMessage(),new Object[]{}, locale));
+        errorResponse.setCode(HttpStatus.BAD_REQUEST.value()  + "002");
+        LOG.error(exception);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
 }

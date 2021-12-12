@@ -5,6 +5,7 @@ import com.epam.esm.dao.CertificateTagDAO;
 import com.epam.esm.dao.TagDAO;
 import com.epam.esm.exception.ResourceAlreadyExistsException;
 import com.epam.esm.service.TagService;
+import com.epam.esm.validator.TagCheck;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,8 @@ public class TagServiceImpl implements TagService {
     @Override
     @Transactional
     public void add(Tag tag) {
+        TagCheck.checkTag(tag);
+
         Tag tagFromBase = tagDAO.get(tag.getName());
         if (tagFromBase != null) {
             throw new ResourceAlreadyExistsException(tag.getName());

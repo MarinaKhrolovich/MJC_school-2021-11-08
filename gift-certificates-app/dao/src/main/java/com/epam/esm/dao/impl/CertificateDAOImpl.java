@@ -20,7 +20,6 @@ import java.util.List;
 @Repository
 public class CertificateDAOImpl implements CertificateDAO {
 
-    public static final String SELECT_FROM_CERTIFICATE = "SELECT * FROM certificate";
     public static final String SELECT_FROM_CERTIFICATE_WHERE_ID = "SELECT * FROM certificate WHERE id = ?";
     public static final String DELETE_FROM_CERTIFICATE_WHERE_ID = "DELETE FROM certificate WHERE id = ?";
     public static final String CREATE_CERTIFICATE = "INSERT INTO certificate(name,description,duration,price,create_date,last_update_date) VALUES(?,?,?,?,?,?)";

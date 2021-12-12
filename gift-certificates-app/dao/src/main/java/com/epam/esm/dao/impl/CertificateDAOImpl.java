@@ -3,7 +3,6 @@ package com.epam.esm.dao.impl;
 import com.epam.esm.bean.Certificate;
 import com.epam.esm.dao.CertificateDAO;
 import com.epam.esm.dao.mapper.CertificateMapper;
-import com.epam.esm.dao.util.CertificateUpdateParameters;
 import com.epam.esm.dao.util.CertificateUpdateSQLRequest;
 import com.epam.esm.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,9 +62,10 @@ public class CertificateDAOImpl implements CertificateDAO {
 
     @Override
     public void update(int id, Certificate certificate) {
-        CertificateUpdateParameters parameters = CertificateUpdateSQLRequest.create(id, certificate);
-        if (!parameters.getParameters().isEmpty()) {
-            jdbcTemplate.update(parameters.getSqlRequest(), parameters.getParameters().toArray());
+        CertificateUpdateSQLRequest sqlRequestParameters = new CertificateUpdateSQLRequest();
+        sqlRequestParameters.create(id,certificate);
+        if (!sqlRequestParameters.getParameters().isEmpty()) {
+            jdbcTemplate.update(sqlRequestParameters.getSqlRequest(), sqlRequestParameters.getParameters().toArray());
         }
     }
 

@@ -34,24 +34,8 @@ public class CertificateServiceImpl implements CertificateService {
         certificate.setCreate_date(Instant.now());
         certificate.setLast_update_date(Instant.now());
 
-        List<Tag> tagList = certificate.getTagList();
         certificateDAO.add(certificate);
-        if (tagList != null) {
-            tagList.forEach(tag -> {
-
-                Tag tagFromBase = tagDAO.get(tag.getName());
-                if (tagFromBase == null) {
-                    tagDAO.add(tag);
-                }
-                else{
-                    tag.setId(tagFromBase.getId());
-                }
-                Tag tagOfCertificate = certificateTagDAO.getTagOfCertificate(certificate.getId(), tag.getId());
-                if (tagOfCertificate == null) {
-                    certificateTagDAO.addTagToCertificate(certificate.getId(), tag.getId());
-                }
-            });
-        }
+        addTagsToCertificate(certificate);
 
     }
 
@@ -59,7 +43,7 @@ public class CertificateServiceImpl implements CertificateService {
     @Transactional
     public Certificate get(int id) {
         Certificate certificate = certificateDAO.get(id);
-        addTagsToCertificate(id, certificate);
+        setTagList(id, certificate);
         return certificate;
     }
 
@@ -67,7 +51,7 @@ public class CertificateServiceImpl implements CertificateService {
     @Transactional
     public List<Certificate> get(String orderByDate, String orderByName, String tagName, String certificateName, String certificateDescription) {
         List<Certificate> certificateList = certificateDAO.get(orderByDate, orderByName, tagName, certificateName, certificateDescription);
-        certificateList.forEach(certificate -> addTagsToCertificate(certificate.getId(), certificate));
+        certificateList.forEach(certificate -> setTagList(certificate.getId(), certificate));
         return certificateList;
     }
 
@@ -75,8 +59,9 @@ public class CertificateServiceImpl implements CertificateService {
     @Transactional
     public void update(int id, Certificate certificate) {
         certificateDAO.get(id);
+        certificate.setId(id);
         certificateDAO.update(id, certificate);
-        //TODO update tagsList
+        addTagsToCertificate(certificate);
     }
 
     @Override
@@ -87,7 +72,25 @@ public class CertificateServiceImpl implements CertificateService {
         certificateDAO.delete(id);
     }
 
-    private void addTagsToCertificate(int id, Certificate certificate) {
+    private void addTagsToCertificate(Certificate certificate) {
+        List<Tag> tagList = certificate.getTagList();
+        if (tagList != null) {
+            for (Tag tag : tagList) {
+                Tag tagFromBase = tagDAO.get(tag.getName());
+                if (tagFromBase == null) {
+                    tagDAO.add(tag);
+                } else {
+                    tag.setId(tagFromBase.getId());
+                }
+                Tag tagOfCertificate = certificateTagDAO.getTagOfCertificate(certificate.getId(), tag.getId());
+                if (tagOfCertificate == null) {
+                    certificateTagDAO.addTagToCertificate(certificate.getId(), tag.getId());
+                }
+            }
+        }
+    }
+
+    private void setTagList(int id, Certificate certificate) {
         List<Tag> tagList = certificateTagDAO.getAllTagsOfCertificate(id);
         certificate.setTagList(tagList);
     }

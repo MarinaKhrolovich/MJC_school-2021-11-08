@@ -12,33 +12,45 @@ public final class CertificateCheck {
     public static final String MESSAGE_CERTIFICATE_DURATION = "message.certificate.duration";
     public static final String MESSAGE_CERTIFICATE_PRICE = "message.certificate.price";
 
-    public static void checkCertificate(Certificate certificate) {
-        String name = certificate.getName();
-        String description = certificate.getDescription();
-        int duration = certificate.getDuration();
-        double price = certificate.getPrice();
+    public static void CheckCertificate(Certificate certificate, boolean checkNull) {
+        checkNameCertificate(certificate.getName(), checkNull);
+        checkDescriptionCertificate(certificate.getDescription(), checkNull);
+        checkDurationCertificate(certificate.getDuration(), checkNull);
+        checkPriceCertificate(certificate.getPrice(), checkNull);
+    }
 
+    public static void checkNameCertificate(String name, boolean checkNull) {
         if (name == null) {
-            throw new ValidatorException(MESSAGE_CERTIFICATE_NAME_FILL);
+            if (checkNull) {
+                throw new ValidatorException(MESSAGE_CERTIFICATE_NAME_FILL);
+            }
+        } else {
+            if (name.length() < 3 || name.length() > 100) {
+                throw new ValidatorException(MESSAGE_CERTIFICATE_NAME_LENGTH);
+            }
         }
+    }
 
-        if (name.length() < 3 || name.length() > 100) {
-            throw new ValidatorException(MESSAGE_CERTIFICATE_NAME_LENGTH);
-        }
-
+    public static void checkDescriptionCertificate(String description, boolean checkNull) {
         if (description == null) {
-            throw new ValidatorException(MESSAGE_CERTIFICATE_DESCRIPTION_FILL);
+            if (checkNull) {
+                throw new ValidatorException(MESSAGE_CERTIFICATE_DESCRIPTION_FILL);
+            }
+        } else {
+            if (description.length() < 3 || description.length() > 1000) {
+                throw new ValidatorException(MESSAGE_CERTIFICATE_DESCRIPTION_LENGTH);
+            }
         }
+    }
 
-        if (description.length() < 3 || description.length() > 1000) {
-            throw new ValidatorException(MESSAGE_CERTIFICATE_DESCRIPTION_LENGTH);
-        }
-
-        if (duration < 1) {
+    public static void checkDurationCertificate(int duration, boolean checkNull) {
+        if (duration == 0 && checkNull || duration < 0) {
             throw new ValidatorException(MESSAGE_CERTIFICATE_DURATION);
         }
+    }
 
-        if (price <= 0) {
+    public static void checkPriceCertificate(double price, boolean checkNull) {
+        if (price == 0 && checkNull || price < 0) {
             throw new ValidatorException(MESSAGE_CERTIFICATE_PRICE);
         }
     }

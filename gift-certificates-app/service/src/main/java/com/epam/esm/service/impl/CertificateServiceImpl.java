@@ -7,6 +7,7 @@ import com.epam.esm.dao.CertificateTagDAO;
 import com.epam.esm.dao.TagDAO;
 import com.epam.esm.service.CertificateService;
 import com.epam.esm.validator.CertificateCheck;
+import com.epam.esm.validator.TagCheck;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +33,7 @@ public class CertificateServiceImpl implements CertificateService {
     @Override
     @Transactional
     public void add(Certificate certificate) {
-        CertificateCheck.checkCertificate(certificate);
+        CertificateCheck.CheckCertificate(certificate, true);
 
         certificate.setCreate_date(Instant.now());
         certificate.setLast_update_date(Instant.now());
@@ -63,6 +64,7 @@ public class CertificateServiceImpl implements CertificateService {
     public void update(int id, Certificate certificate) {
         certificateDAO.get(id);
         certificate.setId(id);
+        CertificateCheck.CheckCertificate(certificate, false);
         certificateDAO.update(id, certificate);
         addTagsToCertificate(certificate);
     }
@@ -79,6 +81,7 @@ public class CertificateServiceImpl implements CertificateService {
         List<Tag> tagList = certificate.getTagList();
         if (tagList != null) {
             for (Tag tag : tagList) {
+                TagCheck.checkTag(tag);
                 Tag tagFromBase = tagDAO.get(tag.getName());
                 if (tagFromBase == null) {
                     tagDAO.add(tag);

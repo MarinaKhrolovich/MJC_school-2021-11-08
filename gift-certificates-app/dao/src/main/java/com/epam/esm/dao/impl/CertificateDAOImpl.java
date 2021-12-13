@@ -5,6 +5,7 @@ import com.epam.esm.bean.RequestParameters;
 import com.epam.esm.dao.CertificateDAO;
 import com.epam.esm.dao.mapper.CertificateMapper;
 import com.epam.esm.dao.util.CertificateGetSQLRequest;
+import com.epam.esm.dao.util.CertificateUpdateParameters;
 import com.epam.esm.dao.util.CertificateUpdateSQLRequest;
 import com.epam.esm.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,15 +63,15 @@ public class CertificateDAOImpl implements CertificateDAO {
 
     @Override
     public List<Certificate> get(RequestParameters requestParameters) {
-        getSQLRequest.create(requestParameters);
-        return jdbcTemplate.query(getSQLRequest.getSqlRequest(), new CertificateMapper(),getSQLRequest.getParameters().toArray());
+        CertificateUpdateParameters getParameters = getSQLRequest.create(requestParameters);
+        return jdbcTemplate.query(getParameters.getSqlRequest(), new CertificateMapper(), getParameters.getParameters().toArray());
     }
 
     @Override
     public void update(int id, Certificate certificate) {
-        updateSQLRequest.create(id,certificate);
-        if (!updateSQLRequest.getParameters().isEmpty()) {
-            jdbcTemplate.update(updateSQLRequest.getSqlRequest(), updateSQLRequest.getParameters().toArray());
+        CertificateUpdateParameters updateParameters = updateSQLRequest.create(id, certificate);
+        if (!updateParameters.getParameters().isEmpty()) {
+            jdbcTemplate.update(updateParameters.getSqlRequest(), updateParameters.getParameters().toArray());
         }
     }
 

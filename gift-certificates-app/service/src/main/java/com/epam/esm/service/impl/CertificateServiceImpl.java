@@ -24,17 +24,22 @@ public class CertificateServiceImpl implements CertificateService {
     private final TagDAO tagDAO;
     private final CertificateTagDAO certificateTagDAO;
 
+    private final CertificateCheck certificateCheck;
+    private final TagCheck tagCheck;
+
     @Autowired
-    public CertificateServiceImpl(CertificateDAO certificateDAO, TagDAO tagDAO, CertificateTagDAO certificateTagDAO) {
+    public CertificateServiceImpl(CertificateDAO certificateDAO, TagDAO tagDAO, CertificateTagDAO certificateTagDAO, CertificateCheck certificateCheck, TagCheck tagCheck) {
         this.certificateDAO = certificateDAO;
         this.tagDAO = tagDAO;
         this.certificateTagDAO = certificateTagDAO;
+        this.certificateCheck = certificateCheck;
+        this.tagCheck = tagCheck;
     }
 
     @Override
     @Transactional
     public void add(Certificate certificate) {
-        CertificateCheck.check(certificate, true);
+        certificateCheck.check(certificate, true);
 
         certificate.setCreate_date(Instant.now());
         certificate.setLast_update_date(Instant.now());
@@ -65,7 +70,7 @@ public class CertificateServiceImpl implements CertificateService {
     public Certificate update(int id, Certificate certificate) {
         certificateDAO.get(id);
         certificate.setId(id);
-        CertificateCheck.check(certificate, false);
+        certificateCheck.check(certificate, false);
         certificateDAO.update(id, certificate);
 
         certificateTagDAO.deleteTagsOfCertificate(id);
@@ -85,7 +90,7 @@ public class CertificateServiceImpl implements CertificateService {
         List<Tag> tagList = certificate.getTagList();
         if (tagList != null) {
             for (Tag tag : tagList) {
-                TagCheck.check(tag);
+                tagCheck.check(tag);
                 Tag tagFromBase = tagDAO.get(tag.getName());
                 if (tagFromBase == null) {
                     tagDAO.add(tag);

@@ -17,17 +17,19 @@ public class TagServiceImpl implements TagService {
 
     private final TagDAO tagDAO;
     private final CertificateTagDAO certificateTagDAO;
+    private final TagCheck tagCheck;
 
     @Autowired
-    public TagServiceImpl(TagDAO tagDAO, CertificateTagDAO certificateTagDAO) {
+    public TagServiceImpl(TagDAO tagDAO, CertificateTagDAO certificateTagDAO, TagCheck tagCheck) {
         this.tagDAO = tagDAO;
         this.certificateTagDAO = certificateTagDAO;
+        this.tagCheck = tagCheck;
     }
 
     @Override
     @Transactional
     public void add(Tag tag) {
-        TagCheck.check(tag);
+        tagCheck.check(tag);
 
         Tag tagFromBase = tagDAO.get(tag.getName());
         if (tagFromBase != null) {

@@ -19,25 +19,11 @@ public class CertificateUpdateSQLRequest {
     public static final String PRICE = "price = ?, ";
     public static final String LAST_UPDATE_DATE = "last_update_date = ? ";
 
-    private String sqlRequest;
-    private List<Object> parameters;
-
-    public CertificateUpdateSQLRequest() {
-    }
-
-    public String getSqlRequest() {
-        return sqlRequest;
-    }
-
-    public List<Object> getParameters() {
-        return parameters;
-    }
-
-    public void create(int id, Certificate certificate) {
+    public CertificateUpdateParameters create(int id, Certificate certificate) {
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(UPDATE_CERTIFICATE);
-        parameters = new ArrayList<>();
+        List<Object> parameters = new ArrayList<>();
 
         if (certificate.getName() != null) {
             stringBuilder.append(NAME);
@@ -62,7 +48,7 @@ public class CertificateUpdateSQLRequest {
         stringBuilder.append(UPDATE_WHERE);
         parameters.add(id);
 
-        sqlRequest = stringBuilder.toString();
+        return new CertificateUpdateParameters(stringBuilder.toString(), parameters);
 
     }
 }

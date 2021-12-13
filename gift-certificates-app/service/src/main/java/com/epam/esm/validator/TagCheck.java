@@ -2,13 +2,15 @@ package com.epam.esm.validator;
 
 import com.epam.esm.bean.Tag;
 import com.epam.esm.exception.ValidatorException;
+import org.springframework.stereotype.Component;
 
-public final class TagCheck {
+@Component
+public class TagCheck {
 
     public static final String MESSAGE_TAG_NAME_FILL = "message.tag.name.fill";
     public static final String MESSAGE_TAG_NAME_LENGTH = "message.tag.name.length";
 
-    public static void check(Tag tag) {
+    public void check(Tag tag) {
         String name = tag.getName();
 
         if (name == null) {

@@ -67,8 +67,10 @@ public class CertificateServiceImpl implements CertificateService {
         certificate.setId(id);
         CertificateCheck.check(certificate, false);
         certificateDAO.update(id, certificate);
+
+        certificateTagDAO.deleteTagsOfCertificate(id);
         addTagsToCertificate(certificate);
-        return certificateDAO.get(id);
+        return get(id);
     }
 
     @Override

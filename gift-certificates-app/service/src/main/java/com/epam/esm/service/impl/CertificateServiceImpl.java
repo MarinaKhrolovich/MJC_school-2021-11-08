@@ -62,12 +62,13 @@ public class CertificateServiceImpl implements CertificateService {
 
     @Override
     @Transactional
-    public void update(int id, Certificate certificate) {
+    public Certificate update(int id, Certificate certificate) {
         certificateDAO.get(id);
         certificate.setId(id);
         CertificateCheck.check(certificate, false);
         certificateDAO.update(id, certificate);
         addTagsToCertificate(certificate);
+        return certificateDAO.get(id);
     }
 
     @Override

@@ -1,12 +1,14 @@
 package com.epam.esm.dao.util;
 
 import com.epam.esm.bean.Certificate;
+import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class CertificateUpdateSQLRequest {
 
     public static final String UPDATE_CERTIFICATE = "UPDATE certificate SET ";

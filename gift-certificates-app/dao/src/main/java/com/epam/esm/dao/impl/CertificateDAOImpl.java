@@ -25,10 +25,14 @@ public class CertificateDAOImpl implements CertificateDAO {
     public static final String CREATE_CERTIFICATE = "INSERT INTO certificate(name,description,duration,price,create_date,last_update_date) VALUES(?,?,?,?,?,?)";
 
     private final JdbcTemplate jdbcTemplate;
+    private final CertificateGetSQLRequest getSQLRequest;
+    private final CertificateUpdateSQLRequest updateSQLRequest;
 
     @Autowired
-    public CertificateDAOImpl(JdbcTemplate jdbcTemplate) {
+    public CertificateDAOImpl(JdbcTemplate jdbcTemplate, CertificateGetSQLRequest getSQLRequest, CertificateUpdateSQLRequest updateSQLRequest) {
         this.jdbcTemplate = jdbcTemplate;
+        this.getSQLRequest = getSQLRequest;
+        this.updateSQLRequest = updateSQLRequest;
     }
 
     @Override
@@ -58,17 +62,15 @@ public class CertificateDAOImpl implements CertificateDAO {
 
     @Override
     public List<Certificate> get(RequestParameters requestParameters) {
-        CertificateGetSQLRequest sqlRequestParameters = new CertificateGetSQLRequest();
-        sqlRequestParameters.create(requestParameters);
-        return jdbcTemplate.query(sqlRequestParameters.getSqlRequest(), new CertificateMapper(),sqlRequestParameters.getParameters().toArray());
+        getSQLRequest.create(requestParameters);
+        return jdbcTemplate.query(getSQLRequest.getSqlRequest(), new CertificateMapper(),getSQLRequest.getParameters().toArray());
     }
 
     @Override
     public void update(int id, Certificate certificate) {
-        CertificateUpdateSQLRequest sqlRequestParameters = new CertificateUpdateSQLRequest();
-        sqlRequestParameters.create(id,certificate);
-        if (!sqlRequestParameters.getParameters().isEmpty()) {
-            jdbcTemplate.update(sqlRequestParameters.getSqlRequest(), sqlRequestParameters.getParameters().toArray());
+        updateSQLRequest.create(id,certificate);
+        if (!updateSQLRequest.getParameters().isEmpty()) {
+            jdbcTemplate.update(updateSQLRequest.getSqlRequest(), updateSQLRequest.getParameters().toArray());
         }
     }
 

@@ -1,10 +1,12 @@
 package com.epam.esm.dao.util;
 
 import com.epam.esm.bean.RequestParameters;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class CertificateGetSQLRequest {
 
     public static final String SELECT_FROM_CERTIFICATE = "SELECT * FROM certificate";
@@ -72,7 +74,7 @@ public class CertificateGetSQLRequest {
                 stringBuilder.append(COMMA);
             }
             stringBuilder.append(sqlRequest);
-            stringBuilder.append(orderBy.equals(DESC.trim())?DESC:ASC);
+            stringBuilder.append(orderBy.equals(DESC.trim()) ? DESC : ASC);
         }
         return orderExists;
     }

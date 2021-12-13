@@ -13,7 +13,7 @@ public interface CertificateService {
 
     List<Certificate> get(RequestParameters requestParameters);
 
-    void update(int id, Certificate certificate);
+    Certificate update(int id, Certificate certificate);
 
     void delete(int id);
 

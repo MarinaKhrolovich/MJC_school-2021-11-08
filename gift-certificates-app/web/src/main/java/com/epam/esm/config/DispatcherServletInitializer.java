@@ -23,9 +23,4 @@ public class DispatcherServletInitializer extends AbstractAnnotationConfigDispat
         return new String[]{"/"};
     }
 
-    @Override
-    public void onStartup(ServletContext servletContext) throws ServletException {
-        super.onStartup(servletContext);
-        servletContext.setInitParameter("spring.profiles.active","dev");
-    }
 }

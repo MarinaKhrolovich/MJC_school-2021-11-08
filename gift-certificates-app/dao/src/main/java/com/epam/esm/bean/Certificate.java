@@ -1,5 +1,6 @@
 package com.epam.esm.bean;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.Serializable;
@@ -16,7 +17,9 @@ public class Certificate implements Serializable {
     private String description;
     private double price;
     private int duration;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS", timezone = "UTC")
     private Instant create_date;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS", timezone = "UTC")
     private Instant last_update_date;
     private List<Tag> tagList;
 

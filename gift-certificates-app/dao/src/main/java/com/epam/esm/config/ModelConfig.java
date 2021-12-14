@@ -15,7 +15,7 @@ import javax.sql.DataSource;
 @PropertySource("classpath:properties/${spring.profiles.active}.properties")
 @ComponentScan("com.epam.esm")
 @EnableTransactionManagement
-public class ModelConfigDev {
+public class ModelConfig {
 
     @Autowired
     private  Environment env;

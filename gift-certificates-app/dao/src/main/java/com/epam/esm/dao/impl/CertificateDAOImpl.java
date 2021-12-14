@@ -2,7 +2,9 @@ package com.epam.esm.dao.impl;
 
 import com.epam.esm.bean.Certificate;
 import com.epam.esm.bean.RequestParameters;
+import com.epam.esm.bean.Tag;
 import com.epam.esm.dao.CertificateDAO;
+import com.epam.esm.dao.CertificateTagDAO;
 import com.epam.esm.dao.mapper.CertificateMapper;
 import com.epam.esm.dao.util.CertificateGetSQLRequest;
 import com.epam.esm.dao.util.CertificateUpdateParameters;
@@ -16,7 +18,9 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 
 @Repository
 public class CertificateDAOImpl implements CertificateDAO {
@@ -24,22 +28,26 @@ public class CertificateDAOImpl implements CertificateDAO {
     private static final String SELECT_FROM_CERTIFICATE_WHERE_ID = "SELECT * FROM certificate WHERE id = ?";
     private static final String DELETE_FROM_CERTIFICATE_WHERE_ID = "DELETE FROM certificate WHERE id = ?";
     private static final String CREATE_CERTIFICATE = "INSERT INTO certificate(name,description,duration,price," +
-                                                        "create_date,last_update_date) VALUES(?,?,?,?,?,?)";
+            "create_date,last_update_date) VALUES(?,?,?,?,?,?)";
 
     private final JdbcTemplate jdbcTemplate;
     private final CertificateGetSQLRequest getSQLRequest;
     private final CertificateUpdateSQLRequest updateSQLRequest;
+    private final CertificateTagDAO certificateTagDAO;
 
     @Autowired
     public CertificateDAOImpl(JdbcTemplate jdbcTemplate, CertificateGetSQLRequest getSQLRequest,
-                              CertificateUpdateSQLRequest updateSQLRequest) {
+                              CertificateUpdateSQLRequest updateSQLRequest, CertificateTagDAO certificateTagDAO) {
         this.jdbcTemplate = jdbcTemplate;
         this.getSQLRequest = getSQLRequest;
         this.updateSQLRequest = updateSQLRequest;
+        this.certificateTagDAO = certificateTagDAO;
     }
 
     @Override
     public void add(Certificate certificate) {
+        certificate.setCreateDate(Instant.now());
+        certificate.setLastUpdateDate(Instant.now());
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(
                 connection -> {
@@ -54,20 +62,26 @@ public class CertificateDAOImpl implements CertificateDAO {
                     return ps;
                 },
                 keyHolder);
-        certificate.setId(keyHolder.getKey().intValue());
+
+        if (keyHolder.getKey() != null) {
+            certificate.setId(keyHolder.getKey().intValue());
+        }
     }
 
     @Override
     public Certificate get(int id) {
-        return jdbcTemplate.query(SELECT_FROM_CERTIFICATE_WHERE_ID, new CertificateMapper(), id)
+        Certificate certificate = jdbcTemplate.query(SELECT_FROM_CERTIFICATE_WHERE_ID, new CertificateMapper(), id)
                 .stream().findAny().orElseThrow(() -> new ResourceNotFoundException(Integer.toString(id)));
+        List<Tag> tagList = certificateTagDAO.getAllTagsOfCertificate(id);
+        certificate.setTagList(tagList);
+        return certificate;
     }
 
     @Override
     public List<Certificate> get(RequestParameters requestParameters) {
         CertificateUpdateParameters getParameters = getSQLRequest.create(requestParameters);
         return jdbcTemplate.query(getParameters.getSqlRequest(),
-                                        new CertificateMapper(), getParameters.getParameters().toArray());
+                new CertificateMapper(), getParameters.getParameters().toArray());
     }
 
     @Override

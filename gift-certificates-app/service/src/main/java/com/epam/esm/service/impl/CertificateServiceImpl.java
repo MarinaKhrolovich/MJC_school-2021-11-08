@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -41,19 +40,16 @@ public class CertificateServiceImpl implements CertificateService {
     @Transactional
     public void add(Certificate certificate) {
         certificateCheck.check(certificate, true);
-        certificate.setCreateDate(Instant.now());
-        certificate.setLastUpdateDate(Instant.now());
-
         certificateDAO.add(certificate);
-        addTagsToCertificate(certificate);
+        addTagsToCertificate(certificate);//DAO?
     }
 
     @Override
     @Transactional
     public Certificate get(int id) {
-        Certificate certificate = certificateDAO.get(id);
-        setTagList(id, certificate);
-        return certificate;
+        return certificateDAO.get(id);
+        //List<Tag> tagList = certificateTagDAO.getAllTagsOfCertificate(id);
+        //setTagList(id, certificate);
     }
 
     @Override

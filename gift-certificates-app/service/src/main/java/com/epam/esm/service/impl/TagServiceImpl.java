@@ -30,7 +30,6 @@ public class TagServiceImpl implements TagService {
     @Transactional
     public void add(Tag tag) {
         tagCheck.check(tag);
-
         Tag tagFromBase = tagDAO.get(tag.getName());
         if (tagFromBase != null) {
             throw new ResourceAlreadyExistsException(tag.getName());

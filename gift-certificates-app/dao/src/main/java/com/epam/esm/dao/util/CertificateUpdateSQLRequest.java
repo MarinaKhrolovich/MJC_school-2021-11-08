@@ -20,7 +20,6 @@ public class CertificateUpdateSQLRequest {
     public static final String LAST_UPDATE_DATE = "last_update_date = ? ";
 
     public CertificateUpdateParameters create(int id, Certificate certificate) {
-
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(UPDATE_CERTIFICATE);
         List<Object> parameters = new ArrayList<>();
@@ -49,6 +48,5 @@ public class CertificateUpdateSQLRequest {
         parameters.add(id);
 
         return new CertificateUpdateParameters(stringBuilder.toString(), parameters);
-
     }
 }

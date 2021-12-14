@@ -40,13 +40,11 @@ public class CertificateServiceImpl implements CertificateService {
     @Transactional
     public void add(Certificate certificate) {
         certificateCheck.check(certificate, true);
-
         certificate.setCreate_date(Instant.now());
         certificate.setLast_update_date(Instant.now());
 
         certificateDAO.add(certificate);
         addTagsToCertificate(certificate);
-
     }
 
     @Override

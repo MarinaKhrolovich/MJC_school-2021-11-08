@@ -20,6 +20,5 @@ public class TagCheck {
         if (name.length() < 3 || name.length() > 45) {
             throw new ValidatorException(MESSAGE_TAG_NAME_LENGTH);
         }
-
     }
 }

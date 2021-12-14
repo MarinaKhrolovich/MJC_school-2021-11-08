@@ -18,20 +18,19 @@ import javax.sql.DataSource;
 public class ModelConfig {
 
     @Autowired
-    private  Environment env;
+    private Environment env;
 
     @Bean
     public DataSource dataSource() {
-
         HikariConfig config = new HikariConfig();
         config.setDriverClassName(env.getProperty("db.driverClassName"));
         config.setUsername(env.getProperty("db.username"));
         config.setPassword(env.getProperty("db.password"));
         config.setJdbcUrl(env.getProperty("db.jdbcUrl"));
         config.setMaximumPoolSize(Integer.parseInt(env.getProperty("db.poolsize")));
-
         return new HikariDataSource(config);
     }
+
     @Bean
     public JdbcTemplate jdbcTemplateDev() {
         return new JdbcTemplate(dataSource());

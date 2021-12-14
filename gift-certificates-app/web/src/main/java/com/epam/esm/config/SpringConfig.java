@@ -13,7 +13,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebMvc
 public class SpringConfig implements WebMvcConfigurer {
 
-
     public static final String UTF_8 = "UTF-8";
     public static final String LOCALIZATION_LOCAL = "localization/local";
 

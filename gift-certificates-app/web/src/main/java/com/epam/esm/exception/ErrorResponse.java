@@ -39,4 +39,5 @@ public class ErrorResponse {
     public void setCode(String code) {
         this.code = code;
     }
+
 }

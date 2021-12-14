@@ -47,8 +47,8 @@ public class CertificateDAOImpl implements CertificateDAO {
                     ps.setString(2, certificate.getDescription());
                     ps.setInt(3, certificate.getDuration());
                     ps.setDouble(4, certificate.getPrice());
-                    ps.setTimestamp(5, Timestamp.from(certificate.getCreate_date()));
-                    ps.setTimestamp(6, Timestamp.from(certificate.getLast_update_date()));
+                    ps.setTimestamp(5, Timestamp.from(certificate.getCreateDate()));
+                    ps.setTimestamp(6, Timestamp.from(certificate.getLastUpdateDate()));
                     return ps;
                 },
                 keyHolder);

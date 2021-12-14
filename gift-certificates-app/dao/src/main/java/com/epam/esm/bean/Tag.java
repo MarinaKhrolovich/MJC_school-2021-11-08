@@ -1,6 +1,7 @@
 package com.epam.esm.bean;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Tag implements Serializable {
 
@@ -50,7 +51,7 @@ public class Tag implements Serializable {
         Tag tag = (Tag) o;
 
         if (id != tag.id) return false;
-        return name != null ? name.equals(tag.name) : tag.name == null;
+        return Objects.equals(name, tag.name);
     }
 
     @Override

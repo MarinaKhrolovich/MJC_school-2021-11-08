@@ -26,28 +26,28 @@ public class CertificateTagDAOImpl implements CertificateTagDAO {
     }
 
     @Override
-    public void addTagToCertificate(int certificate_id, int tag_id) {
-        jdbcTemplate.update(CREATE_CERTIFICATE_TAG, certificate_id, tag_id);
+    public void addTagToCertificate(int certificateId, int tagId) {
+        jdbcTemplate.update(CREATE_CERTIFICATE_TAG, certificateId, tagId);
     }
 
     @Override
-    public List<Tag> getAllTagsOfCertificate(int certificate_id) {
-        return jdbcTemplate.query(SELECT_TAGS_OF_CERTIFICATE, new BeanPropertyRowMapper<>(Tag.class), certificate_id);
+    public List<Tag> getAllTagsOfCertificate(int certificateId) {
+        return jdbcTemplate.query(SELECT_TAGS_OF_CERTIFICATE, new BeanPropertyRowMapper<>(Tag.class), certificateId);
     }
 
     @Override
-    public Tag getTagOfCertificate(int certificate_id, int tag_id) {
-        return jdbcTemplate.query(SELECT_CERTIFICATE_TAG, new BeanPropertyRowMapper<>(Tag.class), certificate_id, tag_id)
+    public Tag getTagOfCertificate(int certificateId, int tagId) {
+        return jdbcTemplate.query(SELECT_CERTIFICATE_TAG, new BeanPropertyRowMapper<>(Tag.class), certificateId, tagId)
                 .stream().findAny().orElse(null);
     }
 
     @Override
-    public void deleteTagsOfCertificate(int certificate_id) {
-        jdbcTemplate.update(DELETE_FROM_CERTIFICATE_TAG_WHERE_CERTIFICATE_ID, certificate_id);
+    public void deleteTagsOfCertificate(int certificateId) {
+        jdbcTemplate.update(DELETE_FROM_CERTIFICATE_TAG_WHERE_CERTIFICATE_ID, certificateId);
     }
 
     @Override
-    public void deleteTagFromCertificates(int tag_id) {
-        jdbcTemplate.update(DELETE_FROM_CERTIFICATE_TAG_WHERE_TAG_ID, tag_id);
+    public void deleteTagFromCertificates(int tagId) {
+        jdbcTemplate.update(DELETE_FROM_CERTIFICATE_TAG_WHERE_TAG_ID, tagId);
     }
 }

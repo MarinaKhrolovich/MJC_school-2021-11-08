@@ -3,13 +3,16 @@ package com.epam.esm.config;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
 import javax.sql.DataSource;
+
 
 @Configuration
 @PropertySource("classpath:properties/${spring.profiles.active}.properties")
@@ -17,8 +20,12 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 public class ModelConfig {
 
+    private final Environment env;
+
     @Autowired
-    private Environment env;
+    public ModelConfig(Environment env) {
+        this.env = env;
+    }
 
     @Bean
     public DataSource dataSource() {
@@ -27,7 +34,7 @@ public class ModelConfig {
         config.setUsername(env.getProperty("db.username"));
         config.setPassword(env.getProperty("db.password"));
         config.setJdbcUrl(env.getProperty("db.jdbcUrl"));
-        config.setMaximumPoolSize(Integer.parseInt(env.getProperty("db.poolsize")));
+        config.setMaximumPoolSize(env.getRequiredProperty("db.poolsize",Integer.class));
         return new HikariDataSource(config);
     }
 

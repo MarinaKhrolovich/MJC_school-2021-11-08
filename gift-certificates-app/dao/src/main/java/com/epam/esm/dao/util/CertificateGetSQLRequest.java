@@ -10,7 +10,8 @@ import java.util.List;
 public class CertificateGetSQLRequest {
 
     public static final String SELECT_FROM_CERTIFICATE = "SELECT * FROM certificate";
-    public static final String JOIN = " JOIN certificate_tag JOIN tag ON certificate.id = certificate_tag.certificate_id AND certificate_tag.tag_id = tag.id";
+    public static final String JOIN = " JOIN certificate_tag JOIN tag ON certificate.id = " +
+                                        "certificate_tag.certificate_id AND certificate_tag.tag_id = tag.id";
     public static final String WHERE = " WHERE";
     public static final String CERTIFICATE_NAME = " certificate.name LIKE concat ('%', ?, '%')";
     public static final String CERTIFICATE_DESCRIPTION = " certificate.description LIKE concat ('%', ?, '%')";
@@ -42,7 +43,8 @@ public class CertificateGetSQLRequest {
         }
 
         whereExists = appendWhere(stringBuilder, certificateName, CERTIFICATE_NAME, whereExists, parameters);
-        whereExists = appendWhere(stringBuilder, certificateDescription, CERTIFICATE_DESCRIPTION, whereExists, parameters);
+        whereExists = appendWhere(stringBuilder, certificateDescription, CERTIFICATE_DESCRIPTION,
+                                                                                    whereExists, parameters);
         appendWhere(stringBuilder, tagName, TAG_NAME, whereExists, parameters);
 
         orderExists = appendOrder(stringBuilder, orderByDate, ORDER_DATE, orderExists);
@@ -65,7 +67,8 @@ public class CertificateGetSQLRequest {
         return orderExists;
     }
 
-    private boolean appendWhere(StringBuilder stringBuilder, String field, String sqlRequest, boolean whileExists, List<Object> parameters) {
+    private boolean appendWhere(StringBuilder stringBuilder, String field, String sqlRequest,
+                                boolean whileExists, List<Object> parameters) {
         if (field != null) {
             if (!whileExists) {
                 stringBuilder.append(WHERE);

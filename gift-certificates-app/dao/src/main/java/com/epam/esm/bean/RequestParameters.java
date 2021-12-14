@@ -2,13 +2,14 @@ package com.epam.esm.bean;
 
 public class RequestParameters {
 
-    private String orderByDate;
-    private String orderByName;
-    private String tagName;
-    private String certificateName;
-    private String certificateDescription;
+    private final String orderByDate;
+    private final String orderByName;
+    private final String tagName;
+    private final String certificateName;
+    private final String certificateDescription;
 
-    public RequestParameters(String orderByDate, String orderByName, String tagName, String certificateName, String certificateDescription) {
+    public RequestParameters(String orderByDate, String orderByName, String tagName,
+                             String certificateName, String certificateDescription) {
         this.orderByDate = orderByDate;
         this.orderByName = orderByName;
         this.tagName = tagName;

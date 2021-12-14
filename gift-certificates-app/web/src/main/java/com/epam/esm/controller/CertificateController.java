@@ -36,7 +36,8 @@ public class CertificateController {
                                              @RequestParam(required = false) String certificateName,
                                              @RequestParam(required = false) String certificateDescription
                                              ) {
-        return certificateService.get(new RequestParameters(orderByDate, orderByName, tagName, certificateName, certificateDescription));
+        return certificateService.get(new RequestParameters(orderByDate, orderByName, tagName, certificateName,
+                                                certificateDescription));
     }
 
     @PutMapping("/{id}")

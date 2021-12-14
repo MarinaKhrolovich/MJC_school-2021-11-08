@@ -28,7 +28,8 @@ public class CertificateServiceImpl implements CertificateService {
     private final TagCheck tagCheck;
 
     @Autowired
-    public CertificateServiceImpl(CertificateDAO certificateDAO, TagDAO tagDAO, CertificateTagDAO certificateTagDAO, CertificateCheck certificateCheck, TagCheck tagCheck) {
+    public CertificateServiceImpl(CertificateDAO certificateDAO, TagDAO tagDAO, CertificateTagDAO certificateTagDAO,
+                                  CertificateCheck certificateCheck, TagCheck tagCheck) {
         this.certificateDAO = certificateDAO;
         this.tagDAO = tagDAO;
         this.certificateTagDAO = certificateTagDAO;

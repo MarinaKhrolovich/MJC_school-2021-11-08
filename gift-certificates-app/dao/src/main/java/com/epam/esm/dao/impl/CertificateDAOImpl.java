@@ -23,14 +23,16 @@ public class CertificateDAOImpl implements CertificateDAO {
 
     public static final String SELECT_FROM_CERTIFICATE_WHERE_ID = "SELECT * FROM certificate WHERE id = ?";
     public static final String DELETE_FROM_CERTIFICATE_WHERE_ID = "DELETE FROM certificate WHERE id = ?";
-    public static final String CREATE_CERTIFICATE = "INSERT INTO certificate(name,description,duration,price,create_date,last_update_date) VALUES(?,?,?,?,?,?)";
+    public static final String CREATE_CERTIFICATE = "INSERT INTO certificate(name,description,duration,price," +
+                                                        "create_date,last_update_date) VALUES(?,?,?,?,?,?)";
 
     private final JdbcTemplate jdbcTemplate;
     private final CertificateGetSQLRequest getSQLRequest;
     private final CertificateUpdateSQLRequest updateSQLRequest;
 
     @Autowired
-    public CertificateDAOImpl(JdbcTemplate jdbcTemplate, CertificateGetSQLRequest getSQLRequest, CertificateUpdateSQLRequest updateSQLRequest) {
+    public CertificateDAOImpl(JdbcTemplate jdbcTemplate, CertificateGetSQLRequest getSQLRequest,
+                              CertificateUpdateSQLRequest updateSQLRequest) {
         this.jdbcTemplate = jdbcTemplate;
         this.getSQLRequest = getSQLRequest;
         this.updateSQLRequest = updateSQLRequest;
@@ -64,7 +66,8 @@ public class CertificateDAOImpl implements CertificateDAO {
     @Override
     public List<Certificate> get(RequestParameters requestParameters) {
         CertificateUpdateParameters getParameters = getSQLRequest.create(requestParameters);
-        return jdbcTemplate.query(getParameters.getSqlRequest(), new CertificateMapper(), getParameters.getParameters().toArray());
+        return jdbcTemplate.query(getParameters.getSqlRequest(),
+                                        new CertificateMapper(), getParameters.getParameters().toArray());
     }
 
     @Override

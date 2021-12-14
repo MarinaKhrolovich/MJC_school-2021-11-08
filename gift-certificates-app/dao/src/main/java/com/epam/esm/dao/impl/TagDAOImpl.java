@@ -16,11 +16,11 @@ import java.util.List;
 @Repository
 public class TagDAOImpl implements TagDAO {
 
-    public static final String SELECT_FROM_TAG = "SELECT * FROM tag";
-    public static final String SELECT_FROM_TAG_WHERE_ID = "SELECT * FROM tag WHERE id = ?";
-    public static final String SELECT_FROM_TAG_WHERE_NAME = "SELECT * FROM tag WHERE name = ?";
-    public static final String CREATE_TAG = "INSERT INTO tag(name) VALUES(?)";
-    public static final String DELETE_FROM_TAG_WHERE_ID = "DELETE FROM tag WHERE id = ?";
+    private static final String SELECT_FROM_TAG = "SELECT * FROM tag";
+    private static final String SELECT_FROM_TAG_WHERE_ID = "SELECT * FROM tag WHERE id = ?";
+    private static final String SELECT_FROM_TAG_WHERE_NAME = "SELECT * FROM tag WHERE name = ?";
+    private static final String CREATE_TAG = "INSERT INTO tag(name) VALUES(?)";
+    private static final String DELETE_FROM_TAG_WHERE_ID = "DELETE FROM tag WHERE id = ?";
 
     private final JdbcTemplate jdbcTemplate;
 

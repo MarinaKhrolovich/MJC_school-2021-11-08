@@ -9,20 +9,20 @@ import java.util.List;
 @Component
 public class CertificateGetSQLRequest {
 
-    public static final String SELECT_FROM_CERTIFICATE = "SELECT * FROM certificate";
-    public static final String JOIN = " JOIN certificate_tag JOIN tag ON certificate.id = " +
+    private static final String SELECT_FROM_CERTIFICATE = "SELECT * FROM certificate";
+    private static final String JOIN = " JOIN certificate_tag JOIN tag ON certificate.id = " +
                                         "certificate_tag.certificate_id AND certificate_tag.tag_id = tag.id";
-    public static final String WHERE = " WHERE";
-    public static final String CERTIFICATE_NAME = " certificate.name LIKE concat ('%', ?, '%')";
-    public static final String CERTIFICATE_DESCRIPTION = " certificate.description LIKE concat ('%', ?, '%')";
-    public static final String TAG_NAME = " tag.name = ?";
-    public static final String ORDER_BY = " ORDER BY";
-    public static final String ORDER_NAME = " certificate.name";
-    public static final String ORDER_DATE = " certificate.create_date";
-    public static final String ASC = " ASC";
-    public static final String DESC = " DESC";
-    public static final String AND = " AND";
-    public static final String COMMA = ", ";
+    private static final String WHERE = " WHERE";
+    private static final String CERTIFICATE_NAME = " certificate.name LIKE concat ('%', ?, '%')";
+    private static final String CERTIFICATE_DESCRIPTION = " certificate.description LIKE concat ('%', ?, '%')";
+    private static final String TAG_NAME = " tag.name = ?";
+    private static final String ORDER_BY = " ORDER BY";
+    private static final String ORDER_NAME = " certificate.name";
+    private static final String ORDER_DATE = " certificate.create_date";
+    private static final String ASC = " ASC";
+    private static final String DESC = " DESC";
+    private static final String AND = " AND";
+    private static final String COMMA = ", ";
 
     public CertificateUpdateParameters create(RequestParameters requestParameters) {
         StringBuilder stringBuilder = new StringBuilder();

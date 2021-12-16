@@ -40,7 +40,7 @@ public class ModelConfig {
     }
 
     @Bean
-    public JdbcTemplate jdbcTemplateDev() {
+    public JdbcTemplate jdbcTemplate() {
         return new JdbcTemplate(dataSource());
     }
 

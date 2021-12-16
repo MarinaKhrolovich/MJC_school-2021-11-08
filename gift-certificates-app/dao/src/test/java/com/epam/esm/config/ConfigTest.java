@@ -9,24 +9,23 @@ import javax.sql.DataSource;
 
 @Profile("dev")
 @Configuration
-@PropertySource("classpath:properties/${spring.profiles.active}.properties")
 @ComponentScan("com.epam.esm")
 public class ConfigTest {
 
     public static final String UTF_8 = "UTF-8";
+    public static final String CLASSPATH_DB_CREATE_SQL = "classpath:db_create.sql";
 
     @Bean
     public DataSource dataSource() {
         return new EmbeddedDatabaseBuilder().
-                addDefaultScripts().
                 generateUniqueName(true).
                 setScriptEncoding(UTF_8)
-                .setType(EmbeddedDatabaseType.H2)
+                .setType(EmbeddedDatabaseType.H2).addScript(CLASSPATH_DB_CREATE_SQL)
                 .build();
     }
 
     @Bean
-    public JdbcTemplate jdbcTemplateDev() {
+    public JdbcTemplate jdbcTemplate() {
         return new JdbcTemplate(dataSource());
     }
 

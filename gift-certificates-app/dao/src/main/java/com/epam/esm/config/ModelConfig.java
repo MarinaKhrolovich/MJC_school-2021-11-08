@@ -3,6 +3,7 @@ package com.epam.esm.config;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -15,12 +16,15 @@ import javax.sql.DataSource;
 
 
 @Configuration
-@PropertySource("classpath:properties/${spring.profiles.active}.properties")
+@PropertySource("classpath:properties/${spring.profiles.active:dev}.properties")
 @ComponentScan("com.epam.esm")
 @EnableTransactionManagement
 public class ModelConfig {
 
     private final Environment env;
+
+    @Value("${db.poolsize:5}")
+    private int MAX_POOL_SIZE;
 
     @Autowired
     public ModelConfig(Environment env) {
@@ -34,7 +38,7 @@ public class ModelConfig {
         config.setUsername(env.getProperty("db.username"));
         config.setPassword(env.getProperty("db.password"));
         config.setJdbcUrl(env.getProperty("db.jdbcUrl"));
-        config.setMaximumPoolSize(env.getRequiredProperty("db.poolsize",Integer.class));
+        config.setMaximumPoolSize(MAX_POOL_SIZE);
         return new HikariDataSource(config);
     }
 

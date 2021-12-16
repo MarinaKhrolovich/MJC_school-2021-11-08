@@ -2,7 +2,6 @@ package com.epam.esm.dao.impl;
 
 import com.epam.esm.bean.Certificate;
 import com.epam.esm.bean.RequestParameters;
-import com.epam.esm.bean.Tag;
 import com.epam.esm.dao.CertificateDAO;
 import com.epam.esm.dao.CertificateTagDAO;
 import com.epam.esm.dao.mapper.CertificateMapper;
@@ -20,7 +19,6 @@ import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
-import java.util.Objects;
 
 @Repository
 public class CertificateDAOImpl implements CertificateDAO {
@@ -70,11 +68,8 @@ public class CertificateDAOImpl implements CertificateDAO {
 
     @Override
     public Certificate get(int id) {
-        Certificate certificate = jdbcTemplate.query(SELECT_FROM_CERTIFICATE_WHERE_ID, new CertificateMapper(), id)
+        return jdbcTemplate.query(SELECT_FROM_CERTIFICATE_WHERE_ID, new CertificateMapper(), id)
                 .stream().findAny().orElseThrow(() -> new ResourceNotFoundException(Integer.toString(id)));
-        List<Tag> tagList = certificateTagDAO.getAllTagsOfCertificate(id);
-        certificate.setTagList(tagList);
-        return certificate;
     }
 
     @Override

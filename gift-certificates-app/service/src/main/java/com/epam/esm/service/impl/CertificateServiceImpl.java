@@ -41,15 +41,14 @@ public class CertificateServiceImpl implements CertificateService {
     public void add(Certificate certificate) {
         certificateCheck.check(certificate, true);
         certificateDAO.add(certificate);
-        addTagsToCertificate(certificate);//DAO?
+        addTagsToCertificate(certificate);
     }
 
     @Override
-    @Transactional
     public Certificate get(int id) {
-        return certificateDAO.get(id);
-        //List<Tag> tagList = certificateTagDAO.getAllTagsOfCertificate(id);
-        //setTagList(id, certificate);
+        Certificate certificate = certificateDAO.get(id);
+        setTagList(id, certificate);
+        return certificate;
     }
 
     @Override

@@ -41,7 +41,7 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
         errorResponse.setMessage(messageSource.getMessage(MESSAGE_RESOURCE_NOT_FOUND, new Object[]{}, locale) +
-                                 " (id = " + exception.getMessage() + ")");
+                " (id = " + exception.getMessage() + ")");
         errorResponse.setCode(HttpStatus.NOT_FOUND.value() + exception.getMessage());
         LOG.error(exception);
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
@@ -52,8 +52,8 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setStatus(HttpStatus.CONFLICT.value());
         errorResponse.setMessage(messageSource.getMessage(MESSAGE_RESOURCE_ALREADY_EXISTS, new Object[]{}, locale) +
-                                 " (name = " + exception.getMessage() + ")");
-        errorResponse.setCode(HttpStatus.CONFLICT.value()  + "001");
+                " (name = " + exception.getMessage() + ")");
+        errorResponse.setCode(HttpStatus.CONFLICT.value() + "001");
         LOG.error(exception);
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
@@ -62,8 +62,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleException(ValidatorException exception, Locale locale) {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
-        errorResponse.setMessage(messageSource.getMessage(exception.getMessage(),new Object[]{}, locale));
-        errorResponse.setCode(HttpStatus.BAD_REQUEST.value()  + "002");
+        errorResponse.setMessage(messageSource.getMessage(exception.getMessage(), new Object[]{}, locale));
+        errorResponse.setCode(HttpStatus.BAD_REQUEST.value() + "002");
         LOG.error(exception);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }

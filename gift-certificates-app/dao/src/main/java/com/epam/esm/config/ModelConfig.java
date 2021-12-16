@@ -16,7 +16,7 @@ import javax.sql.DataSource;
 
 
 @Configuration
-@PropertySource("classpath:properties/${spring.profiles.active:dev}.properties")
+@PropertySource({"classpath:properties/app.properties","classpath:properties/${spring.profiles.active}.properties"})
 @ComponentScan("com.epam.esm")
 @EnableTransactionManagement
 public class ModelConfig {

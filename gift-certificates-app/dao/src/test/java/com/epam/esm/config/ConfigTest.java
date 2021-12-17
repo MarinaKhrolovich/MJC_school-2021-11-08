@@ -16,15 +16,14 @@ import javax.sql.DataSource;
 public class ConfigTest {
 
     public static final String UTF_8 = "UTF-8";
-    public static final String CLASSPATH_DB_CREATE_SQL = "classpath:db_create.sql";
+    public static final String CLASSPATH_DB_SCHEMA_SQL = "classpath:db_schema.sql";
+    public static final String CLASSPATH_DB_DATA_SQL = "classpath:db_data.sql";
 
     @Bean
     public DataSource dataSource() {
-        return new EmbeddedDatabaseBuilder().
-                generateUniqueName(true).
-                setScriptEncoding(UTF_8)
-                .setType(EmbeddedDatabaseType.H2).addScript(CLASSPATH_DB_CREATE_SQL)
-                .build();
+        return new EmbeddedDatabaseBuilder().generateUniqueName(true).
+                setScriptEncoding(UTF_8).setType(EmbeddedDatabaseType.H2).
+                addScript(CLASSPATH_DB_SCHEMA_SQL).addScript(CLASSPATH_DB_DATA_SQL).build();
     }
 
     @Bean

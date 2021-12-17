@@ -16,7 +16,7 @@ import javax.sql.DataSource;
 @PropertySource({"classpath:properties/app.properties","classpath:properties/${spring.profiles.active}.properties"})
 @ComponentScan("com.epam.esm")
 @EnableTransactionManagement
-public class ModelConfig {
+public class ConfigDAO {
 
     private final Environment env;
 
@@ -24,7 +24,7 @@ public class ModelConfig {
     private int MAX_POOL_SIZE;
 
     @Autowired
-    public ModelConfig(Environment env) {
+    public ConfigDAO(Environment env) {
         this.env = env;
     }
 

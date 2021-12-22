@@ -2,7 +2,7 @@ package com.epam.esm.dao.impl;
 
 import org.springframework.test.context.ActiveProfiles;
 
-@ActiveProfiles("dev")
+@ActiveProfiles("test")
 public class CertificateTagDAOImplTest {
 
 }

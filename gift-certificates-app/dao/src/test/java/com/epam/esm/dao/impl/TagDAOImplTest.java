@@ -29,6 +29,9 @@ public class TagDAOImplTest {
     public static final int ID_EXISTS = 1;
     public static final int ID_DELETE = 2;
     public static final int ID_NOT_EXISTS = 100;
+    public static final String TAG_EXISTS = "sport";
+    public static final String TAG_NOT_EXISTS = "not exists tag";
+    public static final String NEW_TAG = "new tag";
 
     @Autowired
     private TagDAO tagDAO;
@@ -37,7 +40,7 @@ public class TagDAOImplTest {
     @BeforeAll
     public static void initTag() {
         tagExpected = new Tag();
-        tagExpected.setName("new tag");
+        tagExpected.setName(NEW_TAG);
     }
 
     @Test
@@ -55,6 +58,21 @@ public class TagDAOImplTest {
     @Test
     public void getShouldException() {
         assertThrows(ResourceNotFoundException.class, () -> tagDAO.get(ID_NOT_EXISTS));
+    }
+
+    @Test
+    public void getByNameShouldBeNotNull() {
+        assertNotNull(tagDAO.get(TAG_EXISTS));
+    }
+
+    @Test
+    public void getByNameShouldBeNull() {
+        assertNull(tagDAO.get(TAG_NOT_EXISTS));
+    }
+
+    @Test
+    public void get() {
+        assertEquals(2, tagDAO.get().size());
     }
 
     @Test

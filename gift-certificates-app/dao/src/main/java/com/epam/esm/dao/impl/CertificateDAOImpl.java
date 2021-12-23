@@ -18,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Repository
@@ -44,8 +45,8 @@ public class CertificateDAOImpl implements CertificateDAO {
 
     @Override
     public void add(Certificate certificate) {
-        certificate.setCreateDate(Instant.now());
-        certificate.setLastUpdateDate(Instant.now());
+        certificate.setCreateDate(Instant.now().truncatedTo(ChronoUnit.MILLIS));
+        certificate.setLastUpdateDate(Instant.now().truncatedTo(ChronoUnit.MILLIS));
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(
                 connection -> {

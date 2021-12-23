@@ -2,6 +2,7 @@ package com.epam.esm.dao.impl;
 
 import com.epam.esm.bean.Tag;
 import com.epam.esm.config.ConfigTest;
+import com.epam.esm.dao.CertificateTagDAO;
 import com.epam.esm.dao.TagDAO;
 import com.epam.esm.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeAll;
@@ -13,6 +14,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,6 +37,8 @@ public class TagDAOImplTest {
 
     @Autowired
     private TagDAO tagDAO;
+    @Autowired
+    private CertificateTagDAO certificateTagDAO;
     private static Tag tagExpected;
 
     @BeforeAll
@@ -76,7 +80,9 @@ public class TagDAOImplTest {
     }
 
     @Test
+    @Transactional
     public void delete() {
+        certificateTagDAO.deleteTagFromCertificates(ID_DELETE);
         tagDAO.delete(ID_DELETE);
         assertThrows(ResourceNotFoundException.class, () -> tagDAO.get(ID_DELETE));
     }

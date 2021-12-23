@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,6 +18,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {ConfigTest.class})
+@Sql("classpath:db_schema.sql")
+@Sql("classpath:db_data.sql")
+@Sql(scripts = "classpath:drop.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 public class TagDAOImplTest {
 
     public static final int ID_EXISTS = 1;
@@ -26,7 +30,6 @@ public class TagDAOImplTest {
     @Autowired
     private TagDAO tagDAO;
     private static Tag tagExpected;
-
 
     @BeforeAll
     public static void initTag() {

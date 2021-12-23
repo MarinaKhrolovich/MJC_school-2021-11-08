@@ -1,29 +1,43 @@
 package com.epam.esm.config;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 
-@Profile("dev")
+@Profile("test")
 @Configuration
 @ComponentScan("com.epam.esm")
 @EnableTransactionManagement
+@PropertySource({"classpath:properties/application.properties", "classpath:properties/application-test.properties"})
 public class ConfigTest {
 
-    public static final String UTF_8 = "UTF-8";
-    public static final String CLASSPATH_DB_SCHEMA_SQL = "classpath:db_schema.sql";
-    public static final String CLASSPATH_DB_DATA_SQL = "classpath:db_data.sql";
+    private final Environment env;
+
+    @Value("${db.poolsize:5}")
+    private int MAX_POOL_SIZE;
+
+    @Autowired
+    public ConfigTest(Environment env) {
+        this.env = env;
+    }
 
     @Bean
     public DataSource dataSource() {
-        return new EmbeddedDatabaseBuilder().generateUniqueName(true).
-                setScriptEncoding(UTF_8).setType(EmbeddedDatabaseType.H2).
-                addScript(CLASSPATH_DB_SCHEMA_SQL).addScript(CLASSPATH_DB_DATA_SQL).build();
+        HikariConfig config = new HikariConfig();
+        config.setDriverClassName(env.getProperty("db.driverClassName"));
+        config.setUsername(env.getProperty("db.username"));
+        config.setPassword(env.getProperty("db.password"));
+        config.setJdbcUrl(env.getProperty("db.jdbcUrl"));
+        config.setMaximumPoolSize(MAX_POOL_SIZE);
+        return new HikariDataSource(config);
     }
 
     @Bean

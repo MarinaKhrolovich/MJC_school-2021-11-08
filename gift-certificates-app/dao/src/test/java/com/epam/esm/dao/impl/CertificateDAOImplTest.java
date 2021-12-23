@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
         @Sql("classpath:db_data.sql")
 })
 @Sql(scripts = "classpath:drop.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-public class CertificateTagDAOImplTest {
+public class CertificateDAOImplTest {
 
     @Autowired
     private CertificateDAO certificateDAO;

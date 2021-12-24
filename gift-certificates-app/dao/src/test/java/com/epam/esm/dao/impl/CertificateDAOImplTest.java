@@ -1,6 +1,7 @@
 package com.epam.esm.dao.impl;
 
 import com.epam.esm.bean.Certificate;
+import com.epam.esm.bean.RequestParameters;
 import com.epam.esm.bean.Tag;
 import com.epam.esm.config.ConfigTest;
 import com.epam.esm.dao.CertificateDAO;
@@ -80,6 +81,11 @@ public class CertificateDAOImplTest {
         certificateActual.setTagList(allTagsOfCertificate);
 
         assertEquals(certificateExpected, certificateActual);
+    }
+    @Test
+    public void getAllCertificates() {
+        RequestParameters requestParameters = new RequestParameters(null, null, null, null, null);
+        assertEquals(2, certificateDAO.get(requestParameters).size());
     }
 
     @Test

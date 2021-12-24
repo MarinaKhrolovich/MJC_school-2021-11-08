@@ -6,6 +6,7 @@ import com.epam.esm.config.ConfigTest;
 import com.epam.esm.dao.CertificateDAO;
 import com.epam.esm.dao.CertificateTagDAO;
 import com.epam.esm.dao.TagDAO;
+import com.epam.esm.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
@@ -78,6 +80,14 @@ public class CertificateDAOImplTest {
         certificateActual.setTagList(allTagsOfCertificate);
 
         assertEquals(certificateExpected, certificateActual);
+    }
+
+    @Test
+    @Transactional
+    public void delete() {
+        certificateTagDAO.deleteTagsOfCertificate(ID_DELETE);
+        certificateDAO.delete(ID_DELETE);
+        assertThrows(ResourceNotFoundException.class, () -> certificateDAO.get(ID_DELETE));
     }
 
 }

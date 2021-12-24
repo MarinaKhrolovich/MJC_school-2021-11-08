@@ -22,8 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
@@ -86,6 +85,16 @@ public class CertificateDAOImplTest {
     public void getAllCertificates() {
         RequestParameters requestParameters = new RequestParameters(null, null, null, null, null);
         assertEquals(2, certificateDAO.get(requestParameters).size());
+    }
+
+    @Test
+    public void getShouldBeNotNull() {
+        assertNotNull(certificateDAO.get(ID_EXISTS));
+    }
+
+    @Test
+    public void getShouldException() {
+        assertThrows(ResourceNotFoundException.class, () -> certificateDAO.get(ID_NOT_EXISTS));
     }
 
     @Test

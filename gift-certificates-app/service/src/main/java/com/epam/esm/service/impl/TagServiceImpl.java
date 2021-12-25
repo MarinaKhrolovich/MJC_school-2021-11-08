@@ -38,14 +38,12 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    @Transactional
     public Tag get(int id) {
         Tag tag = tagDAO.get(id);
         return tag;
     }
 
     @Override
-    @Transactional
     public List<Tag> get() {
         return tagDAO.get();
     }

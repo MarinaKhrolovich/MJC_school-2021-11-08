@@ -52,7 +52,6 @@ public class CertificateServiceImpl implements CertificateService {
     }
 
     @Override
-    @Transactional
     public List<Certificate> get(RequestParameters requestParameters) {
         List<Certificate> certificateList = certificateDAO.get(requestParameters);
         certificateList.forEach(certificate -> setTagList(certificate.getId(), certificate));

@@ -19,23 +19,23 @@ public class TagController {
     }
 
     @PostMapping
-    public Tag addTag(@RequestBody Tag tag){
+    public Tag addTag(@RequestBody Tag tag) {
         tagService.add(tag);
         return tag;
     }
 
     @GetMapping("/{id}")
-    public Tag getTag(@PathVariable int id){
+    public Tag getTag(@PathVariable int id) {
         return tagService.get(id);
     }
 
     @GetMapping
-    public List<Tag> getTags(){
+    public List<Tag> getTags() {
         return tagService.get();
     }
 
     @DeleteMapping("/{id}")
-    public void deleteTag(@PathVariable int id){
+    public void deleteTag(@PathVariable int id) {
         tagService.delete(id);
     }
 

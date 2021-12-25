@@ -3,7 +3,9 @@ package com.epam.esm.controller;
 import com.epam.esm.bean.Certificate;
 import com.epam.esm.bean.RequestParameters;
 import com.epam.esm.service.CertificateService;
+
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,9 +37,9 @@ public class CertificateController {
                                              @RequestParam(required = false) String tagName,
                                              @RequestParam(required = false) String certificateName,
                                              @RequestParam(required = false) String certificateDescription
-                                             ) {
+    ) {
         return certificateService.get(new RequestParameters(orderByDate, orderByName, tagName, certificateName,
-                                                certificateDescription));
+                certificateDescription));
     }
 
     @PutMapping("/{id}")

@@ -42,6 +42,8 @@ public class CertificateDAOImplTest {
     private TagDAO tagDAO;
 
     private static Certificate certificateExpected;
+    private static Certificate certificateUpdate;
+
 
     public static final int ID_EXISTS = 1;
     public static final int ID_DELETE = 2;
@@ -63,6 +65,10 @@ public class CertificateDAOImplTest {
         certificateExpected.setPrice(10.0);
         certificateExpected.setDuration(30);
         certificateExpected.setTagList(tagList);
+
+        certificateUpdate = new Certificate();
+        certificateUpdate.setDescription(NEW_CERTIFICATE);
+        certificateUpdate.setDuration(60);
     }
 
     @Test
@@ -95,6 +101,16 @@ public class CertificateDAOImplTest {
     @Test
     public void getShouldException() {
         assertThrows(ResourceNotFoundException.class, () -> certificateDAO.get(ID_NOT_EXISTS));
+    }
+
+    @Test
+    @Transactional
+    public void update() {
+        certificateUpdate.setId(ID_EXISTS);
+        certificateDAO.update(ID_EXISTS, certificateUpdate);
+        Certificate certificateActual = certificateDAO.get(ID_EXISTS);
+        assertEquals(certificateUpdate.getDescription(), certificateActual.getDescription());
+        assertEquals(certificateUpdate.getDuration(), certificateActual.getDuration());
     }
 
     @Test

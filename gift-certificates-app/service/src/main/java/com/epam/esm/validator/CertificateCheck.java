@@ -13,6 +13,9 @@ public class CertificateCheck {
     public static final String MESSAGE_CERTIFICATE_DESCRIPTION_LENGTH = "message.certificate.description.length";
     public static final String MESSAGE_CERTIFICATE_DURATION = "message.certificate.duration";
     public static final String MESSAGE_CERTIFICATE_PRICE = "message.certificate.price";
+    public static final int MAX_NAME_LENGTH = 100;
+    public static final int MAX_DESCRIPTION_LENGTH = 1000;
+    public static final int MIN_STRING_LENGTH = 3;
 
     public void check(Certificate certificate, boolean checkNull) {
         checkNameCertificate(certificate.getName(), checkNull);
@@ -27,7 +30,7 @@ public class CertificateCheck {
                 throw new ValidatorException(MESSAGE_CERTIFICATE_NAME_FILL);
             }
         } else {
-            if (name.trim().isEmpty() || name.length() < 3 || name.length() > 100) {
+            if (name.trim().isEmpty() || name.length() < MIN_STRING_LENGTH || name.length() > MAX_NAME_LENGTH) {
                 throw new ValidatorException(MESSAGE_CERTIFICATE_NAME_LENGTH);
             }
         }
@@ -39,7 +42,7 @@ public class CertificateCheck {
                 throw new ValidatorException(MESSAGE_CERTIFICATE_DESCRIPTION_FILL);
             }
         } else {
-            if (description.trim().isEmpty() || description.length() < 3 || description.length() > 1000) {
+            if (description.trim().isEmpty() || description.length() < MIN_STRING_LENGTH || description.length() > MAX_DESCRIPTION_LENGTH) {
                 throw new ValidatorException(MESSAGE_CERTIFICATE_DESCRIPTION_LENGTH);
             }
         }

@@ -25,24 +25,24 @@ public class CertificateCheck {
     }
 
     public void checkNameCertificate(String name, boolean checkNull) {
-        if (name == null) {
+        if (name == null || name.isBlank()) {
             if (checkNull) {
                 throw new ValidatorException(MESSAGE_CERTIFICATE_NAME_FILL);
             }
         } else {
-            if (name.trim().isEmpty() || name.length() < MIN_STRING_LENGTH || name.length() > MAX_NAME_LENGTH) {
+            if (name.length() < MIN_STRING_LENGTH || name.length() > MAX_NAME_LENGTH) {
                 throw new ValidatorException(MESSAGE_CERTIFICATE_NAME_LENGTH);
             }
         }
     }
 
     public void checkDescriptionCertificate(String description, boolean checkNull) {
-        if (description == null) {
+        if (description == null || description.isBlank()) {
             if (checkNull) {
                 throw new ValidatorException(MESSAGE_CERTIFICATE_DESCRIPTION_FILL);
             }
         } else {
-            if (description.trim().isEmpty() || description.length() < MIN_STRING_LENGTH || description.length() > MAX_DESCRIPTION_LENGTH) {
+            if (description.length() < MIN_STRING_LENGTH || description.length() > MAX_DESCRIPTION_LENGTH) {
                 throw new ValidatorException(MESSAGE_CERTIFICATE_DESCRIPTION_LENGTH);
             }
         }

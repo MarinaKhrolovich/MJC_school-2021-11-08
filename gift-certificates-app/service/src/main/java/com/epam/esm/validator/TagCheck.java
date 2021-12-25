@@ -15,7 +15,7 @@ public class TagCheck {
     public void check(Tag tag) {
         String name = tag.getName();
 
-        if (name == null) {
+        if (name == null || name.isBlank()) {
             throw new ValidatorException(MESSAGE_TAG_NAME_FILL);
         }
 

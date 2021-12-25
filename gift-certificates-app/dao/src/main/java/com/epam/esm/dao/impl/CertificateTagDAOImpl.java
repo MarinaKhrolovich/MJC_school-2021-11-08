@@ -12,13 +12,16 @@ import java.util.List;
 @Repository
 public class CertificateTagDAOImpl implements CertificateTagDAO {
 
-    private static final String CREATE_CERTIFICATE_TAG = "INSERT INTO certificate_tag(certificate_id,tag_id) VALUES(?,?)";
-    private static final String SELECT_TAGS_OF_CERTIFICATE = "SELECT tag.id, tag.name FROM certificate_tag JOIN tag ON" +
-            " certificate_tag.tag_id = tag.id WHERE certificate_tag.certificate_id = ?";
-    private static final String SELECT_CERTIFICATE_TAG = SELECT_TAGS_OF_CERTIFICATE + " AND certificate_tag.tag_id = ?";
-    private static final String DELETE_FROM_CERTIFICATE_TAG_WHERE_TAG_ID = "DELETE FROM certificate_tag WHERE tag_id = ?";
+    private static final String CREATE_CERTIFICATE_TAG = "INSERT INTO certificate_tag(certificate_id,tag_id) " +
+                                                         "VALUES(?,?)";
+    private static final String SELECT_TAGS_OF_CERTIFICATE = "SELECT tag.id, tag.name FROM certificate_tag JOIN tag " +
+                                         "ON certificate_tag.tag_id = tag.id WHERE certificate_tag.certificate_id = ?";
+    private static final String SELECT_CERTIFICATE_TAG = SELECT_TAGS_OF_CERTIFICATE + " AND " +
+                                                         "certificate_tag.tag_id = ?";
+    private static final String DELETE_FROM_CERTIFICATE_TAG_WHERE_TAG_ID = "DELETE FROM certificate_tag " +
+                                                                           "WHERE tag_id = ?";
     private static final String DELETE_FROM_CERTIFICATE_TAG_WHERE_CERTIFICATE_ID = "DELETE FROM certificate_tag " +
-            "WHERE certificate_id = ?";
+                                                                                   "WHERE certificate_id = ?";
 
     private final JdbcTemplate jdbcTemplate;
 

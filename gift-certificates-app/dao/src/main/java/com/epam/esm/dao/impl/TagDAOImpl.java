@@ -36,31 +36,29 @@ public class TagDAOImpl implements TagDAO {
         jdbcTemplate.update(
                 connection -> {
                     PreparedStatement ps =
-                            connection.prepareStatement(CREATE_TAG, new String[] {"id"});
+                            connection.prepareStatement(CREATE_TAG, new String[]{"id"});
                     ps.setString(1, tag.getName());
                     return ps;
                 },
                 keyHolder);
 
         tag.setId(keyHolder.getKey().intValue());
-
     }
 
     @Override
     public Tag get(int id) {
-        return jdbcTemplate.query(SELECT_FROM_TAG_WHERE_ID, new BeanPropertyRowMapper<>(Tag.class),id)
+        return jdbcTemplate.query(SELECT_FROM_TAG_WHERE_ID, new BeanPropertyRowMapper<>(Tag.class), id)
                 .stream().findAny().orElseThrow(() -> new ResourceNotFoundException(Integer.toString(id)));
     }
 
     @Override
     public Tag get(String name) {
-        return jdbcTemplate.query(SELECT_FROM_TAG_WHERE_NAME, new BeanPropertyRowMapper<>(Tag.class),name)
+        return jdbcTemplate.query(SELECT_FROM_TAG_WHERE_NAME, new BeanPropertyRowMapper<>(Tag.class), name)
                 .stream().findAny().orElse(null);
     }
 
     @Override
     public List<Tag> get() {
-
         return jdbcTemplate.query(SELECT_FROM_TAG, new BeanPropertyRowMapper<>(Tag.class));
     }
 

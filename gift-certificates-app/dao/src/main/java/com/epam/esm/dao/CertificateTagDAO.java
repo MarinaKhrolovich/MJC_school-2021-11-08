@@ -15,4 +15,5 @@ public interface CertificateTagDAO {
     void deleteTagsOfCertificate(int certificate_id);
 
     void deleteTagFromCertificates(int tag_id);
+
 }

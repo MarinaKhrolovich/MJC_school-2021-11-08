@@ -87,9 +87,11 @@ public class CertificateDAOImplTest {
 
         assertEquals(certificateExpected, certificateActual);
     }
+
     @Test
     public void getAllCertificates() {
-        RequestParameters requestParameters = new RequestParameters(null, null, null, null, null);
+        RequestParameters requestParameters = new RequestParameters(null, null, null,
+                null, null);
         assertEquals(2, certificateDAO.get(requestParameters).size());
     }
 

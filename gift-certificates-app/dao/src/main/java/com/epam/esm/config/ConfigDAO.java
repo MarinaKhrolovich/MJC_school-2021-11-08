@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 
 @Profile("!test")
 @Configuration
-@PropertySource({"classpath:properties/application.properties","classpath:properties/application-${spring.profiles.active}.properties"})
+@PropertySource({"classpath:properties/application.properties", "classpath:properties/application-${spring.profiles.active}.properties"})
 @ComponentScan("com.epam.esm")
 @EnableTransactionManagement
 public class ConfigDAO {

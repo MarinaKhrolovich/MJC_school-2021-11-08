@@ -11,7 +11,7 @@ public class CertificateGetSQLRequest {
 
     private static final String SELECT_FROM_CERTIFICATE = "SELECT * FROM certificate";
     private static final String JOIN = " JOIN certificate_tag JOIN tag ON certificate.id = " +
-                                        "certificate_tag.certificate_id AND certificate_tag.tag_id = tag.id";
+            "certificate_tag.certificate_id AND certificate_tag.tag_id = tag.id";
     private static final String WHERE = " WHERE";
     private static final String CERTIFICATE_NAME = " certificate.name LIKE concat ('%', ?, '%')";
     private static final String CERTIFICATE_DESCRIPTION = " certificate.description LIKE concat ('%', ?, '%')";
@@ -44,7 +44,7 @@ public class CertificateGetSQLRequest {
 
         whereExists = appendWhere(stringBuilder, certificateName, CERTIFICATE_NAME, whereExists, parameters);
         whereExists = appendWhere(stringBuilder, certificateDescription, CERTIFICATE_DESCRIPTION,
-                                                                                    whereExists, parameters);
+                whereExists, parameters);
         appendWhere(stringBuilder, tagName, TAG_NAME, whereExists, parameters);
 
         orderExists = appendOrder(stringBuilder, orderByDate, ORDER_DATE, orderExists);

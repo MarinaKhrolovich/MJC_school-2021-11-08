@@ -32,14 +32,9 @@ public class CertificateController {
     }
 
     @GetMapping()
-    public List<Certificate> getCertificates(@RequestParam(required = false) String orderByDate,
-                                             @RequestParam(required = false) String orderByName,
-                                             @RequestParam(required = false) String tagName,
-                                             @RequestParam(required = false) String certificateName,
-                                             @RequestParam(required = false) String certificateDescription
-    ) {
-        return certificateService.get(new OrderDTO(orderByDate, orderByName), new SearchDTO(tagName, certificateName,
-                certificateDescription));
+    public List<Certificate> getCertificates(@RequestParam(required = false) OrderDTO orderDTO,
+                                             @RequestParam(required = false) SearchDTO searchDTO) {
+        return certificateService.get(orderDTO, searchDTO);
     }
 
     @PutMapping("/{id}")

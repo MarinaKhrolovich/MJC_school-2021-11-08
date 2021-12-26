@@ -71,7 +71,7 @@ public class CertificateDAOImpl implements CertificateDAO {
     @Override
     public Certificate get(int id) {
         return jdbcTemplate.query(SELECT_FROM_CERTIFICATE_WHERE_ID, new CertificateMapper(), id)
-                .stream().findAny().orElseThrow(() -> new ResourceNotFoundException(Integer.toString(id)));
+                .stream().findAny().orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
     @Override

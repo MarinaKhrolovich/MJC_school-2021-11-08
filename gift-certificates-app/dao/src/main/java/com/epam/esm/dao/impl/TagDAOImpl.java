@@ -53,7 +53,7 @@ public class TagDAOImpl implements TagDAO {
     @Override
     public Tag get(int id) {
         return jdbcTemplate.query(SELECT_FROM_TAG_WHERE_ID, new BeanPropertyRowMapper<>(Tag.class), id)
-                .stream().findAny().orElseThrow(() -> new ResourceNotFoundException(Integer.toString(id)));
+                .stream().findAny().orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
     @Override

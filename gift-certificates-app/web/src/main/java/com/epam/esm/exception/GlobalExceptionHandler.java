@@ -45,8 +45,8 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
         errorResponse.setMessage(messageSource.getMessage(MESSAGE_RESOURCE_NOT_FOUND, new Object[]{}, locale) +
-                " (id = " + exception.getMessage() + ")");
-        errorResponse.setCode(HttpStatus.NOT_FOUND.value() + exception.getMessage());
+                " (id = " + exception.getResourceId() + ")");
+        errorResponse.setCode(HttpStatus.NOT_FOUND.value() + Integer.toString(exception.getResourceId()));
         LOG.error(exception);
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }

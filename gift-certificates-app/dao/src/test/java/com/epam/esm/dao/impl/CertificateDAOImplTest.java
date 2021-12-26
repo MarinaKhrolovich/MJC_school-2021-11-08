@@ -37,6 +37,20 @@ import static org.junit.jupiter.api.Assertions.*;
 @Sql(scripts = "classpath:drop.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 public class CertificateDAOImplTest {
 
+    public static final int EXPECTED_SIZE_BY_SEARCH = 1;
+    public static final double PRICE_OF_EXPECTED_CERTIFICATE = 10.0;
+    public static final int DURATION_OF_EXPECTED_CERTIFICATE = 30;
+    public static final int DURATION_OF_UPDATE_CERTIFICATE = 60;
+    public static final int ID_EXISTS = 1;
+    public static final int ID_DELETE = 2;
+    public static final int ID_NOT_EXISTS = 100;
+    public static final int EXPECTED_LIST_SIZE = 2;
+    public static final String NEW_CERTIFICATE = "new certificate";
+    public static final String NEW_TAG = "new tag";
+    public static final int ID_FIRST_ELEMENT = 1;
+    public static final int ID_SECOND_ELEMENT = 2;
+    public static final int EXPECTED_SIZE_BY_INVALID_SEARCH = 0;
+
     @Autowired
     private CertificateDAO certificateDAO;
     @Autowired
@@ -46,14 +60,6 @@ public class CertificateDAOImplTest {
 
     private static Certificate certificateExpected;
     private static Certificate certificateUpdate;
-
-
-    public static final int ID_EXISTS = 1;
-    public static final int ID_DELETE = 2;
-    public static final int ID_NOT_EXISTS = 100;
-
-    public static final String NEW_CERTIFICATE = "new certificate";
-    public static final String NEW_TAG = "new tag";
 
     @BeforeAll
     public static void initTag() {
@@ -65,13 +71,13 @@ public class CertificateDAOImplTest {
         certificateExpected = new Certificate();
         certificateExpected.setName(NEW_CERTIFICATE);
         certificateExpected.setDescription(NEW_CERTIFICATE);
-        certificateExpected.setPrice(10.0);
-        certificateExpected.setDuration(30);
+        certificateExpected.setPrice(PRICE_OF_EXPECTED_CERTIFICATE);
+        certificateExpected.setDuration(DURATION_OF_EXPECTED_CERTIFICATE);
         certificateExpected.setTagList(tagList);
 
         certificateUpdate = new Certificate();
         certificateUpdate.setDescription(NEW_CERTIFICATE);
-        certificateUpdate.setDuration(60);
+        certificateUpdate.setDuration(DURATION_OF_UPDATE_CERTIFICATE);
     }
 
     @Test
@@ -95,31 +101,31 @@ public class CertificateDAOImplTest {
     public void getAllCertificates() {
         OrderDTO orderDTO = new OrderDTO(null, null);
         SearchDTO searchDTO = new SearchDTO(null, null, null);
-        assertEquals(2, certificateDAO.get(orderDTO, searchDTO).size());
+        assertEquals(EXPECTED_LIST_SIZE, certificateDAO.get(orderDTO, searchDTO).size());
     }
 
     @Test
     public void getCertificatesBySearch() {
         OrderDTO orderDTO = new OrderDTO(null,null);
         SearchDTO searchDTO = new SearchDTO("sport", null, null);
-        assertEquals(1, certificateDAO.get(orderDTO, searchDTO).size());
+        assertEquals(EXPECTED_SIZE_BY_SEARCH, certificateDAO.get(orderDTO, searchDTO).size());
 
         searchDTO = new SearchDTO(null, "spo", null);
-        assertEquals(1, certificateDAO.get(orderDTO, searchDTO).size());
+        assertEquals(EXPECTED_SIZE_BY_SEARCH, certificateDAO.get(orderDTO, searchDTO).size());
 
         searchDTO = new SearchDTO(null, null, "mas");
-        assertEquals(1, certificateDAO.get(orderDTO, searchDTO).size());
+        assertEquals(EXPECTED_SIZE_BY_SEARCH, certificateDAO.get(orderDTO, searchDTO).size());
 
         searchDTO = new SearchDTO("sport", "spo", "mas");
-        assertEquals(0, certificateDAO.get(orderDTO, searchDTO).size());
+        assertEquals(EXPECTED_SIZE_BY_INVALID_SEARCH, certificateDAO.get(orderDTO, searchDTO).size());
     }
 
     @Test
     public void getCertificatesByOrder() {
         SearchDTO searchDTO = new SearchDTO(null, null, null);
         OrderDTO orderDTO = new OrderDTO(null, "DESC");
-        Certificate firstCertificate = certificateDAO.get(1);
-        Certificate secondCertificate = certificateDAO.get(2);
+        Certificate firstCertificate = certificateDAO.get(ID_FIRST_ELEMENT);
+        Certificate secondCertificate = certificateDAO.get(ID_SECOND_ELEMENT);
         List<Certificate> expectedList = Arrays.asList(firstCertificate, secondCertificate);
         assertEquals(expectedList, certificateDAO.get(orderDTO, searchDTO));
 

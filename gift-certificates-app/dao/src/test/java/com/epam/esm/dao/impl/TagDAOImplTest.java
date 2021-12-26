@@ -35,6 +35,7 @@ public class TagDAOImplTest {
     public static final String TAG_EXISTS = "sport";
     public static final String TAG_NOT_EXISTS = "not exists tag";
     public static final String NEW_TAG = "new tag";
+    public static final int EXPECTED_SIZE = 2;
 
     @Autowired
     private TagDAO tagDAO;
@@ -87,7 +88,7 @@ public class TagDAOImplTest {
 
     @Test
     public void get() {
-        assertEquals(2, tagDAO.get().size());
+        assertEquals(EXPECTED_SIZE, tagDAO.get().size());
     }
 
     @Test

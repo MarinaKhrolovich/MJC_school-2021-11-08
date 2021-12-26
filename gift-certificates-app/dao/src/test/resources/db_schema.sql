@@ -12,7 +12,8 @@ create table certificate
 create table tag
 (
     id   INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(45) NOT NULL
+    name VARCHAR(45) NOT NULL,
+    CONSTRAINT unique_name UNIQUE(name)
 );
 
 create table certificate_tag

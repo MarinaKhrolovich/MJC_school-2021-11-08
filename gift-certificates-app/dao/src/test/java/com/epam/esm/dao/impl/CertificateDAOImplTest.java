@@ -22,6 +22,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -117,10 +118,14 @@ public class CertificateDAOImplTest {
     public void getCertificatesByOrder() {
         SearchDTO searchDTO = new SearchDTO(null, null, null);
         OrderDTO orderDTO = new OrderDTO(null, "DESC");
-        //assertEquals(certificateDAO.get(orderDTO, null));
+        Certificate firstCertificate = certificateDAO.get(1);
+        Certificate secondCertificate = certificateDAO.get(2);
+        List<Certificate> expectedList = Arrays.asList(firstCertificate, secondCertificate);
+        assertEquals(expectedList, certificateDAO.get(orderDTO, searchDTO));
 
+        expectedList = Arrays.asList(secondCertificate, firstCertificate);
         orderDTO = new OrderDTO("ASC", null);
-        //assertEquals(certificateDAO.get(orderDTO, null));
+        assertEquals(expectedList, certificateDAO.get(orderDTO, searchDTO));
     }
 
     @Test

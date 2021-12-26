@@ -18,6 +18,10 @@ public class GlobalExceptionHandler {
     public static final String MESSAGE_RESOURCE_NOT_FOUND = "message.resource.NotFound";
     public static final String MESSAGE_SOMETHING_WRONG = "message.somethingWrong";
     public static final String MESSAGE_RESOURCE_ALREADY_EXISTS = "message.resource.AlreadyExists";
+    public static final String CODE_SOMETHING_WRONG = "000";
+    public static final String CODE_RESOURCE_EXISTS = "001";
+    public static final String CODE_RESOURCE_NOT_CHECK = "002";
+
 
     private final MessageSource messageSource;
 
@@ -31,7 +35,7 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         errorResponse.setMessage(messageSource.getMessage(MESSAGE_SOMETHING_WRONG, new Object[]{}, locale));
-        errorResponse.setCode(HttpStatus.BAD_REQUEST.value() + "000");
+        errorResponse.setCode(HttpStatus.BAD_REQUEST.value() + CODE_SOMETHING_WRONG);
         LOG.error(exception);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
@@ -53,7 +57,7 @@ public class GlobalExceptionHandler {
         errorResponse.setStatus(HttpStatus.CONFLICT.value());
         errorResponse.setMessage(messageSource.getMessage(MESSAGE_RESOURCE_ALREADY_EXISTS, new Object[]{}, locale) +
                 " (name = " + exception.getMessage() + ")");
-        errorResponse.setCode(HttpStatus.CONFLICT.value() + "001");
+        errorResponse.setCode(HttpStatus.CONFLICT.value() + CODE_RESOURCE_EXISTS);
         LOG.error(exception);
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
@@ -63,7 +67,7 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         errorResponse.setMessage(messageSource.getMessage(exception.getMessage(), new Object[]{}, locale));
-        errorResponse.setCode(HttpStatus.BAD_REQUEST.value() + "002");
+        errorResponse.setCode(HttpStatus.BAD_REQUEST.value() + CODE_RESOURCE_NOT_CHECK);
         LOG.error(exception);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }

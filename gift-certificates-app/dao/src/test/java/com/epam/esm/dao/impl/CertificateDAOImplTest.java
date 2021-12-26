@@ -10,6 +10,7 @@ import com.epam.esm.dao.CertificateTagDAO;
 import com.epam.esm.dao.TagDAO;
 import com.epam.esm.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,8 +93,34 @@ public class CertificateDAOImplTest {
     @Test
     public void getAllCertificates() {
         OrderDTO orderDTO = new OrderDTO(null, null);
-        SearchDTO searchDTO = new SearchDTO(null, null,null);
-        assertEquals(2, certificateDAO.get(orderDTO,searchDTO).size());
+        SearchDTO searchDTO = new SearchDTO(null, null, null);
+        assertEquals(2, certificateDAO.get(orderDTO, searchDTO).size());
+    }
+
+    @Test
+    public void getCertificatesBySearch() {
+        OrderDTO orderDTO = new OrderDTO(null,null);
+        SearchDTO searchDTO = new SearchDTO("sport", null, null);
+        assertEquals(1, certificateDAO.get(orderDTO, searchDTO).size());
+
+        searchDTO = new SearchDTO(null, "spo", null);
+        assertEquals(1, certificateDAO.get(orderDTO, searchDTO).size());
+
+        searchDTO = new SearchDTO(null, null, "mas");
+        assertEquals(1, certificateDAO.get(orderDTO, searchDTO).size());
+
+        searchDTO = new SearchDTO("sport", "spo", "mas");
+        assertEquals(0, certificateDAO.get(orderDTO, searchDTO).size());
+    }
+
+    @Test
+    public void getCertificatesByOrder() {
+        SearchDTO searchDTO = new SearchDTO(null, null, null);
+        OrderDTO orderDTO = new OrderDTO(null, "DESC");
+        //assertEquals(certificateDAO.get(orderDTO, null));
+
+        orderDTO = new OrderDTO("ASC", null);
+        //assertEquals(certificateDAO.get(orderDTO, null));
     }
 
     @Test

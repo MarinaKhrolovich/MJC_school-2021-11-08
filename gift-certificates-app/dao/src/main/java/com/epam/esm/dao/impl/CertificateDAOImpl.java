@@ -1,7 +1,8 @@
 package com.epam.esm.dao.impl;
 
 import com.epam.esm.bean.Certificate;
-import com.epam.esm.bean.RequestParameters;
+import com.epam.esm.bean.OrderDTO;
+import com.epam.esm.bean.SearchDTO;
 import com.epam.esm.dao.CertificateDAO;
 import com.epam.esm.dao.CertificateTagDAO;
 import com.epam.esm.dao.mapper.CertificateMapper;
@@ -74,8 +75,8 @@ public class CertificateDAOImpl implements CertificateDAO {
     }
 
     @Override
-    public List<Certificate> get(RequestParameters requestParameters) {
-        CertificateUpdateParameters getParameters = getSQLRequest.create(requestParameters);
+    public List<Certificate> get(OrderDTO orderDTO, SearchDTO searchDTO) {
+        CertificateUpdateParameters getParameters = getSQLRequest.create(orderDTO, searchDTO);
         return jdbcTemplate.query(getParameters.getSqlRequest(),
                 new CertificateMapper(), getParameters.getParameters().toArray());
     }

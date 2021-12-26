@@ -1,7 +1,8 @@
 package com.epam.esm.dao.impl;
 
 import com.epam.esm.bean.Certificate;
-import com.epam.esm.bean.RequestParameters;
+import com.epam.esm.bean.OrderDTO;
+import com.epam.esm.bean.SearchDTO;
 import com.epam.esm.bean.Tag;
 import com.epam.esm.config.ConfigTest;
 import com.epam.esm.dao.CertificateDAO;
@@ -90,9 +91,9 @@ public class CertificateDAOImplTest {
 
     @Test
     public void getAllCertificates() {
-        RequestParameters requestParameters = new RequestParameters(null, null, null,
-                null, null);
-        assertEquals(2, certificateDAO.get(requestParameters).size());
+        OrderDTO orderDTO = new OrderDTO(null, null);
+        SearchDTO searchDTO = new SearchDTO(null, null,null);
+        assertEquals(2, certificateDAO.get(orderDTO,searchDTO).size());
     }
 
     @Test

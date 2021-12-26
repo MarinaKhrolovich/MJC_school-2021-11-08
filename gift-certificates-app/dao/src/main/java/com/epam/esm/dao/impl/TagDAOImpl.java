@@ -43,6 +43,7 @@ public class TagDAOImpl implements TagDAO {
                 keyHolder);
 
         tag.setId(keyHolder.getKey().intValue());
+        //throw new ResourceAlreadyExistsException(tag.getName());
     }
 
     @Override

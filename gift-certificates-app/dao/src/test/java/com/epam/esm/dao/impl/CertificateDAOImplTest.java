@@ -62,7 +62,7 @@ public class CertificateDAOImplTest {
     private static Certificate certificateUpdate;
 
     @BeforeAll
-    public static void initTag() {
+    public static void initCertificate() {
         List<Tag> tagList = new ArrayList<>();
         Tag newTag = new Tag();
         newTag.setName(NEW_TAG);

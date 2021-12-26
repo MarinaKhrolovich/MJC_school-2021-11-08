@@ -4,6 +4,7 @@ import com.epam.esm.bean.Tag;
 import com.epam.esm.config.ConfigTest;
 import com.epam.esm.dao.CertificateTagDAO;
 import com.epam.esm.dao.TagDAO;
+import com.epam.esm.exception.ResourceAlreadyExistsException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -40,11 +41,16 @@ public class TagDAOImplTest {
     @Autowired
     private CertificateTagDAO certificateTagDAO;
     private static Tag tagExpected;
+    private static Tag tagExists;
+
 
     @BeforeAll
     public static void initTag() {
         tagExpected = new Tag();
         tagExpected.setName(NEW_TAG);
+
+        tagExists = new Tag();
+        tagExists.setName(TAG_EXISTS);
     }
 
     @Test
@@ -52,6 +58,11 @@ public class TagDAOImplTest {
         tagDAO.add(tagExpected);
         Tag tagActual = tagDAO.get(tagExpected.getId());
         assertEquals(tagExpected, tagActual);
+    }
+
+    @Test
+    public void addExists() {
+        assertThrows(ResourceAlreadyExistsException.class, () -> tagDAO.add(tagExists));
     }
 
     @Test

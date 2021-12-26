@@ -3,7 +3,6 @@ package com.epam.esm.service.impl;
 import com.epam.esm.bean.Tag;
 import com.epam.esm.dao.CertificateTagDAO;
 import com.epam.esm.dao.TagDAO;
-import com.epam.esm.exception.ResourceAlreadyExistsException;
 import com.epam.esm.service.TagService;
 import com.epam.esm.validator.TagCheck;
 import org.springframework.beans.factory.annotation.Autowired;

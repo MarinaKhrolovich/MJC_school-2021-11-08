@@ -2,8 +2,10 @@ package com.epam.esm.dao.impl;
 
 import com.epam.esm.bean.Tag;
 import com.epam.esm.dao.TagDAO;
+import com.epam.esm.exception.ResourceAlreadyExistsException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -33,17 +35,19 @@ public class TagDAOImpl implements TagDAO {
     @Override
     public void add(Tag tag) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(
-                connection -> {
-                    PreparedStatement ps =
-                            connection.prepareStatement(CREATE_TAG, new String[]{"id"});
-                    ps.setString(1, tag.getName());
-                    return ps;
-                },
-                keyHolder);
-
+        try {
+            jdbcTemplate.update(
+                    connection -> {
+                        PreparedStatement ps =
+                                connection.prepareStatement(CREATE_TAG, new String[]{"id"});
+                        ps.setString(1, tag.getName());
+                        return ps;
+                    },
+                    keyHolder);
+        } catch (DuplicateKeyException exception) {
+            throw new ResourceAlreadyExistsException(tag.getName());
+        }
         tag.setId(keyHolder.getKey().intValue());
-        //throw new ResourceAlreadyExistsException(tag.getName());
     }
 
     @Override

@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CertificateServiceImplTest {
@@ -77,9 +77,18 @@ public class CertificateServiceImplTest {
         OrderDTO orderDTO = new OrderDTO(null, null);
         SearchDTO searchDTO = new SearchDTO(null, null, null);
 
-        when(certificateDAO.get(orderDTO,searchDTO)).thenReturn(certificateList);
+        when(certificateDAO.get(orderDTO, searchDTO)).thenReturn(certificateList);
         assertEquals(certificateList, certificateService.get(orderDTO, searchDTO));
-        verify(certificateDAO).get(orderDTO,searchDTO);
+        verify(certificateDAO).get(orderDTO, searchDTO);
+    }
+
+    @Test
+    public void getCertificatesByOrderSearch() {
+        when(certificateDAO.get(any(OrderDTO.class), any(SearchDTO.class))).thenReturn(certificateList);
+        OrderDTO orderDTO = new OrderDTO("DESC", null);
+        SearchDTO searchDTO = new SearchDTO("sport", null, null);
+        assertEquals(certificateList, certificateService.get(orderDTO, searchDTO));
+        verify(certificateDAO).get(orderDTO, searchDTO);
     }
 
     @Test

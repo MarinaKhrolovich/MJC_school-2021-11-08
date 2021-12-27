@@ -121,6 +121,7 @@ public class CertificateServiceImplTest {
         certificateService.add(certificateExpected);
         verify(certificateCheck).check(certificateExpected,true);
         verify(certificateDAO).add(certificateExpected);
+        verifyNoMoreInteractions(certificateCheck,certificateDAO);
     }
 
     @Test

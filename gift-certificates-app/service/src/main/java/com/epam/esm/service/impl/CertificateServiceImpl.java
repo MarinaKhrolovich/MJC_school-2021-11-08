@@ -76,7 +76,6 @@ public class CertificateServiceImpl implements CertificateService {
     @Transactional
     public void delete(int id) {
         certificateDAO.get(id);
-        certificateTagDAO.deleteTagsOfCertificate(id);
         certificateDAO.delete(id);
     }
 

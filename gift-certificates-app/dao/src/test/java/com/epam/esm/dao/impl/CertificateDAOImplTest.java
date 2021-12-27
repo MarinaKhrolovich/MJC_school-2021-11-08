@@ -155,9 +155,7 @@ public class CertificateDAOImplTest {
     }
 
     @Test
-    @Transactional
     public void delete() {
-        certificateTagDAO.deleteTagsOfCertificate(ID_DELETE);
         certificateDAO.delete(ID_DELETE);
         assertThrows(ResourceNotFoundException.class, () -> certificateDAO.get(ID_DELETE));
     }

@@ -42,7 +42,6 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    @Transactional
     public void delete(int id) {
         tagDAO.get(id);
         tagDAO.delete(id);

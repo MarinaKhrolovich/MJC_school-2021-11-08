@@ -15,13 +15,11 @@ import java.util.List;
 public class TagServiceImpl implements TagService {
 
     private final TagDAO tagDAO;
-    private final CertificateTagDAO certificateTagDAO;
     private final TagCheck tagCheck;
 
     @Autowired
     public TagServiceImpl(TagDAO tagDAO, CertificateTagDAO certificateTagDAO, TagCheck tagCheck) {
         this.tagDAO = tagDAO;
-        this.certificateTagDAO = certificateTagDAO;
         this.tagCheck = tagCheck;
     }
 
@@ -47,7 +45,6 @@ public class TagServiceImpl implements TagService {
     @Transactional
     public void delete(int id) {
         tagDAO.get(id);
-        //certificateTagDAO.deleteTagFromCertificates(id);
         tagDAO.delete(id);
     }
 }

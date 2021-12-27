@@ -47,7 +47,7 @@ public class TagServiceImpl implements TagService {
     @Transactional
     public void delete(int id) {
         tagDAO.get(id);
-        certificateTagDAO.deleteTagFromCertificates(id);
+        //certificateTagDAO.deleteTagFromCertificates(id);
         tagDAO.delete(id);
     }
 }

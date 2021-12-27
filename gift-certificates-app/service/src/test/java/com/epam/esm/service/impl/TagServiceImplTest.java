@@ -1,7 +1,6 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.bean.Tag;
-import com.epam.esm.dao.CertificateTagDAO;
 import com.epam.esm.dao.TagDAO;
 import com.epam.esm.exception.ResourceAlreadyExistsException;
 import com.epam.esm.exception.ResourceNotFoundException;
@@ -29,8 +28,6 @@ public class TagServiceImplTest {
     TagDAO tagDAO;
     @Mock
     TagCheck tagCheck;
-    @Mock
-    CertificateTagDAO certificateTagDAO;
 
     public static final String NEW_TAG = "new tag";
     public static final String SECOND_TAG = "second tag";
@@ -59,7 +56,9 @@ public class TagServiceImplTest {
         doNothing().when(tagCheck).check(tagExpected);
         doNothing().when(tagDAO).add(tagExpected);
         tagService.add(tagExpected);
+        verify(tagCheck).check(tagExpected);
         verify(tagDAO).add(tagExpected);
+        verifyNoMoreInteractions(tagCheck,tagDAO);
     }
 
     @Test
@@ -94,9 +93,10 @@ public class TagServiceImplTest {
     @Test
     public void delete() {
         when(tagDAO.get(ID_DELETE)).thenReturn(tagExpected);
-        doNothing().when(certificateTagDAO).deleteTagFromCertificates(ID_DELETE);
         doNothing().when(tagDAO).delete(ID_DELETE);
         tagService.delete(ID_DELETE);
+        verify(tagDAO).get(ID_DELETE);
         verify(tagDAO).delete(ID_DELETE);
+        verifyNoMoreInteractions(tagDAO);
     }
 }

@@ -49,6 +49,7 @@ public class CertificateServiceImplTest {
     public static final int DURATION_OF_CERTIFICATE = 30;
     public static final int ID_EXISTS = 1;
     public static final int ID_NOT_EXISTS = 100;
+    public static final int ID_DELETE = 2;
 
     private static Certificate certificateExpected;
     private static List<Certificate> certificateList;
@@ -144,6 +145,17 @@ public class CertificateServiceImplTest {
         verify(certificateTagDAO).getTagOfCertificate(anyInt(), anyInt());
         verify(certificateTagDAO).addTagToCertificate(anyInt(), anyInt());
         verifyNoMoreInteractions(certificateCheck, certificateDAO, tagCheck, tagDAO, certificateTagDAO);
+    }
+
+    @Test
+    public void delete() {
+        when(certificateDAO.get(ID_DELETE)).thenReturn(certificateExpected);
+        doNothing().when(certificateDAO).delete(ID_DELETE);
+
+        certificateService.delete(ID_DELETE);
+        verify(certificateDAO).get(ID_DELETE);
+        verify(certificateDAO).delete(ID_DELETE);
+        verifyNoMoreInteractions(certificateDAO);
     }
 
     @Test

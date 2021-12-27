@@ -37,6 +37,7 @@ public class TagServiceImplTest {
     public static final int ID_EXISTS = 1;
     public static final int ID_NOT_EXISTS = 100;
     public static final int ID_DELETE = 2;
+
     private static List<Tag> tagList;
     private static Tag tagExpected;
 

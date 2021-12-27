@@ -92,9 +92,7 @@ public class TagDAOImplTest {
     }
 
     @Test
-    @Transactional
     public void delete() {
-        certificateTagDAO.deleteTagFromCertificates(ID_DELETE);
         tagDAO.delete(ID_DELETE);
         assertThrows(ResourceNotFoundException.class, () -> tagDAO.get(ID_DELETE));
     }

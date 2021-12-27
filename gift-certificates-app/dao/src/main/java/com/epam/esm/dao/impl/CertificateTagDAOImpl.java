@@ -51,8 +51,4 @@ public class CertificateTagDAOImpl implements CertificateTagDAO {
         jdbcTemplate.update(DELETE_FROM_CERTIFICATE_TAG_WHERE_CERTIFICATE_ID, certificateId);
     }
 
-    @Override
-    public void deleteTagFromCertificates(int tagId) {
-        jdbcTemplate.update(DELETE_FROM_CERTIFICATE_TAG_WHERE_TAG_ID, tagId);
-    }
 }

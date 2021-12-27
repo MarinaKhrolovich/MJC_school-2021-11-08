@@ -21,10 +21,10 @@ create table certificate_tag
     certificate_id INT NOT NULL,
     tag_id         INT NOT NULL,
     PRIMARY KEY (certificate_id, tag_id),
-    CONSTRAINT certificate_id
+    CONSTRAINT fk_certificate_id
         FOREIGN KEY (certificate_id)
-            REFERENCES certificate(id),
-    CONSTRAINT tag_id
+            REFERENCES certificate(id) ON DELETE CASCADE,
+    CONSTRAINT fk_tag_id
         FOREIGN KEY (tag_id)
-            REFERENCES tag(id)
+            REFERENCES tag(id) ON DELETE CASCADE
 );

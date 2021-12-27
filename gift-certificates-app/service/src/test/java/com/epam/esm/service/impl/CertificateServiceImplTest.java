@@ -90,6 +90,7 @@ public class CertificateServiceImplTest {
         when(certificateTagDAO.getAllTagsOfCertificate(anyInt())).thenReturn(tagList);
 
         assertEquals(certificateList, certificateService.get(orderDTO, searchDTO));
+
         verify(certificateDAO).get(orderDTO, searchDTO);
         verify(certificateTagDAO, times(2)).getAllTagsOfCertificate(anyInt());
         verifyNoMoreInteractions(certificateDAO, certificateTagDAO);
@@ -103,6 +104,7 @@ public class CertificateServiceImplTest {
         SearchDTO searchDTO = new SearchDTO("sport", null, null);
 
         assertEquals(certificateList, certificateService.get(orderDTO, searchDTO));
+
         verify(certificateDAO).get(orderDTO, searchDTO);
         verify(certificateTagDAO, times(2)).getAllTagsOfCertificate(anyInt());
         verifyNoMoreInteractions(certificateDAO, certificateTagDAO);
@@ -114,6 +116,7 @@ public class CertificateServiceImplTest {
         when(certificateTagDAO.getAllTagsOfCertificate(ID_EXISTS)).thenReturn(tagList);
 
         assertNotNull(certificateService.get(ID_EXISTS));
+
         verify(certificateDAO).get(ID_EXISTS);
         verify(certificateTagDAO).getAllTagsOfCertificate(ID_EXISTS);
         verifyNoMoreInteractions(certificateDAO, certificateTagDAO);
@@ -137,6 +140,7 @@ public class CertificateServiceImplTest {
         doNothing().when(certificateTagDAO).addTagToCertificate(anyInt(), anyInt());
 
         certificateService.add(certificateExpected);
+
         verify(certificateCheck).check(certificateExpected, true);
         verify(certificateDAO).add(certificateExpected);
         verify(tagCheck).check(any(Tag.class));
@@ -160,6 +164,7 @@ public class CertificateServiceImplTest {
         doNothing().when(certificateTagDAO).addTagToCertificate(anyInt(), anyInt());
 
         certificateService.update(ID_EXISTS, certificateExpected);
+
         verify(certificateDAO, times(2)).get(ID_EXISTS);
         verify(certificateCheck).check(certificateExpected, false);
         verify(certificateDAO).update(ID_EXISTS, certificateExpected);
@@ -169,7 +174,7 @@ public class CertificateServiceImplTest {
         verify(tagDAO).add(any(Tag.class));
         verify(certificateTagDAO).getTagOfCertificate(anyInt(), anyInt());
         verify(certificateTagDAO).addTagToCertificate(anyInt(), anyInt());
-        //verifyNoMoreInteractions(certificateCheck, certificateDAO, certificateTagDAO);
+        //verifyNoMoreInteractions(certificateCheck, certificateDAO, tagDAO, certificateTagDAO);
     }
 
     @Test
@@ -178,6 +183,7 @@ public class CertificateServiceImplTest {
         doNothing().when(certificateDAO).delete(ID_DELETE);
 
         certificateService.delete(ID_DELETE);
+
         verify(certificateDAO).get(ID_DELETE);
         verify(certificateDAO).delete(ID_DELETE);
         verifyNoMoreInteractions(certificateDAO);

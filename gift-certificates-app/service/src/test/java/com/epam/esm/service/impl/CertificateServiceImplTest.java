@@ -148,6 +148,31 @@ public class CertificateServiceImplTest {
     }
 
     @Test
+    public void update() {
+        when(certificateDAO.get(ID_EXISTS)).thenReturn(certificateExpected);
+        doNothing().when(certificateCheck).check(certificateExpected, false);
+        doNothing().when(certificateDAO).update(ID_EXISTS, certificateExpected);
+        doNothing().when(certificateTagDAO).deleteTagsOfCertificate(ID_EXISTS);
+        doNothing().when(tagCheck).check(any(Tag.class));
+        when(tagDAO.get(anyString())).thenReturn(null);
+        doNothing().when(tagDAO).add(any(Tag.class));
+        when(certificateTagDAO.getTagOfCertificate(anyInt(), anyInt())).thenReturn(null);
+        doNothing().when(certificateTagDAO).addTagToCertificate(anyInt(), anyInt());
+
+        certificateService.update(ID_EXISTS, certificateExpected);
+        verify(certificateDAO, times(2)).get(ID_EXISTS);
+        verify(certificateCheck).check(certificateExpected, false);
+        verify(certificateDAO).update(ID_EXISTS, certificateExpected);
+        verify(certificateTagDAO).deleteTagsOfCertificate(ID_EXISTS);
+        verify(tagCheck).check(any(Tag.class));
+        verify(tagDAO).get(anyString());
+        verify(tagDAO).add(any(Tag.class));
+        verify(certificateTagDAO).getTagOfCertificate(anyInt(), anyInt());
+        verify(certificateTagDAO).addTagToCertificate(anyInt(), anyInt());
+        //verifyNoMoreInteractions(certificateCheck, certificateDAO, certificateTagDAO);
+    }
+
+    @Test
     public void delete() {
         when(certificateDAO.get(ID_DELETE)).thenReturn(certificateExpected);
         doNothing().when(certificateDAO).delete(ID_DELETE);
@@ -156,18 +181,6 @@ public class CertificateServiceImplTest {
         verify(certificateDAO).get(ID_DELETE);
         verify(certificateDAO).delete(ID_DELETE);
         verifyNoMoreInteractions(certificateDAO);
-    }
-
-    @Test
-    public void update() {
-       /* when(certificateDAO.get(ID_EXISTS)).thenReturn(certificateExpected);
-        doNothing().when(certificateCheck).check(certificateExpected,false);
-        doNothing().when(certificateDAO).update(ID_EXISTS, certificateExpected);
-
-       certificateService.update(ID_EXISTS, certificateExpected);
-       verify(certificateDAO).get(ID_EXISTS);
-       verify(certificateCheck).check(certificateExpected,true);
-       verify(certificateDAO).update(ID_EXISTS,certificateExpected);*/
     }
 
 }

@@ -11,12 +11,12 @@ import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.validator.CertificateCheck;
 import com.epam.esm.validator.TagCheck;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class CertificateServiceImplTest {
@@ -54,10 +53,11 @@ public class CertificateServiceImplTest {
     private static Certificate certificateExpected;
     private static List<Certificate> certificateList;
     private static Tag newTag;
+    private static List<Tag> tagList;
 
     @BeforeAll
     static void beforeAll() {
-        List<Tag> tagList = new ArrayList<>();
+        tagList = new ArrayList<>();
         newTag = new Tag();
         newTag.setName(NEW_TAG);
         tagList.add(newTag);
@@ -85,26 +85,37 @@ public class CertificateServiceImplTest {
     public void getAllCertificates() {
         OrderDTO orderDTO = new OrderDTO(null, null);
         SearchDTO searchDTO = new SearchDTO(null, null, null);
-
         when(certificateDAO.get(orderDTO, searchDTO)).thenReturn(certificateList);
+        when(certificateTagDAO.getAllTagsOfCertificate(anyInt())).thenReturn(tagList);
+
         assertEquals(certificateList, certificateService.get(orderDTO, searchDTO));
         verify(certificateDAO).get(orderDTO, searchDTO);
+        verify(certificateTagDAO, times(2)).getAllTagsOfCertificate(anyInt());
+        verifyNoMoreInteractions(certificateDAO, certificateTagDAO);
     }
 
     @Test
     public void getCertificatesByOrderSearch() {
         when(certificateDAO.get(any(OrderDTO.class), any(SearchDTO.class))).thenReturn(certificateList);
+        when(certificateTagDAO.getAllTagsOfCertificate(anyInt())).thenReturn(tagList);
         OrderDTO orderDTO = new OrderDTO("DESC", null);
         SearchDTO searchDTO = new SearchDTO("sport", null, null);
+
         assertEquals(certificateList, certificateService.get(orderDTO, searchDTO));
         verify(certificateDAO).get(orderDTO, searchDTO);
+        verify(certificateTagDAO, times(2)).getAllTagsOfCertificate(anyInt());
+        verifyNoMoreInteractions(certificateDAO, certificateTagDAO);
     }
 
     @Test
     public void getShouldBeNotNull() {
         when(certificateDAO.get(ID_EXISTS)).thenReturn(certificateExpected);
+        when(certificateTagDAO.getAllTagsOfCertificate(ID_EXISTS)).thenReturn(tagList);
+
         assertNotNull(certificateService.get(ID_EXISTS));
         verify(certificateDAO).get(ID_EXISTS);
+        verify(certificateTagDAO).getAllTagsOfCertificate(ID_EXISTS);
+        verifyNoMoreInteractions(certificateDAO, certificateTagDAO);
     }
 
     @Test
@@ -116,24 +127,35 @@ public class CertificateServiceImplTest {
 
     @Test
     public void add() {
-        doNothing().when(certificateCheck).check(certificateExpected,true);
+        doNothing().when(certificateCheck).check(certificateExpected, true);
         doNothing().when(certificateDAO).add(certificateExpected);
+        doNothing().when(tagCheck).check(any(Tag.class));
+        when(tagDAO.get(anyString())).thenReturn(null);
+        doNothing().when(tagDAO).add(any(Tag.class));
+        when(certificateTagDAO.getTagOfCertificate(anyInt(), anyInt())).thenReturn(null);
+        doNothing().when(certificateTagDAO).addTagToCertificate(anyInt(), anyInt());
+
         certificateService.add(certificateExpected);
-        verify(certificateCheck).check(certificateExpected,true);
+        verify(certificateCheck).check(certificateExpected, true);
         verify(certificateDAO).add(certificateExpected);
-        verifyNoMoreInteractions(certificateCheck,certificateDAO);
+        verify(tagCheck).check(any(Tag.class));
+        verify(tagDAO).get(anyString());
+        verify(tagDAO).add(any(Tag.class));
+        verify(certificateTagDAO).getTagOfCertificate(anyInt(), anyInt());
+        verify(certificateTagDAO).addTagToCertificate(anyInt(), anyInt());
+        verifyNoMoreInteractions(certificateCheck, certificateDAO, tagCheck, tagDAO, certificateTagDAO);
     }
 
     @Test
     public void update() {
-        when(certificateDAO.get(ID_EXISTS)).thenReturn(certificateExpected);
+       /* when(certificateDAO.get(ID_EXISTS)).thenReturn(certificateExpected);
         doNothing().when(certificateCheck).check(certificateExpected,false);
         doNothing().when(certificateDAO).update(ID_EXISTS, certificateExpected);
 
-        certificateService.update(ID_EXISTS, certificateExpected);
-/*        verify(certificateDAO).get(ID_EXISTS);
-        verify(certificateCheck).check(certificateExpected,true);
-        verify(certificateDAO).update(ID_EXISTS,certificateExpected);*/
+       certificateService.update(ID_EXISTS, certificateExpected);
+       verify(certificateDAO).get(ID_EXISTS);
+       verify(certificateCheck).check(certificateExpected,true);
+       verify(certificateDAO).update(ID_EXISTS,certificateExpected);*/
     }
 
 }

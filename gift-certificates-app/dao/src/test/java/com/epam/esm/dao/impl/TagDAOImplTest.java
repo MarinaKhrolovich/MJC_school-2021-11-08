@@ -78,12 +78,12 @@ public class TagDAOImplTest {
 
     @Test
     public void getByNameShouldBeNotNull() {
-        assertNotNull(tagDAO.get(TAG_EXISTS));
+        assertTrue(tagDAO.get(TAG_EXISTS).isPresent());
     }
 
     @Test
     public void getByNameShouldBeNull() {
-        assertNull(tagDAO.get(TAG_NOT_EXISTS));
+        assertFalse(tagDAO.get(TAG_NOT_EXISTS).isPresent());
     }
 
     @Test

@@ -20,10 +20,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class CertificateServiceImplTest {
@@ -134,7 +136,7 @@ public class CertificateServiceImplTest {
         doNothing().when(certificateCheck).check(certificateExpected, true);
         doNothing().when(certificateDAO).add(certificateExpected);
         doNothing().when(tagCheck).check(any(Tag.class));
-        when(tagDAO.get(anyString())).thenReturn(null);
+        when(tagDAO.get(anyString())).thenReturn(Optional.empty());
         doNothing().when(tagDAO).add(any(Tag.class));
         when(certificateTagDAO.getTagOfCertificate(anyInt(), anyInt())).thenReturn(null);
         doNothing().when(certificateTagDAO).addTagToCertificate(anyInt(), anyInt());
@@ -158,10 +160,11 @@ public class CertificateServiceImplTest {
         doNothing().when(certificateDAO).update(ID_EXISTS, certificateExpected);
         doNothing().when(certificateTagDAO).deleteTagsOfCertificate(ID_EXISTS);
         doNothing().when(tagCheck).check(any(Tag.class));
-        when(tagDAO.get(anyString())).thenReturn(null);
+        when(tagDAO.get(anyString())).thenReturn(Optional.empty());
         doNothing().when(tagDAO).add(any(Tag.class));
         when(certificateTagDAO.getTagOfCertificate(anyInt(), anyInt())).thenReturn(null);
         doNothing().when(certificateTagDAO).addTagToCertificate(anyInt(), anyInt());
+        when(certificateTagDAO.getAllTagsOfCertificate(ID_EXISTS)).thenReturn(tagList);
 
         certificateService.update(ID_EXISTS, certificateExpected);
 
@@ -174,7 +177,8 @@ public class CertificateServiceImplTest {
         verify(tagDAO).add(any(Tag.class));
         verify(certificateTagDAO).getTagOfCertificate(anyInt(), anyInt());
         verify(certificateTagDAO).addTagToCertificate(anyInt(), anyInt());
-        //verifyNoMoreInteractions(certificateCheck, certificateDAO, tagDAO, certificateTagDAO);
+        verify(certificateTagDAO).getAllTagsOfCertificate(ID_EXISTS);
+        verifyNoMoreInteractions(certificateCheck, certificateDAO, tagCheck, tagDAO, certificateTagDAO);
     }
 
     @Test

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CertificateServiceImpl implements CertificateService {
@@ -83,11 +84,11 @@ public class CertificateServiceImpl implements CertificateService {
         if (tagList != null) {
             for (Tag tag : tagList) {
                 tagCheck.check(tag);
-                Tag tagFromBase = tagDAO.get(tag.getName());
-                if (tagFromBase == null) {
+                Optional<Tag> tagFromBase = tagDAO.get(tag.getName());
+                if (tagFromBase.isPresent()) {
                     tagDAO.add(tag);
                 } else {
-                    tag.setId(tagFromBase.getId());
+                    tag.setId(tagFromBase.get().getId());
                 }
                 Tag tagOfCertificate = certificateTagDAO.getTagOfCertificate(certificate.getId(), tag.getId());
                 if (tagOfCertificate == null) {

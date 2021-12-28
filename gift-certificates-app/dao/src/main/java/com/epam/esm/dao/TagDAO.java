@@ -3,6 +3,7 @@ package com.epam.esm.dao;
 import com.epam.esm.bean.Tag;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TagDAO {
 
@@ -10,7 +11,7 @@ public interface TagDAO {
 
     Tag get(int id);
 
-    Tag get(String name);
+    Optional<Tag> get(String name);
 
     List<Tag> get();
 

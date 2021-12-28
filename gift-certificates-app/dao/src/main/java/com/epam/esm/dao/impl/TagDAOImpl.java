@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class TagDAOImpl implements TagDAO {
@@ -57,9 +58,9 @@ public class TagDAOImpl implements TagDAO {
     }
 
     @Override
-    public Tag get(String name) {
+    public Optional<Tag> get(String name) {
         return jdbcTemplate.query(SELECT_FROM_TAG_WHERE_NAME, new BeanPropertyRowMapper<>(Tag.class), name)
-                .stream().findAny().orElse(null);
+                .stream().findAny();
     }
 
     @Override

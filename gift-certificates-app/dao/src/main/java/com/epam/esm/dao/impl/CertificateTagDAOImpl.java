@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class CertificateTagDAOImpl implements CertificateTagDAO {
@@ -41,9 +42,9 @@ public class CertificateTagDAOImpl implements CertificateTagDAO {
     }
 
     @Override
-    public Tag getTagOfCertificate(int certificateId, int tagId) {
+    public Optional<Tag> getTagOfCertificate(int certificateId, int tagId) {
         return jdbcTemplate.query(SELECT_CERTIFICATE_TAG, new BeanPropertyRowMapper<>(Tag.class), certificateId, tagId)
-                .stream().findAny().orElse(null);
+                .stream().findAny();
     }
 
     @Override

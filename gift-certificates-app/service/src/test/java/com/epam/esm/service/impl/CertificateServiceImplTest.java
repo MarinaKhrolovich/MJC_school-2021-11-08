@@ -138,7 +138,7 @@ public class CertificateServiceImplTest {
         doNothing().when(tagCheck).check(any(Tag.class));
         when(tagDAO.get(anyString())).thenReturn(Optional.empty());
         doNothing().when(tagDAO).add(any(Tag.class));
-        when(certificateTagDAO.getTagOfCertificate(anyInt(), anyInt())).thenReturn(null);
+        when(certificateTagDAO.getTagOfCertificate(anyInt(), anyInt())).thenReturn(Optional.empty());
         doNothing().when(certificateTagDAO).addTagToCertificate(anyInt(), anyInt());
 
         certificateService.add(certificateExpected);
@@ -162,7 +162,7 @@ public class CertificateServiceImplTest {
         doNothing().when(tagCheck).check(any(Tag.class));
         when(tagDAO.get(anyString())).thenReturn(Optional.empty());
         doNothing().when(tagDAO).add(any(Tag.class));
-        when(certificateTagDAO.getTagOfCertificate(anyInt(), anyInt())).thenReturn(null);
+        when(certificateTagDAO.getTagOfCertificate(anyInt(), anyInt())).thenReturn(Optional.empty());
         doNothing().when(certificateTagDAO).addTagToCertificate(anyInt(), anyInt());
         when(certificateTagDAO.getAllTagsOfCertificate(ID_EXISTS)).thenReturn(tagList);
 

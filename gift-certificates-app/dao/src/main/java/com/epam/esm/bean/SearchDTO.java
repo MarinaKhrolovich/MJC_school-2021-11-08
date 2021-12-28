@@ -1,5 +1,7 @@
 package com.epam.esm.bean;
 
+import java.util.Optional;
+
 public class SearchDTO {
 
     private final String tagName;
@@ -12,15 +14,16 @@ public class SearchDTO {
         this.certificateDescription = certificateDescription;
     }
 
-    public String getTagName() {
-        return tagName;
+    public Optional<String> getTagName() {
+        return Optional.ofNullable(tagName);
     }
 
-    public String getCertificateName() {
-        return certificateName;
+    public Optional<String> getCertificateName() {
+        return Optional.ofNullable(certificateName);
     }
 
-    public String getCertificateDescription() {
-        return certificateDescription;
+    public Optional<String> getCertificateDescription() {
+        return Optional.ofNullable(certificateDescription);
     }
+
 }

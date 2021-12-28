@@ -4,7 +4,6 @@ import com.epam.esm.bean.Certificate;
 import com.epam.esm.bean.OrderDTO;
 import com.epam.esm.bean.SearchDTO;
 import com.epam.esm.dao.CertificateDAO;
-import com.epam.esm.dao.CertificateTagDAO;
 import com.epam.esm.dao.mapper.CertificateMapper;
 import com.epam.esm.dao.util.CertificateGetSQLRequest;
 import com.epam.esm.dao.util.CertificateUpdateParameters;
@@ -33,15 +32,13 @@ public class CertificateDAOImpl implements CertificateDAO {
     private final JdbcTemplate jdbcTemplate;
     private final CertificateGetSQLRequest getSQLRequest;
     private final CertificateUpdateSQLRequest updateSQLRequest;
-    private final CertificateTagDAO certificateTagDAO;
 
     @Autowired
     public CertificateDAOImpl(JdbcTemplate jdbcTemplate, CertificateGetSQLRequest getSQLRequest,
-                              CertificateUpdateSQLRequest updateSQLRequest, CertificateTagDAO certificateTagDAO) {
+                              CertificateUpdateSQLRequest updateSQLRequest) {
         this.jdbcTemplate = jdbcTemplate;
         this.getSQLRequest = getSQLRequest;
         this.updateSQLRequest = updateSQLRequest;
-        this.certificateTagDAO = certificateTagDAO;
     }
 
     @Override
@@ -93,6 +90,5 @@ public class CertificateDAOImpl implements CertificateDAO {
     public void delete(int id) {
         jdbcTemplate.update(DELETE_FROM_CERTIFICATE_WHERE_ID, id);
     }
-
 
 }

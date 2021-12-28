@@ -1,7 +1,6 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.bean.Tag;
-import com.epam.esm.dao.CertificateTagDAO;
 import com.epam.esm.dao.TagDAO;
 import com.epam.esm.service.TagService;
 import com.epam.esm.validator.TagCheck;
@@ -18,7 +17,7 @@ public class TagServiceImpl implements TagService {
     private final TagCheck tagCheck;
 
     @Autowired
-    public TagServiceImpl(TagDAO tagDAO, CertificateTagDAO certificateTagDAO, TagCheck tagCheck) {
+    public TagServiceImpl(TagDAO tagDAO, TagCheck tagCheck) {
         this.tagDAO = tagDAO;
         this.tagCheck = tagCheck;
     }
@@ -32,8 +31,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Tag get(int id) {
-        Tag tag = tagDAO.get(id);
-        return tag;
+        return tagDAO.get(id);
     }
 
     @Override

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class CertificateGetSQLRequest {
@@ -30,16 +31,16 @@ public class CertificateGetSQLRequest {
         stringBuilder.append(SELECT_FROM_CERTIFICATE);
         List<Object> parameters = new ArrayList<>();
 
-        String tagName = searchDTO.getTagName();
-        String certificateName = searchDTO.getCertificateName();
-        String certificateDescription = searchDTO.getCertificateDescription();
-        String orderByDate = orderDTO.getOrderByDate();
-        String orderByName = orderDTO.getOrderByName();
+        Optional<String> tagName = searchDTO.getTagName();
+        Optional<String> certificateName = searchDTO.getCertificateName();
+        Optional<String> certificateDescription = searchDTO.getCertificateDescription();
+        Optional<String> orderByDate = orderDTO.getOrderByDate();
+        Optional<String> orderByName = orderDTO.getOrderByName();
 
         boolean whereExists = false;
         boolean orderExists = false;
 
-        if (tagName != null) {
+        if (tagName.isPresent()) {
             stringBuilder.append(JOIN);
         }
 
@@ -54,8 +55,8 @@ public class CertificateGetSQLRequest {
         return new CertificateUpdateParameters(stringBuilder.toString(), parameters);
     }
 
-    private boolean appendOrder(StringBuilder stringBuilder, String orderBy, String sqlRequest, boolean orderExists) {
-        if (orderBy != null) {
+    private boolean appendOrder(StringBuilder stringBuilder, Optional<String> orderBy, String sqlRequest, boolean orderExists) {
+        if (orderBy.isPresent()) {
             if (!orderExists) {
                 stringBuilder.append(ORDER_BY);
                 orderExists = true;
@@ -63,14 +64,14 @@ public class CertificateGetSQLRequest {
                 stringBuilder.append(COMMA);
             }
             stringBuilder.append(sqlRequest);
-            stringBuilder.append(orderBy.equals(DESC.trim()) ? DESC : ASC);
+            stringBuilder.append(orderBy.get().equals(DESC.trim()) ? DESC : ASC);
         }
         return orderExists;
     }
 
-    private boolean appendWhere(StringBuilder stringBuilder, String field, String sqlRequest,
+    private boolean appendWhere(StringBuilder stringBuilder, Optional<String> field, String sqlRequest,
                                 boolean whileExists, List<Object> parameters) {
-        if (field != null) {
+        if (field.isPresent()) {
             if (!whileExists) {
                 stringBuilder.append(WHERE);
                 whileExists = true;
@@ -78,7 +79,7 @@ public class CertificateGetSQLRequest {
                 stringBuilder.append(AND);
             }
             stringBuilder.append(sqlRequest);
-            parameters.add(field);
+            parameters.add(field.get());
         }
         return whileExists;
     }

@@ -11,7 +11,6 @@ import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.validator.CertificateCheck;
 import com.epam.esm.validator.TagCheck;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,7 +24,6 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class CertificateServiceImplTest {
@@ -55,13 +53,12 @@ public class CertificateServiceImplTest {
 
     private static Certificate certificateExpected;
     private static List<Certificate> certificateList;
-    private static Tag newTag;
     private static List<Tag> tagList;
 
     @BeforeAll
     static void beforeAll() {
         tagList = new ArrayList<>();
-        newTag = new Tag();
+        Tag newTag = new Tag();
         newTag.setName(NEW_TAG);
         tagList.add(newTag);
 

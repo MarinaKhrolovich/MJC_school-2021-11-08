@@ -1,21 +1,23 @@
 package com.epam.esm.bean;
 
+import java.util.Optional;
+
 public class OrderDTO {
 
-    private final String orderByDate;
-    private final String orderByName;
+    private String orderByDate;
+    private String orderByName;
 
     public OrderDTO(String orderByDate, String orderByName) {
         this.orderByDate = orderByDate;
         this.orderByName = orderByName;
     }
 
-    public String getOrderByDate() {
-        return orderByDate;
+    public Optional<String> getOrderByDate() {
+        return Optional.ofNullable(orderByDate);
     }
 
-    public String getOrderByName() {
-        return orderByName;
+    public Optional<String> getOrderByName() {
+        return Optional.ofNullable(orderByName);
     }
 
 }

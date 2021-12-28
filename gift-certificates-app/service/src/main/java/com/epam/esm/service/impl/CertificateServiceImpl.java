@@ -85,7 +85,7 @@ public class CertificateServiceImpl implements CertificateService {
             for (Tag tag : tagList) {
                 tagCheck.check(tag);
                 Optional<Tag> tagFromBase = tagDAO.get(tag.getName());
-                if (tagFromBase.isPresent()) {
+                if (tagFromBase.isEmpty()) {
                     tagDAO.add(tag);
                 } else {
                     tag.setId(tagFromBase.get().getId());

@@ -19,8 +19,6 @@ public class CertificateTagDAOImpl implements CertificateTagDAO {
                                          "ON certificate_tag.tag_id = tag.id WHERE certificate_tag.certificate_id = ?";
     private static final String SELECT_CERTIFICATE_TAG = SELECT_TAGS_OF_CERTIFICATE + " AND " +
                                                          "certificate_tag.tag_id = ?";
-    private static final String DELETE_FROM_CERTIFICATE_TAG_WHERE_TAG_ID = "DELETE FROM certificate_tag " +
-                                                                           "WHERE tag_id = ?";
     private static final String DELETE_FROM_CERTIFICATE_TAG_WHERE_CERTIFICATE_ID = "DELETE FROM certificate_tag " +
                                                                                    "WHERE certificate_id = ?";
 

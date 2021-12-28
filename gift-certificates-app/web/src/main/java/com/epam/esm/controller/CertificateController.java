@@ -32,8 +32,7 @@ public class CertificateController {
     }
 
     @GetMapping()
-    public List<Certificate> getCertificates(@RequestParam(required = false) OrderDTO orderDTO,
-                                             @RequestParam(required = false) SearchDTO searchDTO) {
+    public List<Certificate> getCertificates(OrderDTO orderDTO, SearchDTO searchDTO) {
         return certificateService.get(orderDTO, searchDTO);
     }
 

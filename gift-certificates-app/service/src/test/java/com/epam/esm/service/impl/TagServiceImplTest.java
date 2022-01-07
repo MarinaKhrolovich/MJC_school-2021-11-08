@@ -51,9 +51,7 @@ public class TagServiceImplTest {
     @Test
     public void add() {
         doNothing().when(tagDAO).add(tagExpected);
-
         tagService.add(tagExpected);
-
         verify(tagDAO).add(tagExpected);
     }
 
@@ -87,13 +85,8 @@ public class TagServiceImplTest {
 
     @Test
     public void delete() {
-        when(tagDAO.get(ID_DELETE)).thenReturn(tagExpected);
         doNothing().when(tagDAO).delete(ID_DELETE);
-
         tagService.delete(ID_DELETE);
-
-        verify(tagDAO).get(ID_DELETE);
         verify(tagDAO).delete(ID_DELETE);
-        verifyNoMoreInteractions(tagDAO);
     }
 }

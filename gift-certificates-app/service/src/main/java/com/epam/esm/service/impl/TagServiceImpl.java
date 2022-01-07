@@ -37,7 +37,6 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public void delete(int id) {
-        tagDAO.get(id);
         tagDAO.delete(id);
     }
 }

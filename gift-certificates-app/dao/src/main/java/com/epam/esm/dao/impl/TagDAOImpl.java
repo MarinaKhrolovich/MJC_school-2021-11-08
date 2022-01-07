@@ -70,7 +70,13 @@ public class TagDAOImpl implements TagDAO {
 
     @Override
     public void delete(int id) {
+        if (!isExists(id)) {
+            throw new ResourceNotFoundException(id);
+        }
         jdbcTemplate.update(DELETE_FROM_TAG_WHERE_ID, id);
     }
 
+    public boolean isExists(int id) {
+        return jdbcTemplate.query(SELECT_FROM_TAG_WHERE_ID, new BeanPropertyRowMapper<>(Tag.class), id).stream().findAny().isPresent();
+    }
 }

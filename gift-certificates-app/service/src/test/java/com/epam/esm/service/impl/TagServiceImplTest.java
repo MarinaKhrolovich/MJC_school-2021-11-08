@@ -4,7 +4,6 @@ import com.epam.esm.bean.Tag;
 import com.epam.esm.dao.TagDAO;
 import com.epam.esm.exception.ResourceAlreadyExistsException;
 import com.epam.esm.exception.ResourceNotFoundException;
-import com.epam.esm.validator.TagCheck;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,8 +25,6 @@ public class TagServiceImplTest {
 
     @Mock
     TagDAO tagDAO;
-    @Mock
-    TagCheck tagCheck;
 
     public static final String NEW_TAG = "new tag";
     public static final String SECOND_TAG = "second tag";
@@ -53,19 +50,15 @@ public class TagServiceImplTest {
 
     @Test
     public void add() {
-        doNothing().when(tagCheck).check(tagExpected);
         doNothing().when(tagDAO).add(tagExpected);
 
         tagService.add(tagExpected);
 
-        verify(tagCheck).check(tagExpected);
         verify(tagDAO).add(tagExpected);
-        verifyNoMoreInteractions(tagCheck,tagDAO);
     }
 
     @Test
     public void addExists() {
-        doNothing().when(tagCheck).check(tagExpected);
         doThrow(new ResourceAlreadyExistsException()).when(tagDAO).add(tagExpected);
         assertThrows(ResourceAlreadyExistsException.class, () -> tagService.add(tagExpected));
         verify(tagDAO).add(tagExpected);

@@ -9,7 +9,6 @@ import com.epam.esm.dao.CertificateTagDAO;
 import com.epam.esm.dao.TagDAO;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.validator.CertificateCheck;
-import com.epam.esm.validator.TagCheck;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,8 +34,6 @@ public class CertificateServiceImplTest {
     CertificateDAO certificateDAO;
     @Mock
     CertificateCheck certificateCheck;
-    @Mock
-    TagCheck tagCheck;
     @Mock
     CertificateTagDAO certificateTagDAO;
     @Mock
@@ -132,7 +129,6 @@ public class CertificateServiceImplTest {
     public void add() {
         doNothing().when(certificateCheck).check(certificateExpected, true);
         doNothing().when(certificateDAO).add(certificateExpected);
-        doNothing().when(tagCheck).check(any(Tag.class));
         when(tagDAO.get(anyString())).thenReturn(Optional.empty());
         doNothing().when(tagDAO).add(any(Tag.class));
         when(certificateTagDAO.getTagOfCertificate(anyInt(), anyInt())).thenReturn(Optional.empty());
@@ -142,12 +138,11 @@ public class CertificateServiceImplTest {
 
         verify(certificateCheck).check(certificateExpected, true);
         verify(certificateDAO).add(certificateExpected);
-        verify(tagCheck).check(any(Tag.class));
         verify(tagDAO).get(anyString());
         verify(tagDAO).add(any(Tag.class));
         verify(certificateTagDAO).getTagOfCertificate(anyInt(), anyInt());
         verify(certificateTagDAO).addTagToCertificate(anyInt(), anyInt());
-        verifyNoMoreInteractions(certificateCheck, certificateDAO, tagCheck, tagDAO, certificateTagDAO);
+        verifyNoMoreInteractions(certificateCheck, certificateDAO, tagDAO, certificateTagDAO);
     }
 
     @Test
@@ -156,7 +151,6 @@ public class CertificateServiceImplTest {
         doNothing().when(certificateCheck).check(certificateExpected, false);
         doNothing().when(certificateDAO).update(ID_EXISTS, certificateExpected);
         doNothing().when(certificateTagDAO).deleteTagsOfCertificate(ID_EXISTS);
-        doNothing().when(tagCheck).check(any(Tag.class));
         when(tagDAO.get(anyString())).thenReturn(Optional.empty());
         doNothing().when(tagDAO).add(any(Tag.class));
         when(certificateTagDAO.getTagOfCertificate(anyInt(), anyInt())).thenReturn(Optional.empty());
@@ -169,13 +163,12 @@ public class CertificateServiceImplTest {
         verify(certificateCheck).check(certificateExpected, false);
         verify(certificateDAO).update(ID_EXISTS, certificateExpected);
         verify(certificateTagDAO).deleteTagsOfCertificate(ID_EXISTS);
-        verify(tagCheck).check(any(Tag.class));
         verify(tagDAO).get(anyString());
         verify(tagDAO).add(any(Tag.class));
         verify(certificateTagDAO).getTagOfCertificate(anyInt(), anyInt());
         verify(certificateTagDAO).addTagToCertificate(anyInt(), anyInt());
         verify(certificateTagDAO).getAllTagsOfCertificate(ID_EXISTS);
-        verifyNoMoreInteractions(certificateCheck, certificateDAO, tagCheck, tagDAO, certificateTagDAO);
+        verifyNoMoreInteractions(certificateCheck, certificateDAO, tagDAO, certificateTagDAO);
     }
 
     @Test

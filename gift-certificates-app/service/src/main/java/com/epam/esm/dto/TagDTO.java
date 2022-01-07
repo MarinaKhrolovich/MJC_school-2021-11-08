@@ -10,6 +10,7 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @EqualsAndHashCode
+@ToString
 public class TagDTO {
 
     private int id;

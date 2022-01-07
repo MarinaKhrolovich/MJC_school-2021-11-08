@@ -10,6 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @EqualsAndHashCode
+@ToString
 public class CertificateDTO {
 
     private int id;

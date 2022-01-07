@@ -14,7 +14,7 @@ public interface CertificateDAO {
 
     List<Certificate> get(OrderDTO orderDTO, SearchDTO searchDTO);
 
-    void update(int id, Certificate certificate);
+    Certificate update(int id, Certificate certificate);
 
     void delete(int id);
 

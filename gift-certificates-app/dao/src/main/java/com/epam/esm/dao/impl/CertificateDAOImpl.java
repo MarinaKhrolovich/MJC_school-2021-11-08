@@ -3,7 +3,10 @@ package com.epam.esm.dao.impl;
 import com.epam.esm.bean.Certificate;
 import com.epam.esm.bean.OrderDTO;
 import com.epam.esm.bean.SearchDTO;
+import com.epam.esm.bean.Tag;
 import com.epam.esm.dao.CertificateDAO;
+import com.epam.esm.dao.CertificateTagDAO;
+import com.epam.esm.dao.TagDAO;
 import com.epam.esm.dao.mapper.CertificateMapper;
 import com.epam.esm.dao.util.CertificateGetSQLRequest;
 import com.epam.esm.dao.util.CertificateUpdateParameters;
@@ -20,6 +23,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class CertificateDAOImpl implements CertificateDAO {
@@ -32,13 +36,18 @@ public class CertificateDAOImpl implements CertificateDAO {
     private final JdbcTemplate jdbcTemplate;
     private final CertificateGetSQLRequest getSQLRequest;
     private final CertificateUpdateSQLRequest updateSQLRequest;
+    private final CertificateTagDAO certificateTagDAO;
+    private final TagDAO tagDAO;
 
     @Autowired
     public CertificateDAOImpl(JdbcTemplate jdbcTemplate, CertificateGetSQLRequest getSQLRequest,
-                              CertificateUpdateSQLRequest updateSQLRequest) {
+                              CertificateUpdateSQLRequest updateSQLRequest, CertificateTagDAO certificateTagDAO,
+                              TagDAO tagDAO) {
         this.jdbcTemplate = jdbcTemplate;
         this.getSQLRequest = getSQLRequest;
         this.updateSQLRequest = updateSQLRequest;
+        this.certificateTagDAO = certificateTagDAO;
+        this.tagDAO = tagDAO;
     }
 
     @Override
@@ -63,6 +72,7 @@ public class CertificateDAOImpl implements CertificateDAO {
         if (keyHolder.getKey() != null) {
             certificate.setId(keyHolder.getKey().intValue());
         }
+        addTagsToCertificate(certificate);
     }
 
     @Override
@@ -79,16 +89,48 @@ public class CertificateDAOImpl implements CertificateDAO {
     }
 
     @Override
-    public void update(int id, Certificate certificate) {
+    public Certificate update(int id, Certificate certificate) {
+        if (notExists(id)) {
+            throw new ResourceNotFoundException(id);
+        }
+        certificate.setId(id);
         CertificateUpdateParameters updateParameters = updateSQLRequest.create(id, certificate);
         if (!updateParameters.getParameters().isEmpty()) {
             jdbcTemplate.update(updateParameters.getSqlRequest(), updateParameters.getParameters().toArray());
         }
+        certificateTagDAO.deleteTagsOfCertificate(id);
+        addTagsToCertificate(certificate);
+        return get(id);
     }
 
     @Override
     public void delete(int id) {
+        if (notExists(id)) {
+            throw new ResourceNotFoundException(id);
+        }
         jdbcTemplate.update(DELETE_FROM_CERTIFICATE_WHERE_ID, id);
     }
 
+    public boolean notExists(int id) {
+        return jdbcTemplate.query(SELECT_FROM_CERTIFICATE_WHERE_ID, new CertificateMapper(), id)
+                .stream().findAny().isEmpty();
+    }
+
+    private void addTagsToCertificate(Certificate certificate) {
+        List<Tag> tagList = certificate.getTagList();
+        if (tagList != null) {
+            for (Tag tag : tagList) {
+                Optional<Tag> tagFromBase = tagDAO.get(tag.getName());
+                if (tagFromBase.isEmpty()) {
+                    tagDAO.add(tag);
+                } else {
+                    tag.setId(tagFromBase.get().getId());
+                }
+                Optional<Tag> tagOfCertificate = certificateTagDAO.getTagOfCertificate(certificate.getId(), tag.getId());
+                if (tagOfCertificate.isEmpty()) {
+                    certificateTagDAO.addTagToCertificate(certificate.getId(), tag.getId());
+                }
+            }
+        }
+    }
 }

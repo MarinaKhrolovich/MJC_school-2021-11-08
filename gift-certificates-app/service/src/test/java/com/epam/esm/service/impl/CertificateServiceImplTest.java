@@ -125,55 +125,23 @@ public class CertificateServiceImplTest {
     @Test
     public void add() {
         doNothing().when(certificateDAO).add(certificateExpected);
-        when(tagDAO.get(anyString())).thenReturn(Optional.empty());
-        doNothing().when(tagDAO).add(any(Tag.class));
-        when(certificateTagDAO.getTagOfCertificate(anyInt(), anyInt())).thenReturn(Optional.empty());
-        doNothing().when(certificateTagDAO).addTagToCertificate(anyInt(), anyInt());
-
         certificateService.add(certificateExpected);
-
         verify(certificateDAO).add(certificateExpected);
-        verify(tagDAO).get(anyString());
-        verify(tagDAO).add(any(Tag.class));
-        verify(certificateTagDAO).getTagOfCertificate(anyInt(), anyInt());
-        verify(certificateTagDAO).addTagToCertificate(anyInt(), anyInt());
-        verifyNoMoreInteractions(certificateDAO, tagDAO, certificateTagDAO);
     }
 
     @Test
     public void update() {
-        when(certificateDAO.get(ID_EXISTS)).thenReturn(certificateExpected);
-        doNothing().when(certificateDAO).update(ID_EXISTS, certificateExpected);
-        doNothing().when(certificateTagDAO).deleteTagsOfCertificate(ID_EXISTS);
-        when(tagDAO.get(anyString())).thenReturn(Optional.empty());
-        doNothing().when(tagDAO).add(any(Tag.class));
-        when(certificateTagDAO.getTagOfCertificate(anyInt(), anyInt())).thenReturn(Optional.empty());
-        doNothing().when(certificateTagDAO).addTagToCertificate(anyInt(), anyInt());
-        when(certificateTagDAO.getAllTagsOfCertificate(ID_EXISTS)).thenReturn(tagList);
-
-        certificateService.update(ID_EXISTS, certificateExpected);
-
-        verify(certificateDAO, times(2)).get(ID_EXISTS);
+        when(certificateDAO.update(ID_EXISTS, certificateExpected)).thenReturn(certificateExpected);
+        Certificate actualCertificate = certificateService.update(ID_EXISTS, certificateExpected);
+        assertEquals(certificateExpected,actualCertificate);
         verify(certificateDAO).update(ID_EXISTS, certificateExpected);
-        verify(certificateTagDAO).deleteTagsOfCertificate(ID_EXISTS);
-        verify(tagDAO).get(anyString());
-        verify(tagDAO).add(any(Tag.class));
-        verify(certificateTagDAO).getTagOfCertificate(anyInt(), anyInt());
-        verify(certificateTagDAO).addTagToCertificate(anyInt(), anyInt());
-        verify(certificateTagDAO).getAllTagsOfCertificate(ID_EXISTS);
-        verifyNoMoreInteractions(certificateDAO, tagDAO, certificateTagDAO);
     }
 
     @Test
     public void delete() {
-        when(certificateDAO.get(ID_DELETE)).thenReturn(certificateExpected);
         doNothing().when(certificateDAO).delete(ID_DELETE);
-
         certificateService.delete(ID_DELETE);
-
-        verify(certificateDAO).get(ID_DELETE);
         verify(certificateDAO).delete(ID_DELETE);
-        verifyNoMoreInteractions(certificateDAO);
     }
 
 }

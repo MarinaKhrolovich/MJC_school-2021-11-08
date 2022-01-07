@@ -7,7 +7,6 @@ import com.epam.esm.bean.Tag;
 import com.epam.esm.config.ConfigTest;
 import com.epam.esm.dao.CertificateDAO;
 import com.epam.esm.dao.CertificateTagDAO;
-import com.epam.esm.dao.TagDAO;
 import com.epam.esm.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -54,8 +53,6 @@ public class CertificateDAOImplTest {
     private CertificateDAO certificateDAO;
     @Autowired
     private CertificateTagDAO certificateTagDAO;
-    @Autowired
-    private TagDAO tagDAO;
 
     private static Certificate certificateExpected;
     private static Certificate certificateUpdate;
@@ -83,11 +80,6 @@ public class CertificateDAOImplTest {
     @Transactional
     public void add() {
         certificateDAO.add(certificateExpected);
-        List<Tag> tagList = certificateExpected.getTagList();
-        for (Tag tag : tagList) {
-            tagDAO.add(tag);
-            certificateTagDAO.addTagToCertificate(certificateExpected.getId(), tag.getId());
-        }
 
         Certificate certificateActual = certificateDAO.get(certificateExpected.getId());
         List<Tag> allTagsOfCertificate = certificateTagDAO.getAllTagsOfCertificate(certificateExpected.getId());
@@ -146,9 +138,7 @@ public class CertificateDAOImplTest {
     @Test
     @Transactional
     public void update() {
-        certificateUpdate.setId(ID_EXISTS);
-        certificateDAO.update(ID_EXISTS, certificateUpdate);
-        Certificate certificateActual = certificateDAO.get(ID_EXISTS);
+        Certificate certificateActual  = certificateDAO.update(ID_EXISTS, certificateUpdate);
         assertEquals(certificateUpdate.getDescription(), certificateActual.getDescription());
         assertEquals(certificateUpdate.getDuration(), certificateActual.getDuration());
     }

@@ -6,27 +6,23 @@ import com.epam.esm.bean.SearchDTO;
 import com.epam.esm.bean.Tag;
 import com.epam.esm.dao.CertificateDAO;
 import com.epam.esm.dao.CertificateTagDAO;
-import com.epam.esm.dao.TagDAO;
 import com.epam.esm.service.CertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CertificateServiceImpl implements CertificateService {
 
 
     private final CertificateDAO certificateDAO;
-    private final TagDAO tagDAO;
     private final CertificateTagDAO certificateTagDAO;
 
     @Autowired
-    public CertificateServiceImpl(CertificateDAO certificateDAO, TagDAO tagDAO, CertificateTagDAO certificateTagDAO) {
+    public CertificateServiceImpl(CertificateDAO certificateDAO, CertificateTagDAO certificateTagDAO) {
         this.certificateDAO = certificateDAO;
-        this.tagDAO = tagDAO;
         this.certificateTagDAO = certificateTagDAO;
     }
 
@@ -34,7 +30,6 @@ public class CertificateServiceImpl implements CertificateService {
     @Transactional
     public void add(Certificate certificate) {
         certificateDAO.add(certificate);
-        addTagsToCertificate(certificate);
     }
 
     @Override
@@ -54,37 +49,12 @@ public class CertificateServiceImpl implements CertificateService {
     @Override
     @Transactional
     public Certificate update(int id, Certificate certificate) {
-        certificateDAO.get(id);
-        certificate.setId(id);
-        certificateDAO.update(id, certificate);
-
-        certificateTagDAO.deleteTagsOfCertificate(id);
-        addTagsToCertificate(certificate);
-        return get(id);
+        return certificateDAO.update(id, certificate);
     }
 
     @Override
     public void delete(int id) {
-        certificateDAO.get(id);
         certificateDAO.delete(id);
-    }
-
-    private void addTagsToCertificate(Certificate certificate) {
-        List<Tag> tagList = certificate.getTagList();
-        if (tagList != null) {
-            for (Tag tag : tagList) {
-                Optional<Tag> tagFromBase = tagDAO.get(tag.getName());
-                if (tagFromBase.isEmpty()) {
-                    tagDAO.add(tag);
-                } else {
-                    tag.setId(tagFromBase.get().getId());
-                }
-                Optional<Tag> tagOfCertificate = certificateTagDAO.getTagOfCertificate(certificate.getId(), tag.getId());
-                if (tagOfCertificate.isEmpty()) {
-                    certificateTagDAO.addTagToCertificate(certificate.getId(), tag.getId());
-                }
-            }
-        }
     }
 
     private void setTagList(int id, Certificate certificate) {

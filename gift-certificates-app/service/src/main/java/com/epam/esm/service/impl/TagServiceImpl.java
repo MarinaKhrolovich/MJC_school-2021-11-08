@@ -1,38 +1,42 @@
 package com.epam.esm.service.impl;
 
-import com.epam.esm.bean.Tag;
 import com.epam.esm.dao.TagDAO;
+import com.epam.esm.dto.TagDTO;
+import com.epam.esm.mapper.TagMapper;
 import com.epam.esm.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TagServiceImpl implements TagService {
 
     private final TagDAO tagDAO;
+    private final TagMapper tagMapper;
 
     @Autowired
-    public TagServiceImpl(TagDAO tagDAO) {
+    public TagServiceImpl(TagDAO tagDAO, TagMapper tagMapper) {
         this.tagDAO = tagDAO;
+        this.tagMapper = tagMapper;
     }
 
     @Override
     @Transactional
-    public void add(Tag tag) {
-        tagDAO.add(tag);
+    public void add(TagDTO tagDTO) {
+        tagDAO.add(tagMapper.сonvertToEntity(tagDTO));
     }
 
     @Override
-    public Tag get(int id) {
-        return tagDAO.get(id);
+    public TagDTO get(int id) {
+        return tagMapper.сonvertToDTO(tagDAO.get(id));
     }
 
     @Override
-    public List<Tag> get() {
-        return tagDAO.get();
+    public List<TagDTO> get() {
+        return tagDAO.get().stream().map(tagMapper::сonvertToDTO).collect(Collectors.toList());
     }
 
     @Override

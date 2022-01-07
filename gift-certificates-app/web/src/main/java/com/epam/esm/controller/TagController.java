@@ -1,10 +1,11 @@
 package com.epam.esm.controller;
 
-import com.epam.esm.bean.Tag;
+import com.epam.esm.dto.TagDTO;
 import com.epam.esm.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -19,18 +20,18 @@ public class TagController {
     }
 
     @PostMapping
-    public Tag addTag(@RequestBody Tag tag) {
-        tagService.add(tag);
-        return tag;
+    public TagDTO addTag(@Valid @RequestBody TagDTO tagDTO) {
+        tagService.add(tagDTO);
+        return tagDTO;
     }
 
     @GetMapping("/{id}")
-    public Tag getTag(@PathVariable int id) {
+    public TagDTO getTag(@PathVariable int id) {
         return tagService.get(id);
     }
 
     @GetMapping
-    public List<Tag> getTags() {
+    public List<TagDTO> getTags() {
         return tagService.get();
     }
 

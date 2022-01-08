@@ -10,9 +10,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.List;
 
+@Validated
 @RestController
 @RequestMapping("/tags")
-@Validated
 public class TagController {
 
     private final TagService tagService;

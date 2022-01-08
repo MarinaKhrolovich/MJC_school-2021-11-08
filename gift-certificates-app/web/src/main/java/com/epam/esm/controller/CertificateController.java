@@ -6,11 +6,14 @@ import com.epam.esm.dto.CertificateDTO;
 import com.epam.esm.dto.CertificateUpdateDTO;
 import com.epam.esm.service.CertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 
+@Validated
 @RestController
 @RequestMapping("/certificates")
 public class CertificateController {
@@ -28,7 +31,7 @@ public class CertificateController {
     }
 
     @GetMapping("/{id}")
-    public CertificateDTO getCertificate(@PathVariable int id) {
+    public CertificateDTO getCertificate(@PathVariable @Min(1) int id) {
         return certificateService.get(id);
     }
 
@@ -38,12 +41,12 @@ public class CertificateController {
     }
 
     @PatchMapping("/{id}")
-    public CertificateUpdateDTO updateCertificate(@PathVariable int id, @Valid @RequestBody CertificateUpdateDTO certificate) {
+    public CertificateUpdateDTO updateCertificate(@PathVariable @Min(1) int id, @Valid @RequestBody CertificateUpdateDTO certificate) {
         return certificateService.update(id, certificate);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCertificate(@PathVariable int id) {
+    public void deleteCertificate(@PathVariable @Min(1) int id) {
         certificateService.delete(id);
     }
 

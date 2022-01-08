@@ -32,11 +32,11 @@ public class CertificateUpdateSQLRequest {
             stringBuilder.append(DESCRIPTION);
             parameters.add(certificate.getDescription());
         }
-        if (certificate.getDuration() != 0) {
+        if (certificate.getDuration() != null) {
             stringBuilder.append(DURATION);
             parameters.add(certificate.getDuration());
         }
-        if (certificate.getPrice() != 0) {
+        if (certificate.getPrice() != null) {
             stringBuilder.append(PRICE);
             parameters.add(certificate.getPrice());
         }

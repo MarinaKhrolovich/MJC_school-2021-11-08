@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 
@@ -20,8 +21,8 @@ public class Certificate implements Serializable {
     private int id;
     private String name;
     private String description;
-    private double price;
-    private int duration;
+    private BigDecimal price;
+    private Integer duration;
     private Instant createDate;
     private Instant lastUpdateDate;
     private List<Tag> tagList;

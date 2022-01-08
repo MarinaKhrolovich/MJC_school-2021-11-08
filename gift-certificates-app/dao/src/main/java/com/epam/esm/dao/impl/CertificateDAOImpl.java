@@ -62,7 +62,7 @@ public class CertificateDAOImpl implements CertificateDAO {
                     ps.setString(1, certificate.getName());
                     ps.setString(2, certificate.getDescription());
                     ps.setInt(3, certificate.getDuration());
-                    ps.setDouble(4, certificate.getPrice());
+                    ps.setBigDecimal(4, certificate.getPrice());
                     ps.setTimestamp(5, Timestamp.from(certificate.getCreateDate()));
                     ps.setTimestamp(6, Timestamp.from(certificate.getLastUpdateDate()));
                     return ps;
@@ -103,8 +103,10 @@ public class CertificateDAOImpl implements CertificateDAO {
         if (!updateParameters.getParameters().isEmpty()) {
             jdbcTemplate.update(updateParameters.getSqlRequest(), updateParameters.getParameters().toArray());
         }
-        certificateTagDAO.deleteTagsOfCertificate(id);
-        addTagsToCertificate(certificate);
+        if (certificate.getTagList() != null) {
+            certificateTagDAO.deleteTagsOfCertificate(id);
+            addTagsToCertificate(certificate);
+        }
         return get(id);
     }
 

@@ -19,8 +19,10 @@ import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Formatter;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CertificateDAOImplTest {
 
     public static final int EXPECTED_SIZE_BY_SEARCH = 1;
-    public static final double PRICE_OF_EXPECTED_CERTIFICATE = 10.0;
+    public static final double PRICE_OF_EXPECTED_CERTIFICATE = 10.00;
     public static final int DURATION_OF_EXPECTED_CERTIFICATE = 30;
     public static final int DURATION_OF_UPDATE_CERTIFICATE = 60;
     public static final int ID_EXISTS = 1;
@@ -67,7 +69,7 @@ public class CertificateDAOImplTest {
         certificateExpected = new Certificate();
         certificateExpected.setName(NEW_CERTIFICATE);
         certificateExpected.setDescription(NEW_CERTIFICATE);
-        certificateExpected.setPrice(PRICE_OF_EXPECTED_CERTIFICATE);
+        certificateExpected.setPrice(BigDecimal.valueOf(PRICE_OF_EXPECTED_CERTIFICATE));
         certificateExpected.setDuration(DURATION_OF_EXPECTED_CERTIFICATE);
         certificateExpected.setTagList(tagList);
 

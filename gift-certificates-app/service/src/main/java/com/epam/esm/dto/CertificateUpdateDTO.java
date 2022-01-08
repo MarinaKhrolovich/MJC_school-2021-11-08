@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 
@@ -27,10 +28,10 @@ public class CertificateUpdateDTO {
     private String description;
 
     @DecimalMin(value = "0.01", message = "{message.certificate.price}")
-    private double price;
+    private BigDecimal price;
 
     @Min(value = 1, message = "{message.certificate.duration}")
-    private int duration;
+    private Integer duration;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS", timezone = "UTC")
     private Instant createDate;

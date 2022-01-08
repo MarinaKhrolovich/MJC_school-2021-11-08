@@ -4,10 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 
@@ -29,11 +27,13 @@ public class CertificateDTO {
     @Size(min = 3, max = 1000, message = "{message.certificate.description.length}")
     private String description;
 
+    @NotNull
     @DecimalMin(value="0.01", message="{message.certificate.price}")
-    private double price;
+    private BigDecimal price;
 
+    @NotNull
     @Min(value=1, message="{message.certificate.duration}")
-    private int duration;
+    private Integer duration;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS", timezone = "UTC")
     private Instant createDate;

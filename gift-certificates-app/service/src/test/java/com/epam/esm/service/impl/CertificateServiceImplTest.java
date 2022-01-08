@@ -17,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,14 +67,14 @@ public class CertificateServiceImplTest {
         certificateExpected = new Certificate();
         certificateExpected.setName(NEW_CERTIFICATE);
         certificateExpected.setDescription(NEW_CERTIFICATE);
-        certificateExpected.setPrice(PRICE_OF_CERTIFICATE);
+        certificateExpected.setPrice(BigDecimal.valueOf(PRICE_OF_CERTIFICATE));
         certificateExpected.setDuration(DURATION_OF_CERTIFICATE);
         certificateExpected.setTagList(tagList);
 
         secondCertificate = new Certificate();
         secondCertificate.setName(SECOND_CERTIFICATE);
         secondCertificate.setDescription(SECOND_CERTIFICATE);
-        secondCertificate.setPrice(PRICE_OF_CERTIFICATE);
+        secondCertificate.setPrice(BigDecimal.valueOf(PRICE_OF_CERTIFICATE));
         secondCertificate.setDuration(DURATION_OF_CERTIFICATE);
         secondCertificate.setTagList(tagList);
 
@@ -89,21 +90,21 @@ public class CertificateServiceImplTest {
         certificateExpectedDTO = new CertificateDTO();
         certificateExpectedDTO.setName(NEW_CERTIFICATE);
         certificateExpectedDTO.setDescription(NEW_CERTIFICATE);
-        certificateExpectedDTO.setPrice(PRICE_OF_CERTIFICATE);
+        certificateExpectedDTO.setPrice(BigDecimal.valueOf(PRICE_OF_CERTIFICATE));
         certificateExpectedDTO.setDuration(DURATION_OF_CERTIFICATE);
         certificateExpectedDTO.setTagList(tagListDTO);
 
         certificateExpectedUpdateDTO = new CertificateUpdateDTO();
         certificateExpectedUpdateDTO.setName(NEW_CERTIFICATE);
         certificateExpectedUpdateDTO.setDescription(NEW_CERTIFICATE);
-        certificateExpectedUpdateDTO.setPrice(PRICE_OF_CERTIFICATE);
+        certificateExpectedUpdateDTO.setPrice(BigDecimal.valueOf(PRICE_OF_CERTIFICATE));
         certificateExpectedUpdateDTO.setDuration(DURATION_OF_CERTIFICATE);
         certificateExpectedUpdateDTO.setTagList(tagListDTO);
 
         secondCertificateDTO = new CertificateDTO();
         secondCertificateDTO.setName(NEW_CERTIFICATE);
         secondCertificateDTO.setDescription(NEW_CERTIFICATE);
-        secondCertificateDTO.setPrice(PRICE_OF_CERTIFICATE);
+        secondCertificateDTO.setPrice(BigDecimal.valueOf(PRICE_OF_CERTIFICATE));
         secondCertificateDTO.setDuration(DURATION_OF_CERTIFICATE);
         secondCertificateDTO.setTagList(tagListDTO);
 

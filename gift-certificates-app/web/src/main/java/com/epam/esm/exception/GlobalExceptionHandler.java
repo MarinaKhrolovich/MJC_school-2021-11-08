@@ -7,10 +7,12 @@ import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Locale;
 
@@ -24,6 +26,8 @@ public class GlobalExceptionHandler {
     public static final String CODE_SOMETHING_WRONG = "000";
     public static final String CODE_RESOURCE_EXISTS = "001";
     public static final String CODE_RESOURCE_NOT_CHECK = "002";
+    public static final String CODE_WRONG_PATH_ID = "003";
+    public static final String MESSAGE_ID_MIN = "message.id.min";
 
 
     private final MessageSource messageSource;
@@ -72,6 +76,16 @@ public class GlobalExceptionHandler {
         List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
         errorResponse.setMessage(messageSource.getMessage(fieldErrors.get(0), locale));
         errorResponse.setCode(HttpStatus.BAD_REQUEST.value() + CODE_RESOURCE_NOT_CHECK);
+        LOG.error(exception);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorResponse> handleException(ConstraintViolationException exception, Locale locale) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorResponse.setMessage(messageSource.getMessage(MESSAGE_ID_MIN, new Object[]{}, locale));
+        errorResponse.setCode(HttpStatus.BAD_REQUEST.value() + CODE_WRONG_PATH_ID);
         LOG.error(exception);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }

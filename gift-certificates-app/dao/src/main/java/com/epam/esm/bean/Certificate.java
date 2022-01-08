@@ -22,9 +22,7 @@ public class Certificate implements Serializable {
     private String description;
     private double price;
     private int duration;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS", timezone = "UTC")
     private Instant createDate;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS", timezone = "UTC")
     private Instant lastUpdateDate;
     private List<Tag> tagList;
 

@@ -8,6 +8,7 @@ import com.epam.esm.service.CertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -22,7 +23,7 @@ public class CertificateController {
     }
 
     @PostMapping
-    public CertificateDTO addCertificate(@RequestBody CertificateDTO certificate) {
+    public CertificateDTO addCertificate(@Valid @RequestBody CertificateDTO certificate) {
         return certificateService.add(certificate);
     }
 
@@ -37,7 +38,7 @@ public class CertificateController {
     }
 
     @PatchMapping("/{id}")
-    public CertificateUpdateDTO updateCertificate(@PathVariable int id, @RequestBody CertificateUpdateDTO certificate) {
+    public CertificateUpdateDTO updateCertificate(@PathVariable int id, @Valid @RequestBody CertificateUpdateDTO certificate) {
         return certificateService.update(id, certificate);
     }
 

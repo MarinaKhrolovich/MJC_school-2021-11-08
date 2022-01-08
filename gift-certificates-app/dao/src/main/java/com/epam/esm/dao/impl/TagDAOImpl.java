@@ -76,7 +76,7 @@ public class TagDAOImpl implements TagDAO {
         jdbcTemplate.update(DELETE_FROM_TAG_WHERE_ID, id);
     }
 
-    public boolean isExists(int id) {
+    private boolean isExists(int id) {
         return jdbcTemplate.query(SELECT_FROM_TAG_WHERE_ID, new BeanPropertyRowMapper<>(Tag.class), id)
                 .stream().findAny().isPresent();
     }

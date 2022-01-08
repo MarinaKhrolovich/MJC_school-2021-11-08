@@ -5,8 +5,6 @@ import com.epam.esm.bean.OrderDTO;
 import com.epam.esm.bean.SearchDTO;
 import com.epam.esm.bean.Tag;
 import com.epam.esm.dao.CertificateDAO;
-import com.epam.esm.dao.CertificateTagDAO;
-import com.epam.esm.dao.TagDAO;
 import com.epam.esm.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -17,7 +15,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -31,10 +28,6 @@ public class CertificateServiceImplTest {
 
     @Mock
     CertificateDAO certificateDAO;
-    @Mock
-    CertificateTagDAO certificateTagDAO;
-    @Mock
-    TagDAO tagDAO;
 
     public static final String NEW_TAG = "new tag";
     public static final String NEW_CERTIFICATE = "new certificate";
@@ -79,40 +72,27 @@ public class CertificateServiceImplTest {
     public void getAllCertificates() {
         OrderDTO orderDTO = new OrderDTO(null, null);
         SearchDTO searchDTO = new SearchDTO(null, null, null);
+
         when(certificateDAO.get(orderDTO, searchDTO)).thenReturn(certificateList);
-        when(certificateTagDAO.getAllTagsOfCertificate(anyInt())).thenReturn(tagList);
-
         assertEquals(certificateList, certificateService.get(orderDTO, searchDTO));
-
         verify(certificateDAO).get(orderDTO, searchDTO);
-        verify(certificateTagDAO, times(2)).getAllTagsOfCertificate(anyInt());
-        verifyNoMoreInteractions(certificateDAO, certificateTagDAO);
     }
 
     @Test
     public void getCertificatesByOrderSearch() {
-        when(certificateDAO.get(any(OrderDTO.class), any(SearchDTO.class))).thenReturn(certificateList);
-        when(certificateTagDAO.getAllTagsOfCertificate(anyInt())).thenReturn(tagList);
         OrderDTO orderDTO = new OrderDTO("DESC", null);
         SearchDTO searchDTO = new SearchDTO("sport", null, null);
 
+        when(certificateDAO.get(any(OrderDTO.class), any(SearchDTO.class))).thenReturn(certificateList);
         assertEquals(certificateList, certificateService.get(orderDTO, searchDTO));
-
         verify(certificateDAO).get(orderDTO, searchDTO);
-        verify(certificateTagDAO, times(2)).getAllTagsOfCertificate(anyInt());
-        verifyNoMoreInteractions(certificateDAO, certificateTagDAO);
     }
 
     @Test
     public void getShouldBeNotNull() {
         when(certificateDAO.get(ID_EXISTS)).thenReturn(certificateExpected);
-        when(certificateTagDAO.getAllTagsOfCertificate(ID_EXISTS)).thenReturn(tagList);
-
         assertNotNull(certificateService.get(ID_EXISTS));
-
         verify(certificateDAO).get(ID_EXISTS);
-        verify(certificateTagDAO).getAllTagsOfCertificate(ID_EXISTS);
-        verifyNoMoreInteractions(certificateDAO, certificateTagDAO);
     }
 
     @Test

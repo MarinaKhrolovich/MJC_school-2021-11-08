@@ -115,7 +115,7 @@ public class CertificateDAOImpl implements CertificateDAO {
         jdbcTemplate.update(DELETE_FROM_CERTIFICATE_WHERE_ID, id);
     }
 
-    public boolean notExists(int id) {
+    private boolean notExists(int id) {
         return jdbcTemplate.query(SELECT_FROM_CERTIFICATE_WHERE_ID, new CertificateMapper(), id)
                 .stream().findAny().isEmpty();
     }

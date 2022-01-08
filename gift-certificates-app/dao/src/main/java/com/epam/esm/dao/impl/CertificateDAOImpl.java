@@ -77,15 +77,19 @@ public class CertificateDAOImpl implements CertificateDAO {
 
     @Override
     public Certificate get(int id) {
-        return jdbcTemplate.query(SELECT_FROM_CERTIFICATE_WHERE_ID, new CertificateMapper(), id)
+        Certificate certificate = jdbcTemplate.query(SELECT_FROM_CERTIFICATE_WHERE_ID, new CertificateMapper(), id)
                 .stream().findAny().orElseThrow(() -> new ResourceNotFoundException(id));
+        setTagList(id, certificate);
+        return certificate;
     }
 
     @Override
     public List<Certificate> get(OrderDTO orderDTO, SearchDTO searchDTO) {
         CertificateUpdateParameters getParameters = getSQLRequest.create(orderDTO, searchDTO);
-        return jdbcTemplate.query(getParameters.getSqlRequest(),
+        List<Certificate> certificateList = jdbcTemplate.query(getParameters.getSqlRequest(),
                 new CertificateMapper(), getParameters.getParameters().toArray());
+        certificateList.forEach(certificate -> setTagList(certificate.getId(), certificate));
+        return certificateList;
     }
 
     @Override
@@ -132,5 +136,10 @@ public class CertificateDAOImpl implements CertificateDAO {
                 }
             }
         }
+    }
+
+    private void setTagList(int id, Certificate certificate) {
+        List<Tag> tagList = certificateTagDAO.getAllTagsOfCertificate(id);
+        certificate.setTagList(tagList);
     }
 }

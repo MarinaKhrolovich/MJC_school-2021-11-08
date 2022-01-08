@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface TagDAO {
 
-    void add(Tag tag);
+    Tag add(Tag tag);
 
     Tag get(int id);
 

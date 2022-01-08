@@ -23,8 +23,7 @@ public class CertificateController {
 
     @PostMapping
     public CertificateDTO addCertificate(@RequestBody CertificateDTO certificate) {
-        certificateService.add(certificate);
-        return certificate;
+        return certificateService.add(certificate);
     }
 
     @GetMapping("/{id}")

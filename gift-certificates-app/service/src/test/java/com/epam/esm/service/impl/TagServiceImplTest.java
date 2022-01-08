@@ -69,13 +69,14 @@ public class TagServiceImplTest {
 
     @Test
     public void add() {
-        doNothing().when(tagDAO).add(tagExpected);
+        when(tagDAO.add(tagExpected)).thenReturn(tagExpected);
         when(tagMapper.сonvertToEntity(tagExpectedDTO)).thenReturn(tagExpected);
-
+        when(tagMapper.сonvertToDTO(tagExpected)).thenReturn(tagExpectedDTO);
         tagService.add(tagExpectedDTO);
 
         verify(tagDAO).add(tagExpected);
         verify(tagMapper).сonvertToEntity(tagExpectedDTO);
+        verify(tagMapper).сonvertToDTO(tagExpected);
         verifyNoMoreInteractions(tagDAO, tagMapper);
     }
 

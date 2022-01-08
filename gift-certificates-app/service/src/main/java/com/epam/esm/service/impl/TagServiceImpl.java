@@ -1,5 +1,6 @@
 package com.epam.esm.service.impl;
 
+import com.epam.esm.bean.Tag;
 import com.epam.esm.dao.TagDAO;
 import com.epam.esm.dto.TagDTO;
 import com.epam.esm.mapper.TagMapper;
@@ -25,8 +26,9 @@ public class TagServiceImpl implements TagService {
 
     @Override
     @Transactional
-    public void add(TagDTO tagDTO) {
-        tagDAO.add(tagMapper.сonvertToEntity(tagDTO));
+    public TagDTO add(TagDTO tagDTO) {
+        Tag addedTag = tagDAO.add(tagMapper.сonvertToEntity(tagDTO));
+        return tagMapper.сonvertToDTO(addedTag);
     }
 
     @Override

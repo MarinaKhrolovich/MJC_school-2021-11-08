@@ -21,8 +21,7 @@ public class TagController {
 
     @PostMapping
     public TagDTO addTag(@Valid @RequestBody TagDTO tagDTO) {
-        tagService.add(tagDTO);
-        return tagDTO;
+        return tagService.add(tagDTO);
     }
 
     @GetMapping("/{id}")

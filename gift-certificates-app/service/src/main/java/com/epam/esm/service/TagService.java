@@ -1,6 +1,5 @@
 package com.epam.esm.service;
 
-import com.epam.esm.bean.Tag;
 import com.epam.esm.dto.TagDTO;
 
 import java.util.List;
@@ -13,20 +12,20 @@ public interface TagService {
 
     /**
      * Add Tag to the database according to provided object Tag
-     * @param tag is object {@link Tag}
+     * @param tag is object {@link TagDTO}
      */
-    void add(TagDTO tag);
+    TagDTO add(TagDTO tag);
 
     /**
      * Get Tag from the database according to provided id
-     * @param id is id of Tag {@link Tag} to be getting
-     * @return tag is object {@link Tag}
+     * @param id is id of Tag {@link TagDTO} to be getting
+     * @return tag is object {@link TagDTO}
      */
     TagDTO get(int id);
 
     /**
      * Get all Tags from the database
-     * @return list of tags {@link Tag}
+     * @return list of tags {@link TagDTO}
      */
     List<TagDTO> get();
 

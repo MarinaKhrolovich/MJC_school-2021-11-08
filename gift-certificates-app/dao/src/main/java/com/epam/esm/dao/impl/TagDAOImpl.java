@@ -34,7 +34,7 @@ public class TagDAOImpl implements TagDAO {
 
 
     @Override
-    public void add(Tag tag) {
+    public Tag add(Tag tag) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         try {
             jdbcTemplate.update(
@@ -48,7 +48,10 @@ public class TagDAOImpl implements TagDAO {
         } catch (DuplicateKeyException exception) {
             throw new ResourceAlreadyExistsException(tag.getName());
         }
-        tag.setId(keyHolder.getKey().intValue());
+        if (keyHolder.getKey() != null) {
+            tag.setId(keyHolder.getKey().intValue());
+        }
+        return tag;
     }
 
     @Override

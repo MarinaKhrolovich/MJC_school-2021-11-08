@@ -9,12 +9,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode
-@ToString
+@Data
 public class CertificateUpdateDTO {
 
     private int id;

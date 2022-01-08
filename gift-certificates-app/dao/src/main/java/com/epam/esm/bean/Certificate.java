@@ -8,12 +8,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode
-@ToString
+@Data
 public class Certificate implements Serializable {
 
     private static final long serialVersionUID = 9078411259250099890L;

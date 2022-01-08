@@ -12,8 +12,8 @@ import java.util.Optional;
 public class CertificateGetSQLRequest {
 
     private static final String SELECT_FROM_CERTIFICATE = "SELECT * FROM certificate";
-    private static final String JOIN = " JOIN certificate_tag JOIN tag ON certificate.id = " +
-            "certificate_tag.certificate_id AND certificate_tag.tag_id = tag.id";
+    private static final String JOIN = " JOIN certificate_tag  ON certificate.id = certificate_tag.certificate_id" +
+            " JOIN tag ON certificate_tag.tag_id = tag.id";
     private static final String WHERE = " WHERE";
     private static final String CERTIFICATE_NAME = " certificate.name LIKE concat ('%', ?, '%')";
     private static final String CERTIFICATE_DESCRIPTION = " certificate.description LIKE concat ('%', ?, '%')";

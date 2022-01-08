@@ -23,6 +23,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class CertificateServiceImplTest {
@@ -162,13 +163,16 @@ public class CertificateServiceImplTest {
 
     @Test
     public void add() {
-        doNothing().when(certificateDAO).add(certificateExpected);
+        when(certificateDAO.add(certificateExpected)).thenReturn(certificateExpected);
         when(certificateMapper.сonvertToEntity(certificateExpectedDTO)).thenReturn(certificateExpected);
+        when(certificateMapper.convertToDTO(certificateExpected)).thenReturn(certificateExpectedDTO);
 
-        certificateService.add(certificateExpectedDTO);
+        CertificateDTO actualCertificateDTO = certificateService.add(certificateExpectedDTO);
 
+        assertEquals(certificateExpectedDTO, actualCertificateDTO);
         verify(certificateDAO).add(certificateExpected);
         verify(certificateMapper).сonvertToEntity(certificateExpectedDTO);
+        verify(certificateMapper).convertToDTO(certificateExpected);
         verifyNoMoreInteractions(certificateDAO, certificateMapper);
     }
 
@@ -178,9 +182,9 @@ public class CertificateServiceImplTest {
         when(certificateMapper.сonvertToEntity(certificateExpectedUpdateDTO)).thenReturn(certificateExpected);
         when(certificateMapper.convertToUpdateDTO(certificateExpected)).thenReturn(certificateExpectedUpdateDTO);
 
-        CertificateUpdateDTO actualCertificate = certificateService.update(ID_EXISTS, certificateExpectedUpdateDTO);
+        CertificateUpdateDTO actualCertificateDTO = certificateService.update(ID_EXISTS, certificateExpectedUpdateDTO);
 
-        assertEquals(certificateExpectedUpdateDTO, actualCertificate);
+        assertEquals(certificateExpectedUpdateDTO, actualCertificateDTO);
         verify(certificateDAO).update(ID_EXISTS, certificateExpected);
         verify(certificateMapper).сonvertToEntity(certificateExpectedUpdateDTO);
         verify(certificateMapper).convertToUpdateDTO(certificateExpected);

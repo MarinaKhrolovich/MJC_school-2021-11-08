@@ -51,7 +51,7 @@ public class CertificateDAOImpl implements CertificateDAO {
     }
 
     @Override
-    public void add(Certificate certificate) {
+    public Certificate add(Certificate certificate) {
         certificate.setCreateDate(Instant.now().truncatedTo(ChronoUnit.MILLIS));
         certificate.setLastUpdateDate(Instant.now().truncatedTo(ChronoUnit.MILLIS));
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -73,6 +73,7 @@ public class CertificateDAOImpl implements CertificateDAO {
             certificate.setId(keyHolder.getKey().intValue());
         }
         addTagsToCertificate(certificate);
+        return certificate;
     }
 
     @Override

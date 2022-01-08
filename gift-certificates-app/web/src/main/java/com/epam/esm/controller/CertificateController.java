@@ -37,7 +37,7 @@ public class CertificateController {
         return certificateService.get(orderDTO, searchDTO);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public CertificateUpdateDTO updateCertificate(@PathVariable int id, @RequestBody CertificateUpdateDTO certificate) {
         return certificateService.update(id, certificate);
     }

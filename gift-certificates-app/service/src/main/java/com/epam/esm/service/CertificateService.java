@@ -19,7 +19,7 @@ public interface CertificateService {
      * Add Certificate to the database according to provided object Certificate
      * @param certificate is Object {@link Certificate}
      */
-    void add(CertificateDTO certificate);
+    CertificateDTO add(CertificateDTO certificate);
 
     /**
      * Get Certificate from the database according to provided id

@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface CertificateDAO {
 
-    void add(Certificate certificate);
+    Certificate add(Certificate certificate);
 
     Certificate get(int id);
 

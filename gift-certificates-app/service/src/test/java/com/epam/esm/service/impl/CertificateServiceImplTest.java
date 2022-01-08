@@ -5,7 +5,11 @@ import com.epam.esm.bean.OrderDTO;
 import com.epam.esm.bean.SearchDTO;
 import com.epam.esm.bean.Tag;
 import com.epam.esm.dao.CertificateDAO;
+import com.epam.esm.dto.CertificateDTO;
+import com.epam.esm.dto.CertificateUpdateDTO;
+import com.epam.esm.dto.TagDTO;
 import com.epam.esm.exception.ResourceNotFoundException;
+import com.epam.esm.mapper.CertificateMapperImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,6 +32,8 @@ public class CertificateServiceImplTest {
 
     @Mock
     CertificateDAO certificateDAO;
+    @Mock
+    private CertificateMapperImpl certificateMapper;
 
     public static final String NEW_TAG = "new tag";
     public static final String NEW_CERTIFICATE = "new certificate";
@@ -39,8 +45,15 @@ public class CertificateServiceImplTest {
     public static final int ID_DELETE = 2;
 
     private static Certificate certificateExpected;
+    private static Certificate secondCertificate;
     private static List<Certificate> certificateList;
     private static List<Tag> tagList;
+
+    private static CertificateDTO certificateExpectedDTO;
+    private static CertificateUpdateDTO certificateExpectedUpdateDTO;
+    private static CertificateDTO secondCertificateDTO;
+    private static List<CertificateDTO> certificateListDTO;
+    private static List<TagDTO> tagListDTO;
 
     @BeforeAll
     static void beforeAll() {
@@ -56,7 +69,7 @@ public class CertificateServiceImplTest {
         certificateExpected.setDuration(DURATION_OF_CERTIFICATE);
         certificateExpected.setTagList(tagList);
 
-        Certificate secondCertificate = new Certificate();
+        secondCertificate = new Certificate();
         secondCertificate.setName(SECOND_CERTIFICATE);
         secondCertificate.setDescription(SECOND_CERTIFICATE);
         secondCertificate.setPrice(PRICE_OF_CERTIFICATE);
@@ -66,33 +79,78 @@ public class CertificateServiceImplTest {
         certificateList = new ArrayList<>();
         certificateList.add(certificateExpected);
         certificateList.add(secondCertificate);
+
+        tagListDTO = new ArrayList<>();
+        TagDTO newTagDTO = new TagDTO();
+        newTagDTO.setName(NEW_TAG);
+        tagListDTO.add(newTagDTO);
+
+        certificateExpectedDTO = new CertificateDTO();
+        certificateExpectedDTO.setName(NEW_CERTIFICATE);
+        certificateExpectedDTO.setDescription(NEW_CERTIFICATE);
+        certificateExpectedDTO.setPrice(PRICE_OF_CERTIFICATE);
+        certificateExpectedDTO.setDuration(DURATION_OF_CERTIFICATE);
+        certificateExpectedDTO.setTagList(tagListDTO);
+
+        certificateExpectedUpdateDTO = new CertificateUpdateDTO();
+        certificateExpectedUpdateDTO.setName(NEW_CERTIFICATE);
+        certificateExpectedUpdateDTO.setDescription(NEW_CERTIFICATE);
+        certificateExpectedUpdateDTO.setPrice(PRICE_OF_CERTIFICATE);
+        certificateExpectedUpdateDTO.setDuration(DURATION_OF_CERTIFICATE);
+        certificateExpectedUpdateDTO.setTagList(tagListDTO);
+
+        secondCertificateDTO = new CertificateDTO();
+        secondCertificateDTO.setName(NEW_CERTIFICATE);
+        secondCertificateDTO.setDescription(NEW_CERTIFICATE);
+        secondCertificateDTO.setPrice(PRICE_OF_CERTIFICATE);
+        secondCertificateDTO.setDuration(DURATION_OF_CERTIFICATE);
+        secondCertificateDTO.setTagList(tagListDTO);
+
+        certificateListDTO = new ArrayList<>();
+        certificateListDTO.add(certificateExpectedDTO);
+        certificateListDTO.add(secondCertificateDTO);
     }
 
     @Test
     public void getAllCertificates() {
         OrderDTO orderDTO = new OrderDTO(null, null);
         SearchDTO searchDTO = new SearchDTO(null, null, null);
-
         when(certificateDAO.get(orderDTO, searchDTO)).thenReturn(certificateList);
-        assertEquals(certificateList, certificateService.get(orderDTO, searchDTO));
+        when(certificateMapper.convertToDTO(certificateExpected)).thenReturn(certificateExpectedDTO);
+        when(certificateMapper.convertToDTO(secondCertificate)).thenReturn(secondCertificateDTO);
+
+        assertEquals(certificateListDTO, certificateService.get(orderDTO, searchDTO));
+
         verify(certificateDAO).get(orderDTO, searchDTO);
+        verify(certificateMapper,times(2)).convertToDTO(any(Certificate.class));
+        verifyNoMoreInteractions(certificateDAO,certificateMapper);
     }
 
     @Test
     public void getCertificatesByOrderSearch() {
         OrderDTO orderDTO = new OrderDTO("DESC", null);
         SearchDTO searchDTO = new SearchDTO("sport", null, null);
-
         when(certificateDAO.get(any(OrderDTO.class), any(SearchDTO.class))).thenReturn(certificateList);
-        assertEquals(certificateList, certificateService.get(orderDTO, searchDTO));
+        when(certificateMapper.convertToDTO(certificateExpected)).thenReturn(certificateExpectedDTO);
+        when(certificateMapper.convertToDTO(secondCertificate)).thenReturn(secondCertificateDTO);
+
+        assertEquals(certificateListDTO, certificateService.get(orderDTO, searchDTO));
+
         verify(certificateDAO).get(orderDTO, searchDTO);
+        verify(certificateMapper,times(2)).convertToDTO(any(Certificate.class));
+        verifyNoMoreInteractions(certificateDAO,certificateMapper);
     }
 
     @Test
     public void getShouldBeNotNull() {
         when(certificateDAO.get(ID_EXISTS)).thenReturn(certificateExpected);
+        when(certificateMapper.convertToDTO(certificateExpected)).thenReturn(certificateExpectedDTO);
+
         assertNotNull(certificateService.get(ID_EXISTS));
+
         verify(certificateDAO).get(ID_EXISTS);
+        verify(certificateMapper).convertToDTO(certificateExpected);
+        verifyNoMoreInteractions(certificateDAO, certificateMapper);
     }
 
     @Test
@@ -105,16 +163,28 @@ public class CertificateServiceImplTest {
     @Test
     public void add() {
         doNothing().when(certificateDAO).add(certificateExpected);
-        certificateService.add(certificateExpected);
+        when(certificateMapper.сonvertToEntity(certificateExpectedDTO)).thenReturn(certificateExpected);
+
+        certificateService.add(certificateExpectedDTO);
+
         verify(certificateDAO).add(certificateExpected);
+        verify(certificateMapper).сonvertToEntity(certificateExpectedDTO);
+        verifyNoMoreInteractions(certificateDAO, certificateMapper);
     }
 
     @Test
     public void update() {
         when(certificateDAO.update(ID_EXISTS, certificateExpected)).thenReturn(certificateExpected);
-        Certificate actualCertificate = certificateService.update(ID_EXISTS, certificateExpected);
-        assertEquals(certificateExpected,actualCertificate);
+        when(certificateMapper.сonvertToEntity(certificateExpectedUpdateDTO)).thenReturn(certificateExpected);
+        when(certificateMapper.convertToUpdateDTO(certificateExpected)).thenReturn(certificateExpectedUpdateDTO);
+
+        CertificateUpdateDTO actualCertificate = certificateService.update(ID_EXISTS, certificateExpectedUpdateDTO);
+
+        assertEquals(certificateExpectedUpdateDTO, actualCertificate);
         verify(certificateDAO).update(ID_EXISTS, certificateExpected);
+        verify(certificateMapper).сonvertToEntity(certificateExpectedUpdateDTO);
+        verify(certificateMapper).convertToUpdateDTO(certificateExpected);
+        verifyNoMoreInteractions(certificateDAO, certificateMapper);
     }
 
     @Test

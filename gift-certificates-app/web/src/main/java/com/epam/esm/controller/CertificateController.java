@@ -1,8 +1,9 @@
 package com.epam.esm.controller;
 
-import com.epam.esm.bean.Certificate;
 import com.epam.esm.bean.OrderDTO;
 import com.epam.esm.bean.SearchDTO;
+import com.epam.esm.dto.CertificateDTO;
+import com.epam.esm.dto.CertificateUpdateDTO;
 import com.epam.esm.service.CertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,23 +22,23 @@ public class CertificateController {
     }
 
     @PostMapping
-    public Certificate addCertificate(@RequestBody Certificate certificate) {
+    public CertificateDTO addCertificate(@RequestBody CertificateDTO certificate) {
         certificateService.add(certificate);
         return certificate;
     }
 
     @GetMapping("/{id}")
-    public Certificate getCertificate(@PathVariable int id) {
+    public CertificateDTO getCertificate(@PathVariable int id) {
         return certificateService.get(id);
     }
 
     @GetMapping()
-    public List<Certificate> getCertificates(OrderDTO orderDTO, SearchDTO searchDTO) {
+    public List<CertificateDTO> getCertificates(OrderDTO orderDTO, SearchDTO searchDTO) {
         return certificateService.get(orderDTO, searchDTO);
     }
 
     @PutMapping("/{id}")
-    public Certificate updateCertificate(@PathVariable int id, @RequestBody Certificate certificate) {
+    public CertificateUpdateDTO updateCertificate(@PathVariable int id, @RequestBody CertificateUpdateDTO certificate) {
         return certificateService.update(id, certificate);
     }
 

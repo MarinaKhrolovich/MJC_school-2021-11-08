@@ -16,4 +16,8 @@ public interface CertificateMapper {
 
     Tag сonvertToEntity(TagDTO tagDTO);
 
+    CertificateDTO convertToDTO(Certificate certificate);
+
+    CertificateUpdateDTO convertToUpdateDTO(Certificate certificate);
+
 }

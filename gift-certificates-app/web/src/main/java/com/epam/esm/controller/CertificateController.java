@@ -1,9 +1,9 @@
 package com.epam.esm.controller;
 
-import com.epam.esm.bean.OrderDTO;
-import com.epam.esm.bean.SearchDTO;
 import com.epam.esm.dto.CertificateDTO;
 import com.epam.esm.dto.CertificateUpdateDTO;
+import com.epam.esm.dto.SearchDTO;
+import com.epam.esm.dto.SortDTO;
 import com.epam.esm.service.CertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -36,8 +36,8 @@ public class CertificateController {
     }
 
     @GetMapping()
-    public List<CertificateDTO> getCertificates(OrderDTO orderDTO, SearchDTO searchDTO) {
-        return certificateService.get(orderDTO, searchDTO);
+    public List<CertificateDTO> getCertificates(SortDTO sortDTO, SearchDTO searchDTO) {
+        return certificateService.get(sortDTO, searchDTO);
     }
 
     @PatchMapping("/{id}")

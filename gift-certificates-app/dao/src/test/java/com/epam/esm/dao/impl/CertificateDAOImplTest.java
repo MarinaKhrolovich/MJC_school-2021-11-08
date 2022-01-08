@@ -1,8 +1,8 @@
 package com.epam.esm.dao.impl;
 
 import com.epam.esm.bean.Certificate;
-import com.epam.esm.bean.OrderDTO;
-import com.epam.esm.bean.SearchDTO;
+import com.epam.esm.bean.Sort;
+import com.epam.esm.bean.Search;
 import com.epam.esm.bean.Tag;
 import com.epam.esm.config.ConfigTest;
 import com.epam.esm.dao.CertificateDAO;
@@ -22,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Formatter;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -92,39 +91,39 @@ public class CertificateDAOImplTest {
 
     @Test
     public void getAllCertificates() {
-        OrderDTO orderDTO = new OrderDTO(null, null);
-        SearchDTO searchDTO = new SearchDTO(null, null, null);
-        assertEquals(EXPECTED_LIST_SIZE, certificateDAO.get(orderDTO, searchDTO).size());
+        Sort sort = new Sort(null, null);
+        Search search = new Search(null, null, null);
+        assertEquals(EXPECTED_LIST_SIZE, certificateDAO.get(sort, search).size());
     }
 
     @Test
     public void getCertificatesBySearch() {
-        OrderDTO orderDTO = new OrderDTO(null,null);
-        SearchDTO searchDTO = new SearchDTO("sport", null, null);
-        assertEquals(EXPECTED_SIZE_BY_SEARCH, certificateDAO.get(orderDTO, searchDTO).size());
+        Sort sort = new Sort(null,null);
+        Search search = new Search("sport", null, null);
+        assertEquals(EXPECTED_SIZE_BY_SEARCH, certificateDAO.get(sort, search).size());
 
-        searchDTO = new SearchDTO(null, "spo", null);
-        assertEquals(EXPECTED_SIZE_BY_SEARCH, certificateDAO.get(orderDTO, searchDTO).size());
+        search = new Search(null, "spo", null);
+        assertEquals(EXPECTED_SIZE_BY_SEARCH, certificateDAO.get(sort, search).size());
 
-        searchDTO = new SearchDTO(null, null, "mas");
-        assertEquals(EXPECTED_SIZE_BY_SEARCH, certificateDAO.get(orderDTO, searchDTO).size());
+        search = new Search(null, null, "mas");
+        assertEquals(EXPECTED_SIZE_BY_SEARCH, certificateDAO.get(sort, search).size());
 
-        searchDTO = new SearchDTO("sport", "spo", "mas");
-        assertEquals(EXPECTED_SIZE_BY_INVALID_SEARCH, certificateDAO.get(orderDTO, searchDTO).size());
+        search = new Search("sport", "spo", "mas");
+        assertEquals(EXPECTED_SIZE_BY_INVALID_SEARCH, certificateDAO.get(sort, search).size());
     }
 
     @Test
     public void getCertificatesByOrder() {
-        SearchDTO searchDTO = new SearchDTO(null, null, null);
-        OrderDTO orderDTO = new OrderDTO(null, "DESC");
+        Search search = new Search(null, null, null);
+        Sort sort = new Sort(null, "DESC");
         Certificate firstCertificate = certificateDAO.get(ID_FIRST_ELEMENT);
         Certificate secondCertificate = certificateDAO.get(ID_SECOND_ELEMENT);
         List<Certificate> expectedList = Arrays.asList(firstCertificate, secondCertificate);
-        assertEquals(expectedList, certificateDAO.get(orderDTO, searchDTO));
+        assertEquals(expectedList, certificateDAO.get(sort, search));
 
         expectedList = Arrays.asList(secondCertificate, firstCertificate);
-        orderDTO = new OrderDTO("ASC", null);
-        assertEquals(expectedList, certificateDAO.get(orderDTO, searchDTO));
+        sort = new Sort("ASC", null);
+        assertEquals(expectedList, certificateDAO.get(sort, search));
     }
 
     @Test

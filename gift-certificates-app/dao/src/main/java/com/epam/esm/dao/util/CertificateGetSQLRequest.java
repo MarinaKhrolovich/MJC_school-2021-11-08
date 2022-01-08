@@ -1,7 +1,7 @@
 package com.epam.esm.dao.util;
 
-import com.epam.esm.bean.OrderDTO;
-import com.epam.esm.bean.SearchDTO;
+import com.epam.esm.bean.Sort;
+import com.epam.esm.bean.Search;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -26,16 +26,16 @@ public class CertificateGetSQLRequest {
     private static final String AND = " AND";
     private static final String COMMA = ", ";
 
-    public CertificateUpdateParameters create(OrderDTO orderDTO, SearchDTO searchDTO) {
+    public CertificateUpdateParameters create(Sort sort, Search search) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(SELECT_FROM_CERTIFICATE);
         List<Object> parameters = new ArrayList<>();
 
-        Optional<String> tagName = searchDTO.getTagName();
-        Optional<String> certificateName = searchDTO.getCertificateName();
-        Optional<String> certificateDescription = searchDTO.getCertificateDescription();
-        Optional<String> orderByDate = orderDTO.getOrderByDate();
-        Optional<String> orderByName = orderDTO.getOrderByName();
+        Optional<String> tagName = Optional.ofNullable(search.getTagName());
+        Optional<String> certificateName = Optional.ofNullable(search.getCertificateName());
+        Optional<String> certificateDescription = Optional.ofNullable(search.getCertificateDescription());
+        Optional<String> orderByDate = Optional.ofNullable(sort.getOrderByDate());
+        Optional<String> orderByName = Optional.ofNullable(sort.getOrderByName());
 
         boolean whereExists = false;
         boolean orderExists = false;

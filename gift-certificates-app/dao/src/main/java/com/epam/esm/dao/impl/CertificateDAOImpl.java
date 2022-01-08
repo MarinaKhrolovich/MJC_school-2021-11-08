@@ -1,8 +1,8 @@
 package com.epam.esm.dao.impl;
 
 import com.epam.esm.bean.Certificate;
-import com.epam.esm.bean.OrderDTO;
-import com.epam.esm.bean.SearchDTO;
+import com.epam.esm.bean.Sort;
+import com.epam.esm.bean.Search;
 import com.epam.esm.bean.Tag;
 import com.epam.esm.dao.CertificateDAO;
 import com.epam.esm.dao.CertificateTagDAO;
@@ -85,8 +85,8 @@ public class CertificateDAOImpl implements CertificateDAO {
     }
 
     @Override
-    public List<Certificate> get(OrderDTO orderDTO, SearchDTO searchDTO) {
-        CertificateUpdateParameters getParameters = getSQLRequest.create(orderDTO, searchDTO);
+    public List<Certificate> get(Sort sort, Search search) {
+        CertificateUpdateParameters getParameters = getSQLRequest.create(sort, search);
         List<Certificate> certificateList = jdbcTemplate.query(getParameters.getSqlRequest(),
                 new CertificateMapper(), getParameters.getParameters().toArray());
         certificateList.forEach(certificate -> setTagList(certificate.getId(), certificate));

@@ -1,9 +1,9 @@
 package com.epam.esm.service;
 
-import com.epam.esm.bean.OrderDTO;
-import com.epam.esm.bean.SearchDTO;
 import com.epam.esm.dto.CertificateDTO;
 import com.epam.esm.dto.CertificateUpdateDTO;
+import com.epam.esm.dto.SearchDTO;
+import com.epam.esm.dto.SortDTO;
 
 import java.util.List;
 
@@ -28,11 +28,11 @@ public interface CertificateService {
 
     /**
      * Get all Certificates from the database
-     * @param orderDTO is object {@link OrderDTO}  with parameters for sorting
-     * @param searchDTO is object {@link SearchDTO} with parameters for searching
+     * @param sort is object {@link SortDTO}  with parameters for sorting
+     * @param search is object {@link SearchDTO} with parameters for searching
      * @return list of certificate {@link CertificateDTO}
      */
-    List<CertificateDTO> get(OrderDTO orderDTO, SearchDTO searchDTO);
+    List<CertificateDTO> get(SortDTO sort, SearchDTO search);
 
     /**
      * Update Certificate at the database according to provided data

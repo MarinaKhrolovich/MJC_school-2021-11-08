@@ -1,12 +1,13 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.bean.Certificate;
-import com.epam.esm.bean.OrderDTO;
-import com.epam.esm.bean.SearchDTO;
 import com.epam.esm.dao.CertificateDAO;
 import com.epam.esm.dto.CertificateDTO;
 import com.epam.esm.dto.CertificateUpdateDTO;
+import com.epam.esm.dto.SearchDTO;
+import com.epam.esm.dto.SortDTO;
 import com.epam.esm.mapper.CertificateMapper;
+import com.epam.esm.mapper.SortSearchMapper;
 import com.epam.esm.service.CertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,11 +22,14 @@ public class CertificateServiceImpl implements CertificateService {
 
     private final CertificateDAO certificateDAO;
     private final CertificateMapper certificateMapper;
+    private final SortSearchMapper sortSearchMapper;
 
     @Autowired
-    public CertificateServiceImpl(CertificateDAO certificateDAO, CertificateMapper certificateMapper) {
+    public CertificateServiceImpl(CertificateDAO certificateDAO, CertificateMapper certificateMapper,
+                                  SortSearchMapper sortSearchMapper) {
         this.certificateDAO = certificateDAO;
         this.certificateMapper = certificateMapper;
+        this.sortSearchMapper = sortSearchMapper;
     }
 
     @Override
@@ -41,15 +45,16 @@ public class CertificateServiceImpl implements CertificateService {
     }
 
     @Override
-    public List<CertificateDTO> get(OrderDTO orderDTO, SearchDTO searchDTO) {
-        return certificateDAO.get(orderDTO, searchDTO).stream().map(certificateMapper::convertToDTO)
+    public List<CertificateDTO> get(SortDTO sort, SearchDTO search) {
+        return certificateDAO.get(sortSearchMapper.сonvertToEntity(sort), sortSearchMapper.сonvertToEntity(search))
+                .stream().map(certificateMapper::convertToDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
     public CertificateUpdateDTO update(int id, CertificateUpdateDTO certificate) {
-        Certificate  updatedCertificate= certificateDAO.update(id, certificateMapper.сonvertToEntity(certificate));
+        Certificate updatedCertificate = certificateDAO.update(id, certificateMapper.сonvertToEntity(certificate));
         return certificateMapper.convertToUpdateDTO(updatedCertificate);
 
     }

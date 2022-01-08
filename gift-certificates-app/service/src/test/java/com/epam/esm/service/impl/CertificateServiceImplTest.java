@@ -1,15 +1,14 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.bean.Certificate;
-import com.epam.esm.bean.OrderDTO;
-import com.epam.esm.bean.SearchDTO;
+import com.epam.esm.bean.Search;
+import com.epam.esm.bean.Sort;
 import com.epam.esm.bean.Tag;
 import com.epam.esm.dao.CertificateDAO;
-import com.epam.esm.dto.CertificateDTO;
-import com.epam.esm.dto.CertificateUpdateDTO;
-import com.epam.esm.dto.TagDTO;
+import com.epam.esm.dto.*;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.mapper.CertificateMapperImpl;
+import com.epam.esm.mapper.SortSearchMapperImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,7 +23,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class CertificateServiceImplTest {
@@ -36,6 +34,8 @@ public class CertificateServiceImplTest {
     CertificateDAO certificateDAO;
     @Mock
     private CertificateMapperImpl certificateMapper;
+    @Mock
+    private SortSearchMapperImpl sortSearchMapper;
 
     public static final String NEW_TAG = "new tag";
     public static final String NEW_CERTIFICATE = "new certificate";
@@ -49,17 +49,15 @@ public class CertificateServiceImplTest {
     private static Certificate certificateExpected;
     private static Certificate secondCertificate;
     private static List<Certificate> certificateList;
-    private static List<Tag> tagList;
 
     private static CertificateDTO certificateExpectedDTO;
     private static CertificateUpdateDTO certificateExpectedUpdateDTO;
     private static CertificateDTO secondCertificateDTO;
     private static List<CertificateDTO> certificateListDTO;
-    private static List<TagDTO> tagListDTO;
 
     @BeforeAll
     static void beforeAll() {
-        tagList = new ArrayList<>();
+        List<Tag> tagList = new ArrayList<>();
         Tag newTag = new Tag();
         newTag.setName(NEW_TAG);
         tagList.add(newTag);
@@ -82,7 +80,7 @@ public class CertificateServiceImplTest {
         certificateList.add(certificateExpected);
         certificateList.add(secondCertificate);
 
-        tagListDTO = new ArrayList<>();
+        List<TagDTO> tagListDTO = new ArrayList<>();
         TagDTO newTagDTO = new TagDTO();
         newTagDTO.setName(NEW_TAG);
         tagListDTO.add(newTagDTO);
@@ -114,33 +112,26 @@ public class CertificateServiceImplTest {
     }
 
     @Test
-    public void getAllCertificates() {
-        OrderDTO orderDTO = new OrderDTO(null, null);
-        SearchDTO searchDTO = new SearchDTO(null, null, null);
-        when(certificateDAO.get(orderDTO, searchDTO)).thenReturn(certificateList);
-        when(certificateMapper.convertToDTO(certificateExpected)).thenReturn(certificateExpectedDTO);
-        when(certificateMapper.convertToDTO(secondCertificate)).thenReturn(secondCertificateDTO);
-
-        assertEquals(certificateListDTO, certificateService.get(orderDTO, searchDTO));
-
-        verify(certificateDAO).get(orderDTO, searchDTO);
-        verify(certificateMapper,times(2)).convertToDTO(any(Certificate.class));
-        verifyNoMoreInteractions(certificateDAO,certificateMapper);
-    }
-
-    @Test
-    public void getCertificatesByOrderSearch() {
-        OrderDTO orderDTO = new OrderDTO("DESC", null);
+    public void getCertificates() {
+        SortDTO sortDTO = new SortDTO("DESC", null);
         SearchDTO searchDTO = new SearchDTO("sport", null, null);
-        when(certificateDAO.get(any(OrderDTO.class), any(SearchDTO.class))).thenReturn(certificateList);
+
+        Sort sort = new Sort("DESC", null);
+        Search search = new Search("sport", null, null);
+
+        when(certificateDAO.get(any(Sort.class), any(Search.class))).thenReturn(certificateList);
+        when(sortSearchMapper.сonvertToEntity(sortDTO)).thenReturn(sort);
+        when(sortSearchMapper.сonvertToEntity(searchDTO)).thenReturn(search);
         when(certificateMapper.convertToDTO(certificateExpected)).thenReturn(certificateExpectedDTO);
         when(certificateMapper.convertToDTO(secondCertificate)).thenReturn(secondCertificateDTO);
 
-        assertEquals(certificateListDTO, certificateService.get(orderDTO, searchDTO));
+        assertEquals(certificateListDTO, certificateService.get(sortDTO, searchDTO));
 
-        verify(certificateDAO).get(orderDTO, searchDTO);
-        verify(certificateMapper,times(2)).convertToDTO(any(Certificate.class));
-        verifyNoMoreInteractions(certificateDAO,certificateMapper);
+        verify(certificateDAO).get(any(Sort.class), any(Search.class));
+        verify(sortSearchMapper).сonvertToEntity(sortDTO);
+        verify(sortSearchMapper).сonvertToEntity(searchDTO);
+        verify(certificateMapper, times(2)).convertToDTO(any(Certificate.class));
+        verifyNoMoreInteractions(certificateDAO, certificateMapper, sortSearchMapper);
     }
 
     @Test

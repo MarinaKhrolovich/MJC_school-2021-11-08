@@ -6,9 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.util.List;
 import java.util.Locale;
 
 @ControllerAdvice
@@ -62,14 +65,14 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler(ValidatorException.class)
-    public ResponseEntity<ErrorResponse> handleException(ValidatorException exception, Locale locale) {
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleException(MethodArgumentNotValidException exception, Locale locale) {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
-        errorResponse.setMessage(messageSource.getMessage(exception.getMessage(), new Object[]{}, locale));
+        List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
+        errorResponse.setMessage(messageSource.getMessage(fieldErrors.get(0), locale));
         errorResponse.setCode(HttpStatus.BAD_REQUEST.value() + CODE_RESOURCE_NOT_CHECK);
         LOG.error(exception);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
-
 }

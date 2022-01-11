@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 @Service
 public class CertificateServiceImpl implements CertificateService {
 
-
     private final CertificateDAO certificateDAO;
     private final CertificateMapper certificateMapper;
     private final SortSearchMapper sortSearchMapper;

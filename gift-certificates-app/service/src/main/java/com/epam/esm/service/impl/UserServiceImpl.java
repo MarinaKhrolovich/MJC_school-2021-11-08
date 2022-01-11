@@ -1,13 +1,16 @@
 package com.epam.esm.service.impl;
 
+import com.epam.esm.bean.User;
 import com.epam.esm.dao.UserDAO;
 import com.epam.esm.dto.UserDTO;
 import com.epam.esm.mapper.UserMapper;
 import com.epam.esm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -22,18 +25,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO add(UserDTO user) {
-        return null;
+    @Transactional
+    public UserDTO add(UserDTO userDTO) {
+        User addedUser = userDAO.add(userMapper.convertToEntity(userDTO));
+        return userMapper.convertToDTO(addedUser);
     }
 
     @Override
     public UserDTO get(int id) {
-        return null;
+        return userMapper.convertToDTO(userDAO.get(id));
     }
 
     @Override
     public List<UserDTO> get() {
-        return null;
+        return userDAO.get().stream().map(userMapper::convertToDTO).collect(Collectors.toList());
     }
 
 }

@@ -1,22 +1,20 @@
 package com.epam.esm.dao.mapper;
 
-import com.epam.esm.bean.Certificate;
+import com.epam.esm.bean.Order;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class CertificateMapper implements RowMapper<Certificate> {
+public class OrderMapper implements RowMapper<Order> {
     @Override
-    public Certificate mapRow(ResultSet rs, int rowNum) throws SQLException {
-        Certificate certificate = new Certificate();
-        certificate.setId(rs.getInt("id"));
-        certificate.setName(rs.getString("name"));
-        certificate.setDescription(rs.getString("description"));
-        certificate.setDuration(rs.getInt("duration"));
-        certificate.setPrice(rs.getBigDecimal("price"));
-        certificate.setCreateDate(rs.getTimestamp("create_date").toInstant());
-        certificate.setLastUpdateDate(rs.getTimestamp("last_update_date").toInstant());
-        return certificate;
+    public Order mapRow(ResultSet rs, int rowNum) throws SQLException {
+        Order order = new Order();
+        order.setId(rs.getInt("id"));
+        order.setUserId(rs.getInt("user_id"));
+        order.setCertificateId(rs.getInt("certificate_id"));
+        order.setCost(rs.getBigDecimal("cost"));
+        order.setCreateDate(rs.getTimestamp("create_date").toInstant());
+        return order;
     }
 }

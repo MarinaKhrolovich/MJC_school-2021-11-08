@@ -27,7 +27,7 @@ public class GlobalExceptionHandler {
     public static final String CODE_RESOURCE_EXISTS = "001";
     public static final String CODE_RESOURCE_NOT_CHECK = "002";
     public static final String CODE_WRONG_PATH_ID = "003";
-    public static final String MESSAGE_ID_MIN = "message.id.min";
+    public static final String MESSAGE_ID_MIN = "message.path.id.min";
 
 
     private final MessageSource messageSource;

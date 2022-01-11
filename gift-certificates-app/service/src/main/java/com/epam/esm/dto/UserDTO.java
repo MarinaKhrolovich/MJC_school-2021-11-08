@@ -1,5 +1,6 @@
 package com.epam.esm.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -14,10 +15,12 @@ public class UserDTO {
     @Size(min = 3, max = 45, message = "{message.user.login.length}")
     private String login;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Size(min = 3, max = 45, message = "{message.user.name.length}")
     private String name;
 
-    @Size(min = 3, max = 45, message = "{message.user.name.length}")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Size(min = 3, max = 45, message = "{message.user.surname.length}")
     private String surname;
 
 }

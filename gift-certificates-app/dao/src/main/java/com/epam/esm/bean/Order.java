@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -18,9 +17,9 @@ public class Order implements Serializable {
 
     private int id;
 
-    private User user;
+    private Integer userId;
 
-    private List<Certificate> certificateList;
+    private Integer certificateId;
 
     private Instant createDate;
 

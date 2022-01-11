@@ -22,12 +22,12 @@ public class CertificateDTO {
     @Size(min = 3, max = 1000, message = "{message.certificate.description.length}")
     private String description;
 
-    @NotNull
-    @DecimalMin(value="0.01", message="{message.certificate.price}")
+    @NotNull(message = "{message.certificate.price.fill")
+    @DecimalMin(value = "0.01", message = "{message.certificate.price.value}")
     private BigDecimal price;
 
-    @NotNull
-    @Min(value=1, message="{message.certificate.duration}")
+    @NotNull(message = "{message.certificate.duration.fill")
+    @Min(value = 1, message = "{message.certificate.duration.value}")
     private Integer duration;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS", timezone = "UTC")

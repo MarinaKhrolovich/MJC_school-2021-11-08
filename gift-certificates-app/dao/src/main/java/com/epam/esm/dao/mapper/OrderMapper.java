@@ -14,6 +14,7 @@ public class OrderMapper implements RowMapper<Order> {
         order.setId(rs.getInt("id"));
         //order.setUser(rs.getInt("user_id"));
         order.setCreateDate(rs.getTimestamp("create_date").toInstant());
+        order.setCost(rs.getBigDecimal("cost"));
         return order;
     }
 }

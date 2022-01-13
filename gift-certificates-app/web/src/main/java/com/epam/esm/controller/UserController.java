@@ -13,7 +13,7 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
-     private final UserService userService;
+    private final UserService userService;
 
     @Autowired
     public UserController(UserService userService) {
@@ -21,17 +21,17 @@ public class UserController {
     }
 
     @PostMapping
-    UserDTO add(@Valid @RequestBody UserDTO userDTO){
+    UserDTO add(@Valid @RequestBody UserDTO userDTO) {
         return userService.add(userDTO);
     }
 
     @GetMapping("/{id}")
-    UserDTO get(@PathVariable @Min(1) int id){
+    UserDTO get(@PathVariable @Min(1) int id) {
         return userService.get(id);
     }
 
     @GetMapping
-    List<UserDTO> get(){
+    List<UserDTO> get() {
         return userService.get();
     }
 

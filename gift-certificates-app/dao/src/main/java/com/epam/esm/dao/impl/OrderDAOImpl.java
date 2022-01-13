@@ -2,7 +2,6 @@ package com.epam.esm.dao.impl;
 
 import com.epam.esm.bean.Certificate;
 import com.epam.esm.bean.Order;
-import com.epam.esm.bean.Tag;
 import com.epam.esm.dao.OrderDAO;
 import com.epam.esm.dao.mapper.OrderMapper;
 import com.epam.esm.exception.ResourceNotFoundException;
@@ -22,14 +21,17 @@ import java.util.List;
 @Repository
 public class OrderDAOImpl implements OrderDAO {
 
-    private static final String SELECT_FROM_ORDER = "SELECT * FROM orders";
-    private static final String SELECT_FROM_ORDER_WHERE_ID = "SELECT * FROM orders WHERE id = ?";
+    private static final String SELECT_FROM_ORDER = "SELECT id, user_id,create_date, SUM(price) AS cost FROM orders" +
+            " JOIN order_certificate ON order_certificate.order_id  = orders.id GROUP BY id";
+    private static final String SELECT_FROM_ORDER_WHERE_ID = "SELECT id, user_id,create_date, SUM(price) AS cost " +
+            "FROM orders JOIN order_certificate ON order_certificate.order_id  = orders.id WHERE id = ? GROUP BY id";
     private static final String CREATE_ORDER = "INSERT INTO orders(user_id, create_date) VALUES(?,?)";
 
     private static final String CREATE_ORDER_CERTIFICATE = "INSERT INTO order_certificate" +
-            "(order_id, certificate_id, price) VALUES(?,?,1)";
-    private static final String SELECT_CERTIFICATES_OF_ORDER = "SELECT order_certificate.certificate_id AS id FROM orders " +
-            "JOIN order_certificate ON order_certificate.order_id  = orders.id WHERE orders.id = ?";
+            "(order_id, certificate_id, price) VALUES(?,?,(SELECT price FROM certificate WHERE id = ?))";
+    private static final String SELECT_CERTIFICATES_OF_ORDER = "SELECT order_certificate.certificate_id AS id, " +
+            "order_certificate.price FROM orders JOIN order_certificate " +
+            "ON order_certificate.order_id  = orders.id WHERE orders.id = ?";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -75,7 +77,7 @@ public class OrderDAOImpl implements OrderDAO {
         List<Certificate> certificates = order.getCertificates();
         if (certificates != null) {
             for (Certificate certificate : certificates) {
-                jdbcTemplate.update(CREATE_ORDER_CERTIFICATE, order.getId(), certificate.getId());
+                jdbcTemplate.update(CREATE_ORDER_CERTIFICATE, order.getId(), certificate.getId(), certificate.getId());
             }
         }
     }

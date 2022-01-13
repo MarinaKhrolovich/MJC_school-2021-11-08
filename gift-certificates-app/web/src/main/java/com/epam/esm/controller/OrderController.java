@@ -21,17 +21,17 @@ public class OrderController {
     }
 
     @PostMapping
-    OrderDTO add(@Valid @RequestBody OrderDTO orderDTO){
+    OrderDTO add(@Valid @RequestBody OrderDTO orderDTO) {
         return orderService.add(orderDTO);
     }
 
     @GetMapping("/{id}")
-    OrderDTO get(@PathVariable @Min(1) int id){
+    OrderDTO get(@PathVariable @Min(1) int id) {
         return orderService.get(id);
     }
 
     @GetMapping
-    List<OrderDTO> get(){
+    List<OrderDTO> get() {
         return orderService.get();
     }
 

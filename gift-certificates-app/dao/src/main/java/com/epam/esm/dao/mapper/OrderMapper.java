@@ -13,7 +13,6 @@ public class OrderMapper implements RowMapper<Order> {
         Order order = new Order();
         order.setId(rs.getInt("id"));
         //order.setUser(rs.getInt("user_id"));
-        order.setCost(rs.getBigDecimal("cost"));
         order.setCreateDate(rs.getTimestamp("create_date").toInstant());
         return order;
     }

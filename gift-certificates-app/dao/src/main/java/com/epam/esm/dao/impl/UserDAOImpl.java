@@ -18,9 +18,9 @@ import java.util.List;
 @Repository
 public class UserDAOImpl implements UserDAO {
 
-    private static final String SELECT_FROM_USER = "SELECT * FROM user";
-    private static final String SELECT_FROM_USER_WHERE_ID = "SELECT * FROM user WHERE id = ?";
-    private static final String CREATE_USER = "INSERT INTO user(login, name, surname) VALUES(?,?,?)";
+    private static final String SELECT_FROM_USER = "SELECT * FROM users";
+    private static final String SELECT_FROM_USER_WHERE_ID = "SELECT * FROM users WHERE id = ?";
+    private static final String CREATE_USER = "INSERT INTO users(login, name, surname) VALUES(?,?,?)";
 
     private final JdbcTemplate jdbcTemplate;
 

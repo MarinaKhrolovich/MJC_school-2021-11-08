@@ -4,7 +4,7 @@ import com.epam.esm.bean.Certificate;
 import com.epam.esm.bean.Search;
 import com.epam.esm.bean.Sort;
 import com.epam.esm.bean.Tag;
-import com.epam.esm.config.ConfigTest;
+import com.epam.esm.config.ConfigDAO;
 import com.epam.esm.dao.CertificateDAO;
 import com.epam.esm.dao.CertificateTagDAO;
 import com.epam.esm.exception.ResourceNotFoundException;
@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,8 +27,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @ActiveProfiles("test")
-//@ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = {ConfigTest.class})
+@SpringBootTest(classes = {ConfigDAO.class})
+@TestPropertySource(
+        locations = "classpath:properties/application-test.properties")
 @SqlGroup({
         @Sql("classpath:db_schema.sql"),
         @Sql("classpath:db_data.sql")

@@ -7,19 +7,17 @@ import com.epam.esm.exception.ResourceAlreadyExistsException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @ActiveProfiles("test")
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {ConfigTest.class})
+//@ExtendWith(SpringExtension.class)
+@SpringBootTest(classes = {ConfigTest.class})
 @SqlGroup({
         @Sql("classpath:db_schema.sql"),
         @Sql("classpath:db_data.sql")
@@ -39,7 +37,6 @@ public class TagDAOImplTest {
     private TagDAO tagDAO;
     private static Tag tagExpected;
     private static Tag tagExists;
-
 
     @BeforeAll
     public static void initTag() {

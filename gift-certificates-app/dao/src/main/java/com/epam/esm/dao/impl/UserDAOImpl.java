@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Transactional
@@ -26,7 +26,7 @@ public class UserDAOImpl implements UserDAO {
     public User add(User user) {
         Session currentSession = sessionFactory.getCurrentSession();
         try {
-            Serializable save = currentSession.save(user);
+            currentSession.save(user);
         } catch (ConstraintViolationException exception) {
             throw new ResourceAlreadyExistsException(user.getLogin());
         }
@@ -48,6 +48,12 @@ public class UserDAOImpl implements UserDAO {
         Session currentSession = sessionFactory.getCurrentSession();
         Query<User> userQuery = currentSession.createQuery("from User", User.class);
         return userQuery.getResultList();
+    }
+
+    private boolean isExists(int id) {
+        Session currentSession = sessionFactory.getCurrentSession();
+        Optional<User> user = Optional.ofNullable(currentSession.get(User.class, id));
+        return user.isPresent();
     }
 
 }

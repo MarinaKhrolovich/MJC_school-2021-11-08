@@ -4,83 +4,68 @@ import com.epam.esm.bean.Tag;
 import com.epam.esm.dao.TagDAO;
 import com.epam.esm.exception.ResourceAlreadyExistsException;
 import com.epam.esm.exception.ResourceNotFoundException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.exception.ConstraintViolationException;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
+@Transactional
 public class TagDAOImpl implements TagDAO {
 
-    private static final String SELECT_FROM_TAG = "SELECT * FROM tag";
-    private static final String SELECT_FROM_TAG_WHERE_ID = "SELECT * FROM tag WHERE id = ?";
-    private static final String SELECT_FROM_TAG_WHERE_NAME = "SELECT * FROM tag WHERE name = ?";
-    private static final String CREATE_TAG = "INSERT INTO tag(name) VALUES(?)";
-    private static final String DELETE_FROM_TAG_WHERE_ID = "DELETE FROM tag WHERE id = ?";
-
-    private final JdbcTemplate jdbcTemplate;
-
     @Autowired
-    public TagDAOImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
-
+    private SessionFactory sessionFactory;
 
     @Override
     public Tag add(Tag tag) {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
+        Session currentSession = sessionFactory.getCurrentSession();
         try {
-            jdbcTemplate.update(
-                    connection -> {
-                        PreparedStatement ps =
-                                connection.prepareStatement(CREATE_TAG, new String[]{"id"});
-                        ps.setString(1, tag.getName());
-                        return ps;
-                    },
-                    keyHolder);
-        } catch (DuplicateKeyException exception) {
+            currentSession.save(tag);
+        } catch (ConstraintViolationException exception) {
             throw new ResourceAlreadyExistsException(tag.getName());
-        }
-        if (keyHolder.getKey() != null) {
-            tag.setId(keyHolder.getKey().intValue());
         }
         return tag;
     }
 
     @Override
     public Tag get(int id) {
-        return jdbcTemplate.query(SELECT_FROM_TAG_WHERE_ID, new BeanPropertyRowMapper<>(Tag.class), id)
-                .stream().findAny().orElseThrow(() -> new ResourceNotFoundException(id));
+        Session currentSession = sessionFactory.getCurrentSession();
+        Optional<Tag> tag = Optional.ofNullable(currentSession.get(Tag.class, id));
+        return tag.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
     @Override
     public Optional<Tag> get(String name) {
-        return jdbcTemplate.query(SELECT_FROM_TAG_WHERE_NAME, new BeanPropertyRowMapper<>(Tag.class), name)
-                .stream().findAny();
+        Session currentSession = sessionFactory.getCurrentSession();
+        Query tagQuery = currentSession.createQuery("from Tag where name=:tagName");
+        tagQuery.setParameter("tagName", name);
+        return Optional.ofNullable((Tag) tagQuery.uniqueResult());
     }
 
     @Override
     public List<Tag> get() {
-        return jdbcTemplate.query(SELECT_FROM_TAG, new BeanPropertyRowMapper<>(Tag.class));
+        Session currentSession = sessionFactory.getCurrentSession();
+        Query<Tag> tagQuery = currentSession.createQuery("from Tag", Tag.class);
+        return tagQuery.getResultList();
     }
 
     @Override
     public void delete(int id) {
-        if (!isExists(id)) {
-            throw new ResourceNotFoundException(id);
-        }
-        jdbcTemplate.update(DELETE_FROM_TAG_WHERE_ID, id);
+        Session currentSession = sessionFactory.getCurrentSession();
+        Query theQuery = currentSession.createQuery("delete from Tag where id=:tagId");
+        theQuery.setParameter("tagId", id);
+        theQuery.executeUpdate();
     }
 
     private boolean isExists(int id) {
-        return jdbcTemplate.query(SELECT_FROM_TAG_WHERE_ID, new BeanPropertyRowMapper<>(Tag.class), id)
-                .stream().findAny().isPresent();
+        Session currentSession = sessionFactory.getCurrentSession();
+        Optional<Tag> tag = Optional.ofNullable(currentSession.get(Tag.class, id));
+        return tag.isPresent();
     }
 }

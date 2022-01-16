@@ -36,11 +36,8 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public User get(int id) {
         Session currentSession = sessionFactory.getCurrentSession();
-        User user = currentSession.get(User.class, id);
-        if (user == null) {
-            new ResourceNotFoundException(id);
-        }
-        return user;
+        Optional<User> user = Optional.ofNullable(currentSession.get(User.class, id));
+        return user.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
     @Override

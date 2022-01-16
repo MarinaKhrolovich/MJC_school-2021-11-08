@@ -28,3 +28,12 @@ create table certificate_tag
         FOREIGN KEY (tag_id)
             REFERENCES tag(id) ON DELETE CASCADE
 );
+
+create table users
+(
+    id   INT AUTO_INCREMENT PRIMARY KEY,
+    login VARCHAR(45) NOT NULL,
+    name VARCHAR(45),
+    surname VARCHAR(45),
+    CONSTRAINT unique_login UNIQUE(login)
+);

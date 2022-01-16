@@ -19,8 +19,12 @@ import java.util.Optional;
 @Transactional
 public class TagDAOImpl implements TagDAO {
 
+    private final SessionFactory sessionFactory;
+
     @Autowired
-    private SessionFactory sessionFactory;
+    public TagDAOImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     public Tag add(Tag tag) {
@@ -43,7 +47,7 @@ public class TagDAOImpl implements TagDAO {
     @Override
     public Optional<Tag> get(String name) {
         Session currentSession = sessionFactory.getCurrentSession();
-        Query tagQuery = currentSession.createQuery("from Tag where name=:tagName");
+        Query<?> tagQuery = currentSession.createQuery("from Tag where name=:tagName");
         tagQuery.setParameter("tagName", name);
         return Optional.ofNullable((Tag) tagQuery.uniqueResult());
     }
@@ -58,9 +62,9 @@ public class TagDAOImpl implements TagDAO {
     @Override
     public void delete(int id) {
         Session currentSession = sessionFactory.getCurrentSession();
-        Query theQuery = currentSession.createQuery("delete from Tag where id=:tagId");
-        theQuery.setParameter("tagId", id);
-        theQuery.executeUpdate();
+        Query<?> query = currentSession.createQuery("delete from Tag where id=:tagId");
+        query.setParameter("tagId", id);
+        query.executeUpdate();
     }
 
     private boolean isExists(int id) {

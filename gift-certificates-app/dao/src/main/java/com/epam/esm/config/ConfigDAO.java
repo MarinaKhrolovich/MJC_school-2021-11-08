@@ -1,6 +1,5 @@
 package com.epam.esm.config;
 
-
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -26,8 +25,11 @@ import java.util.Properties;
         HibernateJpaAutoConfiguration.class })
 public class ConfigDAO {
 
-    @Autowired
-    private Environment env;
+    private final Environment env;
+
+    public ConfigDAO(Environment env) {
+        this.env = env;
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(ConfigDAO.class, args);
@@ -62,8 +64,7 @@ public class ConfigDAO {
     @Autowired
     @Bean(name = "transactionManager")
     public HibernateTransactionManager getTransactionManager(SessionFactory sessionFactory) {
-        HibernateTransactionManager transactionManager = new HibernateTransactionManager(sessionFactory);
-        return transactionManager;
+        return new HibernateTransactionManager(sessionFactory);
     }
 
 }

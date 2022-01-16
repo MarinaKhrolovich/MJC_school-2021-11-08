@@ -17,13 +17,35 @@ public class Certificate implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
     private int id;
+
+    @Column(name="name")
     private String name;
+
+    @Column(name="description")
     private String description;
+
+    @Column(name="price")
     private BigDecimal price;
+
+    @Column(name="duration")
     private Integer duration;
+
+    @Column(name="create_date")
     private Instant createDate;
+
+    @Column(name="last_update_date")
     private Instant lastUpdateDate;
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade={CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
+                    CascadeType.REFRESH})
+    @JoinTable(
+            name="certificate_tag",
+            joinColumns=@JoinColumn(name="certificate_id"),
+            inverseJoinColumns=@JoinColumn(name="tag_id")
+    )
     private List<Tag> tagList;
 
 }

@@ -55,7 +55,6 @@ public class CertificateServiceImpl implements CertificateService {
     public CertificateUpdateDTO update(int id, CertificateUpdateDTO certificate) {
         Certificate updatedCertificate = certificateDAO.update(id, certificateMapper.сonvertToEntity(certificate));
         return certificateMapper.convertToUpdateDTO(updatedCertificate);
-
     }
 
     @Override

@@ -2,13 +2,18 @@ package com.epam.esm.bean;
 
 import lombok.*;
 
+import javax.persistence.*;
 import java.io.Serializable;
 
+@Entity
 @Data
+@Table(name = "tag")
 public class Tag implements Serializable {
 
     private static final long serialVersionUID = 4183390015095448535L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String name;

@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -36,7 +37,7 @@ public class Certificate implements Serializable {
     @Column(name="create_date", updatable=false)
     private Instant createDate;
 
-    @Column(name="last_update_date")
+    @Column(name="last_update_date",insertable = false)
     private Instant lastUpdateDate;
 
     @ManyToMany(fetch=FetchType.LAZY,
@@ -46,16 +47,16 @@ public class Certificate implements Serializable {
             joinColumns=@JoinColumn(name="certificate_id"),
             inverseJoinColumns=@JoinColumn(name="tag_id")
     )
-    private List<Tag> tagList;
+    private List<Tag> tagList = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {
-        createDate = Instant.now().truncatedTo(ChronoUnit.MILLIS);
-        lastUpdateDate = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+        this.createDate = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+        this.lastUpdateDate = Instant.now().truncatedTo(ChronoUnit.MILLIS);
     }
 
     @PreUpdate
     protected void onUpdate() {
-        lastUpdateDate = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+        this.lastUpdateDate = Instant.now().truncatedTo(ChronoUnit.MILLIS);
     }
 }

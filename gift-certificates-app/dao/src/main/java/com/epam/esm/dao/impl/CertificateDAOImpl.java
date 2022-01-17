@@ -14,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,8 +35,6 @@ public class CertificateDAOImpl implements CertificateDAO {
 
     @Override
     public Certificate add(Certificate certificate) {
-        certificate.setCreateDate(Instant.now().truncatedTo(ChronoUnit.MILLIS));
-        certificate.setLastUpdateDate(Instant.now().truncatedTo(ChronoUnit.MILLIS));
         Session currentSession = sessionFactory.getCurrentSession();
         currentSession.save(certificate);
         return certificate;

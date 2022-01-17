@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Entity
@@ -32,7 +33,7 @@ public class Certificate implements Serializable {
     @Column(name="duration")
     private Integer duration;
 
-    @Column(name="create_date")
+    @Column(name="create_date", updatable=false)
     private Instant createDate;
 
     @Column(name="last_update_date")
@@ -47,4 +48,14 @@ public class Certificate implements Serializable {
     )
     private List<Tag> tagList;
 
+    @PrePersist
+    protected void onCreate() {
+        createDate = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+        lastUpdateDate = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        lastUpdateDate = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+    }
 }

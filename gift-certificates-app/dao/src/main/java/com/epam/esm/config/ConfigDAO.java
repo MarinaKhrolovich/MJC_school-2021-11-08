@@ -51,6 +51,7 @@ public class ConfigDAO {
         Properties properties = new Properties();
         properties.put("hibernate.dialect", env.getProperty("spring.jpa.properties.hibernate.dialect"));
         properties.put("hibernate.show_sql", env.getProperty("spring.jpa.show-sql"));
+        properties.put("hibernate.enable_lazy_load_no_trans", env.getProperty("spring.jpa.properties.enable_lazy_load_no_trans"));
         properties.put("current_session_context_class",
                 env.getProperty("spring.jpa.properties.hibernate.current_session_context_class"));
         LocalSessionFactoryBean factoryBean = new LocalSessionFactoryBean();

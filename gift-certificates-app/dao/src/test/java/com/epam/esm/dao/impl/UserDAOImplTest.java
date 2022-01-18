@@ -42,7 +42,7 @@ class UserDAOImplTest {
         userExpected.setLogin(NEW_USER);
 
         userExists = new User();
-        userExists.setName(USER_EXISTS);
+        userExists.setLogin(USER_EXISTS);
     }
 
     @Test

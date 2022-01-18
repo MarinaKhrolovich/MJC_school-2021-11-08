@@ -14,12 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,10 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest(classes = {ConfigDAO.class})
 @TestPropertySource(
         locations = "classpath:properties/application-test.properties")
-@SqlGroup({
-        @Sql("classpath:db_schema.sql"),
-        @Sql("classpath:db_data.sql")
-})
+@Sql(scripts = "classpath:db_data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(scripts = "classpath:drop.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 public class CertificateDAOImplTest {
 
@@ -79,11 +74,7 @@ public class CertificateDAOImplTest {
     @Transactional
     public void add() {
         certificateDAO.add(certificateExpected);
-
         Certificate certificateActual = certificateDAO.get(certificateExpected.getId());
-        List<Tag> allTagsOfCertificate = certificateTagDAO.getAllTagsOfCertificate(certificateExpected.getId());
-        certificateActual.setTagList(allTagsOfCertificate);
-
         assertEquals(certificateExpected, certificateActual);
     }
 
@@ -137,7 +128,7 @@ public class CertificateDAOImplTest {
     @Test
     @Transactional
     public void update() {
-        Certificate certificateActual  = certificateDAO.update(ID_EXISTS, certificateUpdate);
+        Certificate certificateActual = certificateDAO.update(ID_EXISTS, certificateUpdate);
         assertEquals(certificateUpdate.getDescription(), certificateActual.getDescription());
         assertEquals(certificateUpdate.getDuration(), certificateActual.getDuration());
     }

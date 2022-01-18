@@ -4,16 +4,14 @@ import com.epam.esm.bean.Certificate;
 import com.epam.esm.bean.Search;
 import com.epam.esm.bean.Sort;
 import com.epam.esm.dao.CertificateDAO;
-import com.epam.esm.dao.util.CertificateGetSQLRequest;
-import com.epam.esm.dao.util.CertificateUpdateSQLRequest;
+import com.epam.esm.exception.ResourceAlreadyExistsException;
 import com.epam.esm.exception.ResourceNotFoundException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,37 +19,28 @@ import java.util.Optional;
 @Transactional
 public class CertificateDAOImpl implements CertificateDAO {
 
-    private final CertificateGetSQLRequest getSQLRequest;
-    private final CertificateUpdateSQLRequest updateSQLRequest;
-
-    private final SessionFactory sessionFactory;
-
-    @Autowired
-    public CertificateDAOImpl(CertificateGetSQLRequest getSQLRequest, CertificateUpdateSQLRequest updateSQLRequest, SessionFactory sessionFactory) {
-        this.getSQLRequest = getSQLRequest;
-        this.updateSQLRequest = updateSQLRequest;
-        this.sessionFactory = sessionFactory;
-    }
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public Certificate add(Certificate certificate) {
-        Session currentSession = sessionFactory.getCurrentSession();
-        currentSession.save(certificate);
+        try {
+            entityManager.persist(certificate);
+        } catch (PersistenceException exception) {
+            throw new ResourceAlreadyExistsException(certificate.getName());
+        }
         return certificate;
     }
 
     @Override
     public Certificate get(int id) {
-        Session currentSession = sessionFactory.getCurrentSession();
-        Optional<Certificate> certificate = Optional.ofNullable(currentSession.get(Certificate.class, id));
+        Optional<Certificate> certificate = Optional.ofNullable(entityManager.find(Certificate.class, id));
         return certificate.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
     @Override
     public List<Certificate> get(Sort sort, Search search) {
-        Session currentSession = sessionFactory.getCurrentSession();
-        Query<Certificate> certificateQuery = currentSession.createQuery("from Certificate", Certificate.class);
-        return certificateQuery.getResultList();
+        return entityManager.createQuery("SELECT c FROM Certificate c", Certificate.class).getResultList();
     }
 
     @Override
@@ -60,22 +49,21 @@ public class CertificateDAOImpl implements CertificateDAO {
             throw new ResourceNotFoundException(id);
         }
         certificate.setId(id);
-        Session currentSession = sessionFactory.getCurrentSession();
-        Certificate mergedCertificate = (Certificate)currentSession.merge(certificate);
-        return mergedCertificate;
+        entityManager.merge(certificate);
+        return certificate;
     }
 
     @Override
     public void delete(int id) {
-        Session currentSession = sessionFactory.getCurrentSession();
-        Query<?> query = currentSession.createQuery("delete from Certificate where id=:certificateId");
-        query.setParameter("certificateId", id);
-        query.executeUpdate();
+        Optional<Certificate> certificate = Optional.ofNullable(entityManager.find(Certificate.class, id));
+        if (certificate.isEmpty()) {
+            throw new ResourceNotFoundException(id);
+        }
+        entityManager.remove(certificate.get());
     }
 
     private boolean notExists(int id) {
-        Session currentSession = sessionFactory.getCurrentSession();
-        Optional<Certificate> certificate = Optional.ofNullable(currentSession.get(Certificate.class, id));
+        Optional<Certificate> certificate = Optional.ofNullable(entityManager.find(Certificate.class, id));
         return certificate.isEmpty();
     }
 

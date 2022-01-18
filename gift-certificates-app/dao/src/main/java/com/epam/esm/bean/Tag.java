@@ -4,6 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -17,7 +19,17 @@ public class Tag implements Serializable {
     @Column(name="id")
     private int id;
 
-    @Column(name="name")
+    @Column(name="name",nullable = false,unique = true)
     private String name;
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+                    CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinTable(
+            name = "certificate_tag",
+            joinColumns = @JoinColumn(name = "tag_id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "certificate_id", nullable = false)
+    )
+    private List<Certificate> certificates = new ArrayList<>();
 
 }

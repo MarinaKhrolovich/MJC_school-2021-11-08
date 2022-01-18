@@ -22,16 +22,16 @@ public class Certificate implements Serializable {
     @Column(name="id")
     private int id;
 
-    @Column(name="name")
+    @Column(name="name",nullable = false)
     private String name;
 
-    @Column(name="description")
+    @Column(name="description",nullable = false)
     private String description;
 
-    @Column(name="price")
+    @Column(name="price",nullable = false)
     private BigDecimal price;
 
-    @Column(name="duration")
+    @Column(name="duration",nullable = false)
     private Integer duration;
 
     @Column(name="create_date", updatable=false)
@@ -45,8 +45,8 @@ public class Certificate implements Serializable {
                     CascadeType.DETACH, CascadeType.REFRESH})
     @JoinTable(
             name="certificate_tag",
-            joinColumns=@JoinColumn(name="certificate_id"),
-            inverseJoinColumns=@JoinColumn(name="tag_id")
+            joinColumns=@JoinColumn(name="certificate_id",nullable = false),
+            inverseJoinColumns=@JoinColumn(name="tag_id",nullable = false)
     )
     private List<Tag> tagList = new ArrayList<>();
 

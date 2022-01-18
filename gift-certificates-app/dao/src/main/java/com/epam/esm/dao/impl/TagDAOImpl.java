@@ -4,14 +4,13 @@ import com.epam.esm.bean.Tag;
 import com.epam.esm.dao.TagDAO;
 import com.epam.esm.exception.ResourceAlreadyExistsException;
 import com.epam.esm.exception.ResourceNotFoundException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.exception.ConstraintViolationException;
-import org.hibernate.query.Query;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
+import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,19 +18,14 @@ import java.util.Optional;
 @Transactional
 public class TagDAOImpl implements TagDAO {
 
-    private final SessionFactory sessionFactory;
-
-    @Autowired
-    public TagDAOImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public Tag add(Tag tag) {
-        Session currentSession = sessionFactory.getCurrentSession();
         try {
-            currentSession.save(tag);
-        } catch (ConstraintViolationException exception) {
+            entityManager.persist(tag);
+        } catch (PersistenceException exception) {
             throw new ResourceAlreadyExistsException(tag.getName());
         }
         return tag;
@@ -39,37 +33,33 @@ public class TagDAOImpl implements TagDAO {
 
     @Override
     public Tag get(int id) {
-        Session currentSession = sessionFactory.getCurrentSession();
-        Optional<Tag> tag = Optional.ofNullable(currentSession.get(Tag.class, id));
+        Optional<Tag> tag = Optional.ofNullable(entityManager.find(Tag.class, id));
         return tag.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
     @Override
     public Optional<Tag> get(String name) {
-        Session currentSession = sessionFactory.getCurrentSession();
-        Query<?> tagQuery = currentSession.createQuery("from Tag where name=:tagName");
-        tagQuery.setParameter("tagName", name);
-        return Optional.ofNullable((Tag) tagQuery.uniqueResult());
+        TypedQuery<Tag> query = entityManager.createQuery("SELECT t FROM Tag t WHERE t.name =:nameParam", Tag.class);
+        query.setParameter("nameParam", name);
+        return query.getResultStream().findAny();
     }
 
     @Override
     public List<Tag> get() {
-        Session currentSession = sessionFactory.getCurrentSession();
-        Query<Tag> tagQuery = currentSession.createQuery("from Tag", Tag.class);
-        return tagQuery.getResultList();
+        return entityManager.createQuery("SELECT t FROM Tag t", Tag.class).getResultList();
     }
 
     @Override
     public void delete(int id) {
-        Session currentSession = sessionFactory.getCurrentSession();
-        Query<?> query = currentSession.createQuery("delete from Tag where id=:tagId");
-        query.setParameter("tagId", id);
-        query.executeUpdate();
+        Optional<Tag> tag = Optional.ofNullable(entityManager.find(Tag.class, id));
+        if (tag.isEmpty()) {
+            throw new ResourceNotFoundException(id);
+        }
+        entityManager.remove(tag.get());
     }
 
     private boolean isExists(int id) {
-        Session currentSession = sessionFactory.getCurrentSession();
-        Optional<Tag> tag = Optional.ofNullable(currentSession.get(Tag.class, id));
+        Optional<Tag> tag = Optional.ofNullable(entityManager.find(Tag.class, id));
         return tag.isPresent();
     }
 }

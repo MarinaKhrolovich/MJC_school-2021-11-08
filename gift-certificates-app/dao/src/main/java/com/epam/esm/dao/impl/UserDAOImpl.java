@@ -4,14 +4,12 @@ import com.epam.esm.bean.User;
 import com.epam.esm.dao.UserDAO;
 import com.epam.esm.exception.ResourceAlreadyExistsException;
 import com.epam.esm.exception.ResourceNotFoundException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.exception.ConstraintViolationException;
-import org.hibernate.query.Query;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,15 +17,14 @@ import java.util.Optional;
 @Transactional
 public class UserDAOImpl implements UserDAO {
 
-    @Autowired
-    private SessionFactory sessionFactory;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public User add(User user) {
-        Session currentSession = sessionFactory.getCurrentSession();
         try {
-            currentSession.save(user);
-        } catch (ConstraintViolationException exception) {
+            entityManager.persist(user);
+        } catch (PersistenceException exception) {
             throw new ResourceAlreadyExistsException(user.getLogin());
         }
         return user;
@@ -35,21 +32,17 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public User get(int id) {
-        Session currentSession = sessionFactory.getCurrentSession();
-        Optional<User> user = Optional.ofNullable(currentSession.get(User.class, id));
+        Optional<User> user = Optional.ofNullable(entityManager.find(User.class, id));
         return user.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
     @Override
     public List<User> get() {
-        Session currentSession = sessionFactory.getCurrentSession();
-        Query<User> userQuery = currentSession.createQuery("from User", User.class);
-        return userQuery.getResultList();
+        return entityManager.createQuery("SELECT u FROM User u", User.class).getResultList();
     }
 
     private boolean isExists(int id) {
-        Session currentSession = sessionFactory.getCurrentSession();
-        Optional<User> user = Optional.ofNullable(currentSession.get(User.class, id));
+        Optional<User> user = Optional.ofNullable(entityManager.find(User.class, id));
         return user.isPresent();
     }
 

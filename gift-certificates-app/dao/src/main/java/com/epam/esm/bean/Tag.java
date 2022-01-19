@@ -22,14 +22,7 @@ public class Tag implements Serializable {
     @Column(name="name",nullable = false,unique = true)
     private String name;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-                    CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinTable(
-            name = "certificate_tag",
-            joinColumns = @JoinColumn(name = "tag_id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "certificate_id", nullable = false)
-    )
+    @ManyToMany(mappedBy = "tagList")
     private List<Certificate> certificates = new ArrayList<>();
 
 }

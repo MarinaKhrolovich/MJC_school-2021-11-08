@@ -1,19 +1,19 @@
 package com.epam.esm.bean;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = "certificates")
 @Table(name = "orders")
 public class Order implements Serializable {
 
@@ -41,5 +41,10 @@ public class Order implements Serializable {
 
     @Transient
     private BigDecimal cost;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createDate = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+    }
 
 }

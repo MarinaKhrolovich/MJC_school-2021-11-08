@@ -9,6 +9,7 @@ import java.util.List;
 
 @Entity
 @Data
+@ToString(exclude = "certificates")
 @Table(name = "tag")
 public class Tag implements Serializable {
 

@@ -1,6 +1,7 @@
 package com.epam.esm.bean;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Entity
 @Data
+@ToString(exclude = "tagList")
 @Table(name = "certificate")
 public class Certificate implements Serializable {
 

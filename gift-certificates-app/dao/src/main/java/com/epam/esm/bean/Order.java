@@ -24,14 +24,11 @@ public class Order implements Serializable {
     @Column(name="id")
     private int id;
 
-    @ManyToOne(fetch=FetchType.LAZY, cascade= {CascadeType.PERSIST, CascadeType.MERGE,
-            CascadeType.DETACH, CascadeType.REFRESH})
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="user_id")
     private User user;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade={CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
-                    CascadeType.REFRESH})
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name="order_certificate",
             joinColumns=@JoinColumn(name="order_id"),

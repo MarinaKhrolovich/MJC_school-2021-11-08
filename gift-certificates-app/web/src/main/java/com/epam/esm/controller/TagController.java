@@ -10,6 +10,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.List;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @Validated
 @RestController
 @RequestMapping("/tags")
@@ -24,17 +27,27 @@ public class TagController {
 
     @PostMapping
     public TagDTO addTag(@Valid @RequestBody TagDTO tagDTO) {
-        return tagService.add(tagDTO);
+        TagDTO addedTag = tagService.add(tagDTO);
+        int id = addedTag.getId();
+        addedTag.add(linkTo(methodOn(TagController.class).getTag(id)).withSelfRel());
+        return addedTag;
     }
 
     @GetMapping("/{id}")
     public TagDTO getTag(@PathVariable @Min(1) int id) {
-        return tagService.get(id);
+        TagDTO tagDTO = tagService.get(id);
+        tagDTO.add(linkTo(methodOn(TagController.class).getTag(id)).withSelfRel());
+        return tagDTO;
     }
 
     @GetMapping
     public List<TagDTO> getTags() {
-        return tagService.get();
+        List<TagDTO> tagDTOS = tagService.get();
+        for (TagDTO tagDTO : tagDTOS) {
+            int id = tagDTO.getId();
+            tagDTO.add(linkTo(methodOn(TagController.class).getTag(id)).withSelfRel());
+        }
+        return tagDTOS;
     }
 
     @DeleteMapping("/{id}")

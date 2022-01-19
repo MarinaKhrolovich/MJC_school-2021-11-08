@@ -11,3 +11,11 @@ VALUES (1, 'sport','sport',10.0,30,'2021-12-23','2021-12-23'),
        (2, 'massage','massage',10.0,30,'2021-12-01','2021-12-01');
 
 INSERT INTO certificate_tag(certificate_id,tag_id) VALUES (1,1),(2,2);
+
+INSERT INTO orders (id,user_id,create_date)
+VALUES (1,2,'2022-01-01'),
+       (2,2,'2022-01-15');
+
+INSERT INTO order_certificate (order_id,certificate_id)
+VALUES (1,1),
+       (2,1);

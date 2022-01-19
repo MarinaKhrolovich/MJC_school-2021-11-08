@@ -51,15 +51,12 @@ public class TagDAOImpl implements TagDAO {
 
     @Override
     public void delete(int id) {
-        Optional<Tag> tag = Optional.ofNullable(entityManager.find(Tag.class, id));
-        if (tag.isEmpty()) {
-            throw new ResourceNotFoundException(id);
-        }
-        entityManager.remove(tag.get());
+        Tag tag = Optional.ofNullable(entityManager.find(Tag.class, id))
+                .stream().findAny().orElseThrow(()-> new ResourceNotFoundException(id));
+        entityManager.remove(tag);
     }
 
     private boolean isExists(int id) {
-        Optional<Tag> tag = Optional.ofNullable(entityManager.find(Tag.class, id));
-        return tag.isPresent();
+        return Optional.ofNullable(entityManager.find(Tag.class, id)).isPresent();
     }
 }

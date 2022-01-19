@@ -55,16 +55,13 @@ public class CertificateDAOImpl implements CertificateDAO {
 
     @Override
     public void delete(int id) {
-        Optional<Certificate> certificate = Optional.ofNullable(entityManager.find(Certificate.class, id));
-        if (certificate.isEmpty()) {
-            throw new ResourceNotFoundException(id);
-        }
-        entityManager.remove(certificate.get());
+        Certificate certificate = Optional.ofNullable(entityManager.find(Certificate.class, id))
+                .stream().findAny().orElseThrow(() -> new ResourceNotFoundException(id));
+        entityManager.remove(certificate);
     }
 
     private boolean notExists(int id) {
-        Optional<Certificate> certificate = Optional.ofNullable(entityManager.find(Certificate.class, id));
-        return certificate.isEmpty();
+        return Optional.ofNullable(entityManager.find(Certificate.class, id)).isEmpty();
     }
 
 }

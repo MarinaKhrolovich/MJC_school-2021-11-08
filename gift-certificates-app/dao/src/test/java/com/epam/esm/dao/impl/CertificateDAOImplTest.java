@@ -6,7 +6,6 @@ import com.epam.esm.bean.Sort;
 import com.epam.esm.bean.Tag;
 import com.epam.esm.config.ConfigDAO;
 import com.epam.esm.dao.CertificateDAO;
-import com.epam.esm.dao.CertificateTagDAO;
 import com.epam.esm.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

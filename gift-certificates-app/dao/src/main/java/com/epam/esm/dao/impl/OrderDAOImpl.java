@@ -1,91 +1,36 @@
 package com.epam.esm.dao.impl;
 
-import com.epam.esm.bean.Certificate;
 import com.epam.esm.bean.Order;
 import com.epam.esm.dao.OrderDAO;
-import com.epam.esm.dao.mapper.OrderMapper;
 import com.epam.esm.exception.ResourceNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.PreparedStatement;
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class OrderDAOImpl implements OrderDAO {
 
-    private static final String SELECT_FROM_ORDER = "SELECT id, user_id,create_date, SUM(price) AS cost FROM orders" +
-            " JOIN order_certificate ON order_certificate.order_id  = orders.id GROUP BY id";
-    private static final String SELECT_FROM_ORDER_WHERE_ID = "SELECT id, user_id,create_date, SUM(price) AS cost " +
-            "FROM orders JOIN order_certificate ON order_certificate.order_id  = orders.id WHERE id = ? GROUP BY id";
-    private static final String CREATE_ORDER = "INSERT INTO orders(user_id, create_date) VALUES(?,?)";
-
-    private static final String CREATE_ORDER_CERTIFICATE = "INSERT INTO order_certificate" +
-            "(order_id, certificate_id, price) VALUES(?,?,(SELECT price FROM certificate WHERE id = ?))";
-    private static final String SELECT_CERTIFICATES_OF_ORDER = "SELECT order_certificate.certificate_id AS id, " +
-            "order_certificate.price FROM orders JOIN order_certificate " +
-            "ON order_certificate.order_id  = orders.id WHERE orders.id = ?";
-
-    private final JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    public OrderDAOImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public Order add(Order order) {
-        order.setCreateDate(Instant.now().truncatedTo(ChronoUnit.MILLIS));
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(
-                connection -> {
-                    PreparedStatement ps =
-                            connection.prepareStatement(CREATE_ORDER, new String[]{"id"});
-                    ps.setInt(1, order.getUser().getId());
-                    ps.setTimestamp(2, Timestamp.from(order.getCreateDate()));
-                    return ps;
-                },
-                keyHolder);
-        if (keyHolder.getKey() != null) {
-            order.setId(keyHolder.getKey().intValue());
-        }
-        addCertificatesToOrder(order);
+        entityManager.persist(order);
         return order;
     }
 
     @Override
     public Order get(int id) {
-        Order order = jdbcTemplate.query(SELECT_FROM_ORDER_WHERE_ID, new OrderMapper(), id).stream().findAny().
-                orElseThrow(() -> new ResourceNotFoundException(id));
-        setCertificateList(id, order);
-        return order;
+        Optional<Order> order = Optional.ofNullable(entityManager.find(Order.class, id));
+        return order.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
     @Override
     public List<Order> get() {
-        return jdbcTemplate.query(SELECT_FROM_ORDER, new OrderMapper());
-    }
-
-    private void addCertificatesToOrder(Order order) {
-        List<Certificate> certificates = order.getCertificates();
-        if (certificates != null) {
-            for (Certificate certificate : certificates) {
-                jdbcTemplate.update(CREATE_ORDER_CERTIFICATE, order.getId(), certificate.getId(), certificate.getId());
-            }
-        }
-    }
-
-    private void setCertificateList(int id, Order order) {
-        List<Certificate> certificateList = jdbcTemplate.query(SELECT_CERTIFICATES_OF_ORDER,
-                new BeanPropertyRowMapper<>(Certificate.class), id);
-        order.setCertificates(certificateList);
+        return entityManager.createQuery("SELECT o FROM Order o", Order.class).getResultList();
     }
 
 }

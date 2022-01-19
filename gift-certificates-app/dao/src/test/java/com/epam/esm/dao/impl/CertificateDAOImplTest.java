@@ -45,8 +45,6 @@ public class CertificateDAOImplTest {
 
     @Autowired
     private CertificateDAO certificateDAO;
-    @Autowired
-    private CertificateTagDAO certificateTagDAO;
 
     private static Certificate certificateExpected;
     private static Certificate certificateUpdate;

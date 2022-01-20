@@ -31,7 +31,7 @@ public class CertificateController {
         CertificateDTO addedDTO = certificateService.add(certificate);
         int id = addedDTO.getId();
         addedDTO.add(linkTo(methodOn(CertificateController.class).getCertificate(id)).withSelfRel());
-        setTagLink(addedDTO);
+        setTagLink(addedDTO.getTagList());
         return addedDTO;
     }
 
@@ -39,7 +39,7 @@ public class CertificateController {
     public CertificateDTO getCertificate(@PathVariable @Min(1) int id) {
         CertificateDTO certificateDTO = certificateService.get(id);
         certificateDTO.add(linkTo(methodOn(CertificateController.class).getCertificate(id)).withSelfRel());
-        setTagLink(certificateDTO);
+        setTagLink(certificateDTO.getTagList());
         return certificateDTO;
     }
 
@@ -50,7 +50,7 @@ public class CertificateController {
             certificateDTOS.forEach(certificateDTO -> {
                 int id = certificateDTO.getId();
                 certificateDTO.add(linkTo(methodOn(CertificateController.class).getCertificate(id)).withSelfRel());
-                setTagLink(certificateDTO);
+                setTagLink(certificateDTO.getTagList());
             });
         }
         return certificateDTOS;
@@ -75,8 +75,7 @@ public class CertificateController {
         certificateService.delete(id);
     }
 
-    private void setTagLink(CertificateDTO addedDTO) {
-        List<TagDTO> tagList = addedDTO.getTagList();
+    private void setTagLink(List<TagDTO> tagList ) {
         if (!CollectionUtils.isEmpty(tagList)) {
             tagList.forEach(tagDTO -> {
                 int tagId = tagDTO.getId();

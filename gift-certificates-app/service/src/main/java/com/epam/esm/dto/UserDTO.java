@@ -12,6 +12,7 @@ public class UserDTO extends RepresentationModel<UserDTO> {
 
     private int id;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotBlank(message = "{message.user.login.fill}")
     @Size(min = 3, max = 45, message = "{message.user.login.length}")
     private String login;

@@ -7,10 +7,7 @@ import com.epam.esm.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,7 +53,10 @@ public class TagDAOImpl implements TagDAO {
         entityManager.remove(tag);
     }
 
-    private boolean isExists(int id) {
-        return Optional.ofNullable(entityManager.find(Tag.class, id)).isPresent();
+    @Override
+    public Tag getMostPopular() {
+        Query nativeQuery = entityManager.createNativeQuery("");
+        return new Tag();
     }
+
 }

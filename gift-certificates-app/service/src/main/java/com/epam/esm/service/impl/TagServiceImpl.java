@@ -45,4 +45,10 @@ public class TagServiceImpl implements TagService {
     public void delete(int id) {
         tagDAO.delete(id);
     }
+
+    @Override
+    public TagDTO getMostPopular() {
+        return tagMapper.сonvertToDTO(tagDAO.getMostPopular());
+    }
+
 }

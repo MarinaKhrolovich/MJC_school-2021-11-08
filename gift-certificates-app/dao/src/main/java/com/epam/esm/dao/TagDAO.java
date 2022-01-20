@@ -17,4 +17,6 @@ public interface TagDAO {
 
     void delete(int id);
 
+    Tag getMostPopular();
+
 }

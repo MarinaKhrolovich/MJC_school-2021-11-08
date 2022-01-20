@@ -35,4 +35,10 @@ public interface TagService {
      */
     void delete(int id);
 
+    /**
+     * Get most popular Tag from the database
+     * @return tag is object {@link TagDTO}
+     */
+    TagDTO getMostPopular();
+
 }

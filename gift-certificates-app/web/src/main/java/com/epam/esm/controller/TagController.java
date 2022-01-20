@@ -58,4 +58,8 @@ public class TagController {
         tagService.delete(id);
     }
 
+    @GetMapping("/mostpopular")
+    public TagDTO getTag() {
+        return tagService.getMostPopular();
+    }
 }

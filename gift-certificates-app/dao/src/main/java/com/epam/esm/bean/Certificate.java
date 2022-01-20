@@ -42,9 +42,7 @@ public class Certificate implements Serializable {
     @Column(name="last_update_date",insertable = false)
     private Instant lastUpdateDate;
 
-    @ManyToMany(fetch=FetchType.LAZY,
-            cascade= {CascadeType.PERSIST,CascadeType.MERGE,
-                    CascadeType.DETACH, CascadeType.REFRESH})
+    @ManyToMany(fetch=FetchType.LAZY)
     @JoinTable(
             name="certificate_tag",
             joinColumns=@JoinColumn(name="certificate_id",nullable = false),

@@ -9,6 +9,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.List;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -22,17 +25,27 @@ public class UserController {
 
     @PostMapping
     UserDTO add(@Valid @RequestBody UserDTO userDTO) {
-        return userService.add(userDTO);
+        UserDTO addedDTO = userService.add(userDTO);
+        int id = addedDTO.getId();
+        addedDTO.add(linkTo(methodOn(UserController.class).get(id)).withSelfRel());
+        return addedDTO;
     }
 
     @GetMapping("/{id}")
     UserDTO get(@PathVariable @Min(1) int id) {
-        return userService.get(id);
+        UserDTO userDTO = userService.get(id);
+        userDTO.add(linkTo(methodOn(UserController.class).get(id)).withSelfRel());
+        return userDTO;
     }
 
     @GetMapping
     List<UserDTO> get() {
-        return userService.get();
+        List<UserDTO> userDTOS = userService.get();
+        userDTOS.forEach(userDTO -> {
+            int id = userDTO.getId();
+            userDTO.add(linkTo(methodOn(UserController.class).get(id)).withSelfRel());
+        });
+        return userDTOS;
     }
 
 }

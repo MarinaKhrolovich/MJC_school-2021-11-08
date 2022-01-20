@@ -2,6 +2,7 @@ package com.epam.esm.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -9,7 +10,7 @@ import java.time.Instant;
 import java.util.List;
 
 @Data
-public class OrderDTO {
+public class OrderDTO extends RepresentationModel<OrderDTO> {
 
     private int id;
 

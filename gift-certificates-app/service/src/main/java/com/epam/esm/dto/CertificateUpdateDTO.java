@@ -2,6 +2,7 @@ package com.epam.esm.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -10,7 +11,7 @@ import java.time.Instant;
 import java.util.List;
 
 @Data
-public class CertificateUpdateDTO {
+public class CertificateUpdateDTO extends RepresentationModel<CertificateUpdateDTO> {
 
     private int id;
 

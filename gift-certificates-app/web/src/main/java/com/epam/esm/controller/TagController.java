@@ -43,10 +43,10 @@ public class TagController {
     @GetMapping
     public List<TagDTO> getTags() {
         List<TagDTO> tagDTOS = tagService.get();
-        for (TagDTO tagDTO : tagDTOS) {
+        tagDTOS.forEach(tagDTO -> {
             int id = tagDTO.getId();
             tagDTO.add(linkTo(methodOn(TagController.class).getTag(id)).withSelfRel());
-        }
+        });
         return tagDTOS;
     }
 

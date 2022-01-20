@@ -23,6 +23,6 @@ public class OrderDTO extends RepresentationModel<OrderDTO> {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS", timezone = "UTC")
     private Instant createDate;
 
-    private BigDecimal cost;
+    private BigDecimal price;
 
 }

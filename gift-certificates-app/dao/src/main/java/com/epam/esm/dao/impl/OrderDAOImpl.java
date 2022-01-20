@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +20,7 @@ public class OrderDAOImpl implements OrderDAO {
     @Override
     public Order add(Order order) {
         entityManager.persist(order);
+        order.setPrice(BigDecimal.valueOf(100));
         return order;
     }
 

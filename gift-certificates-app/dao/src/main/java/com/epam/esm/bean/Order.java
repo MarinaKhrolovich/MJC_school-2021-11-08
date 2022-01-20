@@ -39,8 +39,8 @@ public class Order implements Serializable {
     @Column(name="create_date")
     private Instant createDate;
 
-    @Transient
-    private BigDecimal cost;
+    @Column(name="price")
+    private BigDecimal price;
 
     @PrePersist
     protected void onCreate() {

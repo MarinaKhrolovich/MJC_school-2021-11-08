@@ -1,17 +1,18 @@
 package com.epam.esm.controller;
 
-import com.epam.esm.dto.CertificateDTO;
-import com.epam.esm.dto.CertificateUpdateDTO;
-import com.epam.esm.dto.SearchDTO;
-import com.epam.esm.dto.SortDTO;
+import com.epam.esm.dto.*;
 import com.epam.esm.service.CertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Validated
 @RestController
@@ -27,22 +28,46 @@ public class CertificateController {
 
     @PostMapping
     public CertificateDTO addCertificate(@Valid @RequestBody CertificateDTO certificate) {
-        return certificateService.add(certificate);
+        CertificateDTO addedDTO = certificateService.add(certificate);
+        int id = addedDTO.getId();
+        addedDTO.add(linkTo(methodOn(CertificateController.class).getCertificate(id)).withSelfRel());
+        setTagLink(addedDTO);
+        return addedDTO;
     }
 
     @GetMapping("/{id}")
     public CertificateDTO getCertificate(@PathVariable @Min(1) int id) {
-        return certificateService.get(id);
+        CertificateDTO certificateDTO = certificateService.get(id);
+        certificateDTO.add(linkTo(methodOn(CertificateController.class).getCertificate(id)).withSelfRel());
+        setTagLink(certificateDTO);
+        return certificateDTO;
     }
 
     @GetMapping()
     public List<CertificateDTO> getCertificates(SortDTO sortDTO, SearchDTO searchDTO) {
-        return certificateService.get(sortDTO, searchDTO);
+        List<CertificateDTO> certificateDTOS = certificateService.get(sortDTO, searchDTO);
+        if (!CollectionUtils.isEmpty(certificateDTOS)) {
+            certificateDTOS.forEach(certificateDTO -> {
+                int id = certificateDTO.getId();
+                certificateDTO.add(linkTo(methodOn(CertificateController.class).getCertificate(id)).withSelfRel());
+                setTagLink(certificateDTO);
+            });
+        }
+        return certificateDTOS;
     }
 
     @PatchMapping("/{id}")
     public CertificateUpdateDTO updateCertificate(@PathVariable @Min(1) int id, @Valid @RequestBody CertificateUpdateDTO certificate) {
-        return certificateService.update(id, certificate);
+        CertificateUpdateDTO updateDTO = certificateService.update(id, certificate);
+        updateDTO.add(linkTo(methodOn(CertificateController.class).getCertificate(id)).withSelfRel());
+        List<TagDTO> tagList = updateDTO.getTagList();
+        if (!CollectionUtils.isEmpty(tagList)) {
+            tagList.forEach(tagDTO -> {
+                int tagId = tagDTO.getId();
+                tagDTO.add(linkTo(methodOn(TagController.class).getTag(tagId)).withSelfRel());
+            });
+        }
+        return updateDTO;
     }
 
     @DeleteMapping("/{id}")
@@ -50,4 +75,13 @@ public class CertificateController {
         certificateService.delete(id);
     }
 
+    private void setTagLink(CertificateDTO addedDTO) {
+        List<TagDTO> tagList = addedDTO.getTagList();
+        if (!CollectionUtils.isEmpty(tagList)) {
+            tagList.forEach(tagDTO -> {
+                int tagId = tagDTO.getId();
+                tagDTO.add(linkTo(methodOn(TagController.class).getTag(tagId)).withSelfRel());
+            });
+        }
+    }
 }

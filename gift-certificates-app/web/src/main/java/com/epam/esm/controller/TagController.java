@@ -3,6 +3,7 @@ package com.epam.esm.controller;
 import com.epam.esm.dto.TagDTO;
 import com.epam.esm.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,10 +44,12 @@ public class TagController {
     @GetMapping
     public List<TagDTO> getTags() {
         List<TagDTO> tagDTOS = tagService.get();
-        tagDTOS.forEach(tagDTO -> {
-            int id = tagDTO.getId();
-            tagDTO.add(linkTo(methodOn(TagController.class).getTag(id)).withSelfRel());
-        });
+        if (!CollectionUtils.isEmpty(tagDTOS)) {
+            tagDTOS.forEach(tagDTO -> {
+                int id = tagDTO.getId();
+                tagDTO.add(linkTo(methodOn(TagController.class).getTag(id)).withSelfRel());
+            });
+        }
         return tagDTOS;
     }
 

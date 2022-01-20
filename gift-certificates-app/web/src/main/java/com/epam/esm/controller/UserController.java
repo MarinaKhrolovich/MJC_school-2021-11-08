@@ -3,6 +3,7 @@ package com.epam.esm.controller;
 import com.epam.esm.dto.UserDTO;
 import com.epam.esm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -41,10 +42,12 @@ public class UserController {
     @GetMapping
     List<UserDTO> get() {
         List<UserDTO> userDTOS = userService.get();
-        userDTOS.forEach(userDTO -> {
-            int id = userDTO.getId();
-            userDTO.add(linkTo(methodOn(UserController.class).get(id)).withSelfRel());
-        });
+        if (!CollectionUtils.isEmpty(userDTOS)) {
+            userDTOS.forEach(userDTO -> {
+                int id = userDTO.getId();
+                userDTO.add(linkTo(methodOn(UserController.class).get(id)).withSelfRel());
+            });
+        }
         return userDTOS;
     }
 

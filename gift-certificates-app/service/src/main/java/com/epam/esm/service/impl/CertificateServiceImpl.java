@@ -34,7 +34,7 @@ public class CertificateServiceImpl implements CertificateService {
     @Override
     @Transactional
     public CertificateDTO add(CertificateDTO certificateDTO) {
-        Certificate addedCertificate = certificateDAO.add(certificateMapper.сonvertToEntity(certificateDTO));
+        Certificate addedCertificate = certificateDAO.add(certificateMapper.convertToEntity(certificateDTO));
         return certificateMapper.convertToDTO(addedCertificate);
     }
 
@@ -53,7 +53,7 @@ public class CertificateServiceImpl implements CertificateService {
     @Override
     @Transactional
     public CertificateUpdateDTO update(int id, CertificateUpdateDTO certificate) {
-        Certificate updatedCertificate = certificateDAO.update(id, certificateMapper.сonvertToEntity(certificate));
+        Certificate updatedCertificate = certificateDAO.update(id, certificateMapper.convertToEntity(certificate));
         return certificateMapper.convertToUpdateDTO(updatedCertificate);
     }
 

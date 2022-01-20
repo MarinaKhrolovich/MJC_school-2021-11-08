@@ -7,7 +7,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -28,7 +27,6 @@ public class GlobalExceptionHandler {
     public static final String CODE_RESOURCE_NOT_CHECK = "002";
     public static final String CODE_WRONG_PATH_ID = "003";
     public static final String MESSAGE_ID_MIN = "message.path.id.min";
-
 
     private final MessageSource messageSource;
 
@@ -89,4 +87,5 @@ public class GlobalExceptionHandler {
         LOG.error(exception);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+
 }

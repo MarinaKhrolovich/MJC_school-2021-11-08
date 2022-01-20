@@ -156,14 +156,14 @@ public class CertificateServiceImplTest {
     @Test
     public void add() {
         when(certificateDAO.add(certificateExpected)).thenReturn(certificateExpected);
-        when(certificateMapper.сonvertToEntity(certificateExpectedDTO)).thenReturn(certificateExpected);
+        when(certificateMapper.convertToEntity(certificateExpectedDTO)).thenReturn(certificateExpected);
         when(certificateMapper.convertToDTO(certificateExpected)).thenReturn(certificateExpectedDTO);
 
         CertificateDTO actualCertificateDTO = certificateService.add(certificateExpectedDTO);
 
         assertEquals(certificateExpectedDTO, actualCertificateDTO);
         verify(certificateDAO).add(certificateExpected);
-        verify(certificateMapper).сonvertToEntity(certificateExpectedDTO);
+        verify(certificateMapper).convertToEntity(certificateExpectedDTO);
         verify(certificateMapper).convertToDTO(certificateExpected);
         verifyNoMoreInteractions(certificateDAO, certificateMapper);
     }
@@ -171,14 +171,14 @@ public class CertificateServiceImplTest {
     @Test
     public void update() {
         when(certificateDAO.update(ID_EXISTS, certificateExpected)).thenReturn(certificateExpected);
-        when(certificateMapper.сonvertToEntity(certificateExpectedUpdateDTO)).thenReturn(certificateExpected);
+        when(certificateMapper.convertToEntity(certificateExpectedUpdateDTO)).thenReturn(certificateExpected);
         when(certificateMapper.convertToUpdateDTO(certificateExpected)).thenReturn(certificateExpectedUpdateDTO);
 
         CertificateUpdateDTO actualCertificateDTO = certificateService.update(ID_EXISTS, certificateExpectedUpdateDTO);
 
         assertEquals(certificateExpectedUpdateDTO, actualCertificateDTO);
         verify(certificateDAO).update(ID_EXISTS, certificateExpected);
-        verify(certificateMapper).сonvertToEntity(certificateExpectedUpdateDTO);
+        verify(certificateMapper).convertToEntity(certificateExpectedUpdateDTO);
         verify(certificateMapper).convertToUpdateDTO(certificateExpected);
         verifyNoMoreInteractions(certificateDAO, certificateMapper);
     }

@@ -60,4 +60,5 @@ public class Certificate implements Serializable {
     protected void onUpdate() {
         this.lastUpdateDate = Instant.now().truncatedTo(ChronoUnit.MILLIS);
     }
+
 }

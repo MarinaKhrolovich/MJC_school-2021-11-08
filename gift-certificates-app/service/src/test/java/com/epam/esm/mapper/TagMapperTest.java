@@ -26,7 +26,7 @@ class TagMapperTest {
     }
 
     @Test
-    void сonvertToEntity() {
+    void convertToEntity() {
         TagDTO tagDTO = new TagDTO();
         tagDTO.setId(ID_TAG);
         tagDTO.setName(NEW_TAG);
@@ -38,7 +38,7 @@ class TagMapperTest {
     }
 
     @Test
-    void сonvertToDTO() {
+    void convertToDTO() {
         Tag tag = new Tag();
         tag.setId(ID_TAG);
         tag.setName(NEW_TAG);

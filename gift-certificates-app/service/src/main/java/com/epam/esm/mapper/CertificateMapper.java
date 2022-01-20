@@ -10,11 +10,11 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface CertificateMapper {
 
-    Certificate сonvertToEntity(CertificateDTO certificateDTO);
+    Certificate convertToEntity(CertificateDTO certificateDTO);
 
-    Certificate сonvertToEntity(CertificateUpdateDTO certificateUpdateDTO);
+    Certificate convertToEntity(CertificateUpdateDTO certificateUpdateDTO);
 
-    Tag сonvertToEntity(TagDTO tagDTO);
+    Tag convertToEntity(TagDTO tagDTO);
 
     CertificateDTO convertToDTO(Certificate certificate);
 

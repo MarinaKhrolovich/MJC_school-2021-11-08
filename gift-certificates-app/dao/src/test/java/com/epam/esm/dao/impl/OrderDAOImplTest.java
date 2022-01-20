@@ -2,16 +2,11 @@ package com.epam.esm.dao.impl;
 
 import com.epam.esm.bean.Certificate;
 import com.epam.esm.bean.Order;
-import com.epam.esm.bean.Tag;
-import com.epam.esm.bean.User;
 import com.epam.esm.config.ConfigDAO;
 import com.epam.esm.dao.CertificateDAO;
 import com.epam.esm.dao.OrderDAO;
-import com.epam.esm.dao.TagDAO;
 import com.epam.esm.dao.UserDAO;
-import com.epam.esm.exception.ResourceAlreadyExistsException;
 import com.epam.esm.exception.ResourceNotFoundException;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -70,7 +65,5 @@ class OrderDAOImplTest {
     public void get() {
         assertEquals(EXPECTED_SIZE, orderDAO.get().size());
     }
-
-
 
 }

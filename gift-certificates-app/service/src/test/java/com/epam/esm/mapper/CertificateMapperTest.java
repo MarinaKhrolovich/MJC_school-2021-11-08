@@ -76,8 +76,8 @@ class CertificateMapperTest {
     }
 
     @Test
-    void сonvertToEntity() {
-        Certificate certificate = certificateMapper.сonvertToEntity(certificateDTO);
+    void convertToEntity() {
+        Certificate certificate = certificateMapper.convertToEntity(certificateDTO);
 
         assertEquals(certificateDTO.getName(), certificate.getName());
         assertEquals(certificateDTO.getDescription(), certificate.getDescription());
@@ -87,8 +87,8 @@ class CertificateMapperTest {
     }
 
     @Test
-    void сonvertUpdateDTOToEntity() {
-        Certificate certificate = certificateMapper.сonvertToEntity(certificateUpdateDTO);
+    void convertUpdateDTOToEntity() {
+        Certificate certificate = certificateMapper.convertToEntity(certificateUpdateDTO);
 
         assertEquals(certificateUpdateDTO.getName(), certificate.getName());
         assertEquals(certificateUpdateDTO.getDescription(), certificate.getDescription());

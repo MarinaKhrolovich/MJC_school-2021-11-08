@@ -1,15 +1,12 @@
 package com.epam.esm.bean;
 
-import lombok.*;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Data
-@ToString(exclude = "certificates")
 @Table(name = "tag")
 public class Tag implements Serializable {
 
@@ -17,13 +14,10 @@ public class Tag implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @Column(name = "id")
     private int id;
 
-    @Column(name="name",nullable = false,unique = true)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
-
-    @ManyToMany(mappedBy = "tagList")
-    private List<Certificate> certificates = new ArrayList<>();
 
 }

@@ -28,7 +28,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @Sql(scripts = "classpath:drop.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 public class CertificateDAOImplTest {
 
-    public static final int EXPECTED_SIZE_BY_SEARCH = 1;
     public static final double PRICE_OF_EXPECTED_CERTIFICATE = 10.00;
     public static final int DURATION_OF_EXPECTED_CERTIFICATE = 30;
     public static final int DURATION_OF_UPDATE_CERTIFICATE = 60;
@@ -38,9 +37,6 @@ public class CertificateDAOImplTest {
     public static final int EXPECTED_LIST_SIZE = 2;
     public static final String NEW_CERTIFICATE = "new certificate";
     public static final String NEW_TAG = "new tag";
-    public static final int ID_FIRST_ELEMENT = 1;
-    public static final int ID_SECOND_ELEMENT = 2;
-    public static final int EXPECTED_SIZE_BY_INVALID_SEARCH = 0;
 
     @Autowired
     private CertificateDAO certificateDAO;
@@ -80,36 +76,6 @@ public class CertificateDAOImplTest {
         Sort sort = new Sort(null, null);
         Search search = new Search(null, null, null);
         assertEquals(EXPECTED_LIST_SIZE, certificateDAO.get(sort, search).size());
-    }
-
-    @Test
-    public void getCertificatesBySearch() {
-       /* Sort sort = new Sort(null,null);
-        Search search = new Search("sport", null, null);
-        assertEquals(EXPECTED_SIZE_BY_SEARCH, certificateDAO.get(sort, search).size());
-
-        search = new Search(null, "spo", null);
-        assertEquals(EXPECTED_SIZE_BY_SEARCH, certificateDAO.get(sort, search).size());
-
-        search = new Search(null, null, "mas");
-        assertEquals(EXPECTED_SIZE_BY_SEARCH, certificateDAO.get(sort, search).size());
-
-        search = new Search("sport", "spo", "mas");
-        assertEquals(EXPECTED_SIZE_BY_INVALID_SEARCH, certificateDAO.get(sort, search).size());*/
-    }
-
-    @Test
-    public void getCertificatesByOrder() {
-       /* Search search = new Search(null, null, null);
-        Sort sort = new Sort(null, "DESC");
-        Certificate firstCertificate = certificateDAO.get(ID_FIRST_ELEMENT);
-        Certificate secondCertificate = certificateDAO.get(ID_SECOND_ELEMENT);
-        List<Certificate> expectedList = Arrays.asList(firstCertificate, secondCertificate);
-        assertEquals(expectedList, certificateDAO.get(sort, search));
-
-        expectedList = Arrays.asList(secondCertificate, firstCertificate);
-        sort = new Sort("ASC", null);
-        assertEquals(expectedList, certificateDAO.get(sort, search));*/
     }
 
     @Test

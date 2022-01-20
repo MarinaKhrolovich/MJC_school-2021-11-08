@@ -7,8 +7,11 @@ import com.epam.esm.bean.Tag;
 import com.epam.esm.dao.CertificateDAO;
 import com.epam.esm.dao.TagDAO;
 import com.epam.esm.exception.ResourceAlreadyExistsException;
+import com.epam.esm.exception.ResourceHasLinks;
 import com.epam.esm.exception.ResourceNotFoundException;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -69,7 +72,12 @@ public class CertificateDAOImpl implements CertificateDAO {
     public void delete(int id) {
         Certificate certificate = Optional.ofNullable(entityManager.find(Certificate.class, id))
                 .stream().findAny().orElseThrow(() -> new ResourceNotFoundException(id));
-        entityManager.remove(certificate);
+        try {
+            entityManager.remove(certificate);
+            entityManager.flush();
+        } catch (PersistenceException exception) {
+            throw new ResourceHasLinks(id);
+        }
     }
 
     private boolean notExists(int id) {
@@ -82,7 +90,7 @@ public class CertificateDAOImpl implements CertificateDAO {
                 Optional<Tag> optionalTag = tagDAO.get(tag.getName());
                 if (optionalTag.isEmpty()) {
                     tagDAO.add(tag);
-                }else{
+                } else {
                     tag.setId(optionalTag.get().getId());
                 }
             }

@@ -19,14 +19,15 @@ import java.util.Locale;
 public class GlobalExceptionHandler {
 
     private final static Logger LOG = LogManager.getLogger(GlobalExceptionHandler.class);
-    public static final String MESSAGE_RESOURCE_NOT_FOUND = "message.resource.NotFound";
+    public static final String MESSAGE_RESOURCE_NOT_FOUND = "message.resource.notFound";
     public static final String MESSAGE_SOMETHING_WRONG = "message.somethingWrong";
-    public static final String MESSAGE_RESOURCE_ALREADY_EXISTS = "message.resource.AlreadyExists";
+    public static final String MESSAGE_RESOURCE_ALREADY_EXISTS = "message.resource.alreadyExists";
     public static final String CODE_SOMETHING_WRONG = "000";
     public static final String CODE_RESOURCE_EXISTS = "001";
     public static final String CODE_RESOURCE_NOT_CHECK = "002";
     public static final String CODE_WRONG_PATH_ID = "003";
     public static final String MESSAGE_ID_MIN = "message.path.id.min";
+    public static final String MESSAGE_RESOURCE_HAS_LINKS = "message.resource.hasLinks";
 
     private final MessageSource messageSource;
 
@@ -86,6 +87,17 @@ public class GlobalExceptionHandler {
         errorResponse.setCode(HttpStatus.BAD_REQUEST.value() + CODE_WRONG_PATH_ID);
         LOG.error(exception);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ResourceHasLinks.class)
+    public ResponseEntity<ErrorResponse> handleException(ResourceHasLinks exception, Locale locale) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setStatus(HttpStatus.CONFLICT.value());
+        errorResponse.setMessage(messageSource.getMessage(MESSAGE_RESOURCE_HAS_LINKS, new Object[]{}, locale)+
+                " (id = " + exception.getResourceId() + ")");
+        errorResponse.setCode(HttpStatus.CONFLICT.value() + Integer.toString(exception.getResourceId()));
+        LOG.error(exception);
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
 
 }

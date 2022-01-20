@@ -4,6 +4,7 @@ import com.epam.esm.bean.Order;
 import com.epam.esm.dao.OrderDAO;
 import com.epam.esm.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@Transactional
 public class OrderDAOImpl implements OrderDAO {
 
     @PersistenceContext
@@ -19,8 +21,8 @@ public class OrderDAOImpl implements OrderDAO {
 
     @Override
     public Order add(Order order) {
-        entityManager.persist(order);
         order.setPrice(BigDecimal.valueOf(100));
+        entityManager.persist(order);
         return order;
     }
 

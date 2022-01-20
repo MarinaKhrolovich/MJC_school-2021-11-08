@@ -26,8 +26,10 @@ public class GlobalExceptionHandler {
     public static final String CODE_RESOURCE_EXISTS = "001";
     public static final String CODE_RESOURCE_NOT_CHECK = "002";
     public static final String CODE_WRONG_PATH_ID = "003";
+    public static final String CODE_RESOURCE_NO_LINKS = "004";
     public static final String MESSAGE_ID_MIN = "message.path.id.min";
     public static final String MESSAGE_RESOURCE_HAS_LINKS = "message.resource.hasLinks";
+    public static final String MESSAGE_RESOURCE_NO_LINKS = "message.resource.noLinks";
 
     private final MessageSource messageSource;
 
@@ -98,6 +100,16 @@ public class GlobalExceptionHandler {
         errorResponse.setCode(HttpStatus.CONFLICT.value() + Integer.toString(exception.getResourceId()));
         LOG.error(exception);
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(ResourceNoLinks.class)
+    public ResponseEntity<ErrorResponse> handleException(ResourceNoLinks exception, Locale locale) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
+        errorResponse.setMessage(messageSource.getMessage(MESSAGE_RESOURCE_NO_LINKS, new Object[]{}, locale));
+        errorResponse.setCode(HttpStatus.NOT_FOUND.value() + CODE_RESOURCE_NO_LINKS);
+        LOG.error(exception);
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
 }

@@ -45,6 +45,7 @@ public class Order implements Serializable {
     @PrePersist
     protected void onCreate() {
         this.createDate = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+        this.setPrice(BigDecimal.valueOf(0));
     }
 
 }

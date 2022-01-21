@@ -57,7 +57,8 @@ public class CertificateController {
     }
 
     @PatchMapping("/{id}")
-    public CertificateUpdateDTO updateCertificate(@PathVariable @Min(1) int id, @Valid @RequestBody CertificateUpdateDTO certificate) {
+    public CertificateUpdateDTO updateCertificate(@PathVariable @Min(1) int id,
+                                                  @Valid @RequestBody CertificateUpdateDTO certificate) {
         CertificateUpdateDTO updateDTO = certificateService.update(id, certificate);
         updateDTO.add(linkTo(methodOn(CertificateController.class).getCertificate(id)).withSelfRel());
         List<TagDTO> tagList = updateDTO.getTagList();

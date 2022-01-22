@@ -48,4 +48,5 @@ class TagMapperTest {
         assertEquals(tag.getId(), actualTagDTO.getId());
         assertEquals(tag.getName(), actualTagDTO.getName());
     }
+
 }

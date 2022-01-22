@@ -9,6 +9,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -49,6 +50,7 @@ public class Certificate implements Serializable {
             joinColumns = @JoinColumn(name = "certificate_id", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "tag_id", nullable = false)
     )
+    @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private List<Tag> tagList = new ArrayList<>();
 
@@ -71,25 +73,23 @@ public class Certificate implements Serializable {
         Certificate that = (Certificate) o;
 
         if (id != that.id) return false;
-        if (!name.equals(that.name)) return false;
-        if (!description.equals(that.description)) return false;
-        if (!price.equals(that.price)) return false;
-        if (!duration.equals(that.duration)) return false;
-        if (!createDate.equals(that.createDate)) return false;
-        if (!lastUpdateDate.equals(that.lastUpdateDate)) return false;
-        return tagList.equals(that.tagList);
+        if (!Objects.equals(name, that.name)) return false;
+        if (!Objects.equals(description, that.description)) return false;
+        if (!Objects.equals(price, that.price)) return false;
+        if (!Objects.equals(duration, that.duration)) return false;
+        if (!Objects.equals(createDate, that.createDate)) return false;
+        return Objects.equals(lastUpdateDate, that.lastUpdateDate);
     }
 
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + name.hashCode();
-        result = 31 * result + description.hashCode();
-        result = 31 * result + price.hashCode();
-        result = 31 * result + duration.hashCode();
-        result = 31 * result + createDate.hashCode();
-        result = 31 * result + lastUpdateDate.hashCode();
-        result = 31 * result + tagList.hashCode();
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (price != null ? price.hashCode() : 0);
+        result = 31 * result + (duration != null ? duration.hashCode() : 0);
+        result = 31 * result + (createDate != null ? createDate.hashCode() : 0);
+        result = 31 * result + (lastUpdateDate != null ? lastUpdateDate.hashCode() : 0);
         return result;
     }
 

@@ -38,7 +38,7 @@ public class User implements Serializable {
         User user = (User) o;
 
         if (id != user.id) return false;
-        if (!login.equals(user.login)) return false;
+        if (!Objects.equals(login, user.login)) return false;
         if (!Objects.equals(name, user.name)) return false;
         return Objects.equals(surname, user.surname);
     }
@@ -46,7 +46,7 @@ public class User implements Serializable {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + login.hashCode();
+        result = 31 * result + (login != null ? login.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (surname != null ? surname.hashCode() : 0);
         return result;

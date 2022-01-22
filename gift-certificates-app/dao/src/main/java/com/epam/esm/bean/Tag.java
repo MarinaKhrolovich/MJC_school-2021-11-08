@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -31,13 +32,13 @@ public class Tag implements Serializable {
         Tag tag = (Tag) o;
 
         if (id != tag.id) return false;
-        return name.equals(tag.name);
+        return Objects.equals(name, tag.name);
     }
 
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + name.hashCode();
+        result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
     }
 

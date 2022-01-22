@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -61,19 +62,15 @@ public class Order implements Serializable {
         Order order = (Order) o;
 
         if (id != order.id) return false;
-        if (!user.equals(order.user)) return false;
-        if (!certificates.equals(order.certificates)) return false;
-        if (!createDate.equals(order.createDate)) return false;
-        return price.equals(order.price);
+        if (!Objects.equals(createDate, order.createDate)) return false;
+        return Objects.equals(price, order.price);
     }
 
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + user.hashCode();
-        result = 31 * result + certificates.hashCode();
-        result = 31 * result + createDate.hashCode();
-        result = 31 * result + price.hashCode();
+        result = 31 * result + (createDate != null ? createDate.hashCode() : 0);
+        result = 31 * result + (price != null ? price.hashCode() : 0);
         return result;
     }
 

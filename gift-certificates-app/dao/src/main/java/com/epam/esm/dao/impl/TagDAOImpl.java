@@ -18,6 +18,15 @@ public class TagDAOImpl implements TagDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
+    public static final String SELECT_MOST_POPULAR_TAG =
+            "select tag.id, tag.name, o.user_id, Count(tag.name) AS count_tag from orders AS o " +
+                    "join (select osub.user_id,SUM(osub.price) AS price from orders AS osub group by osub.user_id " +
+                    "order by price DESC LIMIT 1) AS user_limit on user_limit.user_id = o.user_id " +
+                    "join order_certificate AS oc on o.id = oc.order_id " +
+                    "join certificate_tag AS ct on oc.certificate_id = ct.certificate_id " +
+                    "join tag on ct.tag_id = tag.id " +
+                    "group by o.user_id, tag.name, tag.id order by count_tag DESC LIMIT 1";
+
     @Override
     public Tag add(Tag tag) {
         try {
@@ -49,14 +58,14 @@ public class TagDAOImpl implements TagDAO {
     @Override
     public void delete(int id) {
         Tag tag = Optional.ofNullable(entityManager.find(Tag.class, id))
-                .stream().findAny().orElseThrow(()-> new ResourceNotFoundException(id));
+                .stream().findAny().orElseThrow(() -> new ResourceNotFoundException(id));
         entityManager.remove(tag);
     }
 
     @Override
     public Tag getMostPopular() {
-        Query nativeQuery = entityManager.createNativeQuery("");
-        return new Tag();
+        Query nativeQuery = entityManager.createNativeQuery(SELECT_MOST_POPULAR_TAG, Tag.class);
+        return (Tag) nativeQuery.getSingleResult();
     }
 
 }

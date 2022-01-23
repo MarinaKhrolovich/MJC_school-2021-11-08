@@ -13,13 +13,14 @@ import java.util.List;
 @Data
 public class CertificateUpdateDTO extends RepresentationModel<CertificateUpdateDTO> {
 
+    public static final String NOT_BLANK_FIELD = "^(?!\\s*$).+";
     private int id;
 
     @Pattern(regexp = "^(?!\\s*$).+", message = "{message.certificate.name.fill}")
     @Size(min = 3, max = 100, message = "{message.certificate.name.length}")
     private String name;
 
-    @Pattern(regexp = "^(?!\\s*$).+", message = "{message.certificate.description.fill}")
+    @Pattern(regexp = NOT_BLANK_FIELD, message = "{message.certificate.description.fill}")
     @Size(min = 3, max = 1000, message = "{message.certificate.description.length}")
     private String description;
 

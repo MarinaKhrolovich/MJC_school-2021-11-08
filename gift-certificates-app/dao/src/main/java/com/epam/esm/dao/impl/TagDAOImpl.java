@@ -20,7 +20,7 @@ import java.util.Optional;
 public class TagDAOImpl implements TagDAO {
 
     private static final String SELECT_FROM_TAG_WHERE_NAME = "SELECT t FROM Tag t WHERE t.name =:nameParam";
-    public static final String ID = "id";
+    private static final String ID = "id";
 
     @PersistenceContext
     private EntityManager entityManager;

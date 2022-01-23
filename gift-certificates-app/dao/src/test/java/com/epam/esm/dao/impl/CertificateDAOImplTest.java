@@ -1,9 +1,6 @@
 package com.epam.esm.dao.impl;
 
-import com.epam.esm.bean.Certificate;
-import com.epam.esm.bean.Search;
-import com.epam.esm.bean.Sort;
-import com.epam.esm.bean.Tag;
+import com.epam.esm.bean.*;
 import com.epam.esm.config.ConfigDAO;
 import com.epam.esm.dao.CertificateDAO;
 import com.epam.esm.exception.ResourceNotFoundException;
@@ -75,7 +72,8 @@ public class CertificateDAOImplTest {
     public void getAllCertificates() {
         Sort sort = new Sort(null, null);
         Search search = new Search(null, null, null);
-        assertEquals(EXPECTED_LIST_SIZE, certificateDAO.get(sort, search).size());
+        Page page = new Page(10, 0);
+        assertEquals(EXPECTED_LIST_SIZE, certificateDAO.get(page, sort, search).size());
     }
 
     @Test

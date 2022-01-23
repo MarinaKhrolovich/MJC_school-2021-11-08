@@ -2,11 +2,9 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.bean.Certificate;
 import com.epam.esm.dao.CertificateDAO;
-import com.epam.esm.dto.CertificateDTO;
-import com.epam.esm.dto.CertificateUpdateDTO;
-import com.epam.esm.dto.SearchDTO;
-import com.epam.esm.dto.SortDTO;
+import com.epam.esm.dto.*;
 import com.epam.esm.mapper.CertificateMapper;
+import com.epam.esm.mapper.PageMapper;
 import com.epam.esm.mapper.SortSearchMapper;
 import com.epam.esm.service.CertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +20,15 @@ public class CertificateServiceImpl implements CertificateService {
     private final CertificateDAO certificateDAO;
     private final CertificateMapper certificateMapper;
     private final SortSearchMapper sortSearchMapper;
+    private final PageMapper pageMapper;
 
     @Autowired
     public CertificateServiceImpl(CertificateDAO certificateDAO, CertificateMapper certificateMapper,
-                                  SortSearchMapper sortSearchMapper) {
+                                  SortSearchMapper sortSearchMapper, PageMapper pageMapper) {
         this.certificateDAO = certificateDAO;
         this.certificateMapper = certificateMapper;
         this.sortSearchMapper = sortSearchMapper;
+        this.pageMapper = pageMapper;
     }
 
     @Override
@@ -44,8 +44,9 @@ public class CertificateServiceImpl implements CertificateService {
     }
 
     @Override
-    public List<CertificateDTO> get(SortDTO sort, SearchDTO search) {
-        return certificateDAO.get(sortSearchMapper.convertToEntity(sort), sortSearchMapper.convertToEntity(search))
+    public List<CertificateDTO> get(PageDTO pageDTO, SortDTO sort, SearchDTO search) {
+        return certificateDAO.get(pageMapper.convertToEntity(pageDTO),
+                        sortSearchMapper.convertToEntity(sort), sortSearchMapper.convertToEntity(search))
                 .stream().map(certificateMapper::convertToDTO)
                 .collect(Collectors.toList());
     }

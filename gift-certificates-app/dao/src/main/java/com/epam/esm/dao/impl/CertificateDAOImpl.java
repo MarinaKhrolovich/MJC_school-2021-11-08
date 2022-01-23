@@ -1,9 +1,6 @@
 package com.epam.esm.dao.impl;
 
-import com.epam.esm.bean.Certificate;
-import com.epam.esm.bean.Search;
-import com.epam.esm.bean.Sort;
-import com.epam.esm.bean.Tag;
+import com.epam.esm.bean.*;
 import com.epam.esm.dao.CertificateDAO;
 import com.epam.esm.dao.TagDAO;
 import com.epam.esm.exception.ResourceAlreadyExistsException;
@@ -20,6 +17,10 @@ import org.springframework.util.CollectionUtils;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +30,7 @@ import java.util.Set;
 @Transactional
 public class CertificateDAOImpl implements CertificateDAO {
 
-    private static final String SELECT_FROM_CERTIFICATE = "SELECT c FROM Certificate c";
+    private static final String ID = "id";
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -59,8 +60,16 @@ public class CertificateDAOImpl implements CertificateDAO {
     }
 
     @Override
-    public List<Certificate> get(Sort sort, Search search) {
-        return entityManager.createQuery(SELECT_FROM_CERTIFICATE, Certificate.class).getResultList();
+    public List<Certificate> get(Page page, Sort sort, Search search) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
+        CriteriaQuery<Certificate> criteriaQuery = criteriaBuilder.createQuery(Certificate.class);
+        Root<Certificate> root = criteriaQuery.from(Certificate.class);
+        criteriaQuery.orderBy(criteriaBuilder.desc(root.get(ID)));
+
+        Query query = entityManager.createQuery(criteriaQuery)
+                .setFirstResult(page.getOffset()).setMaxResults(page.getLimit());
+        return query.getResultList();
     }
 
     @Override

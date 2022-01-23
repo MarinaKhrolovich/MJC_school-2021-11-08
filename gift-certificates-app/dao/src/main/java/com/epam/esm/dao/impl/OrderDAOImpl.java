@@ -26,7 +26,7 @@ public class OrderDAOImpl implements OrderDAO {
     private static final String SELECT_SUM_PRICE = "SELECT SUM(certificate.price) as price FROM orders " +
             "JOIN order_certificate ON orders.id = order_certificate.order_id " +
             "JOIN certificate ON order_certificate.certificate_id=certificate.id WHERE orders.id =?1";
-    public static final String ID = "id";
+    private static final String ID = "id";
 
     @PersistenceContext
     private EntityManager entityManager;

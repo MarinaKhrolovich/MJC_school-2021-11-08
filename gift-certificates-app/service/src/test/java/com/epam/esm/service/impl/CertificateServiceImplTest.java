@@ -1,13 +1,11 @@
 package com.epam.esm.service.impl;
 
-import com.epam.esm.bean.Certificate;
-import com.epam.esm.bean.Search;
-import com.epam.esm.bean.Sort;
-import com.epam.esm.bean.Tag;
+import com.epam.esm.bean.*;
 import com.epam.esm.dao.CertificateDAO;
 import com.epam.esm.dto.*;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.mapper.CertificateMapperImpl;
+import com.epam.esm.mapper.PageMapperImpl;
 import com.epam.esm.mapper.SortSearchMapperImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -36,6 +34,8 @@ public class CertificateServiceImplTest {
     private CertificateMapperImpl certificateMapper;
     @Mock
     private SortSearchMapperImpl sortSearchMapper;
+    @Mock
+    private PageMapperImpl pageMapper;
 
     public static final String NEW_TAG = "new tag";
     public static final String NEW_CERTIFICATE = "new certificate";
@@ -113,25 +113,30 @@ public class CertificateServiceImplTest {
 
     @Test
     public void getCertificates() {
+        PageDTO pageDTO = new PageDTO(10, 0);
+        Page page = new Page(10, 0);
+
         SortDTO sortDTO = new SortDTO("DESC", null);
         SearchDTO searchDTO = new SearchDTO("sport", null, null);
 
         Sort sort = new Sort("DESC", null);
         Search search = new Search("sport", null, null);
 
-        when(certificateDAO.get(any(Sort.class), any(Search.class))).thenReturn(certificateList);
+        when(certificateDAO.get(any(Page.class), any(Sort.class), any(Search.class))).thenReturn(certificateList);
+        when(pageMapper.convertToEntity(pageDTO)).thenReturn(page);
         when(sortSearchMapper.convertToEntity(sortDTO)).thenReturn(sort);
         when(sortSearchMapper.convertToEntity(searchDTO)).thenReturn(search);
         when(certificateMapper.convertToDTO(certificateExpected)).thenReturn(certificateExpectedDTO);
         when(certificateMapper.convertToDTO(secondCertificate)).thenReturn(secondCertificateDTO);
 
-        assertEquals(certificateListDTO, certificateService.get(sortDTO, searchDTO));
+        assertEquals(certificateListDTO, certificateService.get(pageDTO, sortDTO, searchDTO));
 
-        verify(certificateDAO).get(any(Sort.class), any(Search.class));
+        verify(certificateDAO).get(any(Page.class), any(Sort.class), any(Search.class));
+        verify(pageMapper).convertToEntity(pageDTO);
         verify(sortSearchMapper).convertToEntity(sortDTO);
         verify(sortSearchMapper).convertToEntity(searchDTO);
         verify(certificateMapper, times(2)).convertToDTO(any(Certificate.class));
-        verifyNoMoreInteractions(certificateDAO, certificateMapper, sortSearchMapper);
+        verifyNoMoreInteractions(certificateDAO, certificateMapper, sortSearchMapper, pageMapper);
     }
 
     @Test

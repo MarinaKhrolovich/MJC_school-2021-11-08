@@ -22,7 +22,7 @@ import java.util.Optional;
 @Transactional
 public class UserDAOImpl implements UserDAO {
 
-    public static final String ID = "id";
+    private static final String ID = "id";
 
     @PersistenceContext
     private EntityManager entityManager;

@@ -44,8 +44,8 @@ public class CertificateController {
     }
 
     @GetMapping()
-    public List<CertificateDTO> getCertificates(SortDTO sortDTO, SearchDTO searchDTO) {
-        List<CertificateDTO> certificateDTOS = certificateService.get(sortDTO, searchDTO);
+    public List<CertificateDTO> getCertificates(PageDTO pageDTO, SortDTO sortDTO, SearchDTO searchDTO) {
+        List<CertificateDTO> certificateDTOS = certificateService.get(pageDTO, sortDTO, searchDTO);
         if (!CollectionUtils.isEmpty(certificateDTOS)) {
             certificateDTOS.forEach(certificateDTO -> {
                 int id = certificateDTO.getId();

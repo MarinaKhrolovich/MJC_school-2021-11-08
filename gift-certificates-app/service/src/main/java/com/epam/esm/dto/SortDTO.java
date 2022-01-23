@@ -9,7 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SortDTO {
 
-    private String orderByDate;
-    private String orderByName;
+    public static final String ID = "id";
+    public static final String DESC = "DESC";
+
+    private String sortBy = ID;
+    private String orderBy = DESC;
 
 }

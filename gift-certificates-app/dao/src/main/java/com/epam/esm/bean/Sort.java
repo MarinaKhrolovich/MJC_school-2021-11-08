@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Sort {
 
-    private String orderByDate;
-    private String orderByName;
+    private String sortBy;
+    private String orderBy;
 
 }

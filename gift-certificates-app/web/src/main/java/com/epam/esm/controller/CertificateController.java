@@ -57,8 +57,19 @@ public class CertificateController {
     }
 
     @PatchMapping("/{id}")
-    public CertificateUpdateDTO updateCertificate(@PathVariable @Min(1) int id,
-                                                  @Valid @RequestBody CertificateUpdateDTO certificate) {
+    public CertificateUpdateDTO patchUpdateCertificate(@PathVariable @Min(1) int id,
+                                                       @Valid @RequestBody CertificateUpdateDTO certificate) {
+        return updateCertificate(id, certificate);
+    }
+
+    @PutMapping("/{id}")
+    public CertificateUpdateDTO putUpdateCertificate(@PathVariable @Min(1) int id,
+                                                     @Valid @RequestBody CertificateUpdateDTO certificate) {
+        return updateCertificate(id, certificate);
+    }
+
+    private CertificateUpdateDTO updateCertificate(@PathVariable @Min(1) int id,
+                                                   @RequestBody @Valid CertificateUpdateDTO certificate) {
         CertificateUpdateDTO updateDTO = certificateService.update(id, certificate);
         updateDTO.add(linkTo(methodOn(CertificateController.class).getCertificate(id)).withSelfRel());
         List<TagDTO> tagList = updateDTO.getTagList();
@@ -76,7 +87,7 @@ public class CertificateController {
         certificateService.delete(id);
     }
 
-    private void setTagLink(List<TagDTO> tagList ) {
+    private void setTagLink(List<TagDTO> tagList) {
         if (!CollectionUtils.isEmpty(tagList)) {
             tagList.forEach(tagDTO -> {
                 int tagId = tagDTO.getId();

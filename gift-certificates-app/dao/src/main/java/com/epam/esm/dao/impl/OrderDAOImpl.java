@@ -19,7 +19,8 @@ import java.util.Optional;
 @Transactional
 public class OrderDAOImpl implements OrderDAO {
 
-    public static final String SELECT_SUM_PRICE = "SELECT SUM(certificate.price) as price FROM orders " +
+    private static final String SELECT_FROM_ORDER = "SELECT o FROM Order o";
+    private static final String SELECT_SUM_PRICE = "SELECT SUM(certificate.price) as price FROM orders " +
             "JOIN order_certificate ON orders.id = order_certificate.order_id " +
             "JOIN certificate ON order_certificate.certificate_id=certificate.id WHERE orders.id =?1";
 
@@ -49,7 +50,7 @@ public class OrderDAOImpl implements OrderDAO {
 
     @Override
     public List<Order> get() {
-        return entityManager.createQuery("SELECT o FROM Order o", Order.class).getResultList();
+        return entityManager.createQuery(SELECT_FROM_ORDER, Order.class).getResultList();
     }
 
 }

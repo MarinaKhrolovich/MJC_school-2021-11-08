@@ -17,6 +17,8 @@ import java.util.Optional;
 @Transactional
 public class UserDAOImpl implements UserDAO {
 
+    private static final String SELECT_FROM_USER = "SELECT u FROM User u";
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -38,12 +40,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public List<User> get() {
-        return entityManager.createQuery("SELECT u FROM User u", User.class).getResultList();
-    }
-
-    private boolean isExists(int id) {
-        Optional<User> user = Optional.ofNullable(entityManager.find(User.class, id));
-        return user.isPresent();
+        return entityManager.createQuery(SELECT_FROM_USER, User.class).getResultList();
     }
 
 }

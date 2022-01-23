@@ -29,6 +29,8 @@ import java.util.Set;
 @Transactional
 public class CertificateDAOImpl implements CertificateDAO {
 
+    private static final String SELECT_FROM_CERTIFICATE = "SELECT c FROM Certificate c";
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -58,7 +60,7 @@ public class CertificateDAOImpl implements CertificateDAO {
 
     @Override
     public List<Certificate> get(Sort sort, Search search) {
-        return entityManager.createQuery("SELECT c FROM Certificate c", Certificate.class).getResultList();
+        return entityManager.createQuery(SELECT_FROM_CERTIFICATE, Certificate.class).getResultList();
     }
 
     @Override

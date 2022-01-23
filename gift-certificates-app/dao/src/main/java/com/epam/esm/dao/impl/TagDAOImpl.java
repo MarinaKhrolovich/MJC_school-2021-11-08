@@ -15,10 +15,13 @@ import java.util.Optional;
 @Transactional
 public class TagDAOImpl implements TagDAO {
 
+    private static final String SELECT_FROM_TAG = "SELECT t FROM Tag t";
+    private static final String SELECT_FROM_TAG_WHERE_NAME = "SELECT t FROM Tag t WHERE t.name =:nameParam";
+
     @PersistenceContext
     private EntityManager entityManager;
 
-    public static final String SELECT_MOST_POPULAR_TAG =
+    private static final String SELECT_MOST_POPULAR_TAG =
             "select tag.id, tag.name, o.user_id, Count(tag.name) AS count_tag from orders AS o " +
                     "join (select osub.user_id,SUM(osub.price) AS price from orders AS osub group by osub.user_id " +
                     "order by price DESC LIMIT 1) AS user_limit on user_limit.user_id = o.user_id " +
@@ -45,14 +48,14 @@ public class TagDAOImpl implements TagDAO {
 
     @Override
     public Optional<Tag> get(String name) {
-        TypedQuery<Tag> query = entityManager.createQuery("SELECT t FROM Tag t WHERE t.name =:nameParam", Tag.class);
+        TypedQuery<Tag> query = entityManager.createQuery(SELECT_FROM_TAG_WHERE_NAME, Tag.class);
         query.setParameter("nameParam", name);
         return query.getResultStream().findAny();
     }
 
     @Override
     public List<Tag> get() {
-        return entityManager.createQuery("SELECT t FROM Tag t", Tag.class).getResultList();
+        return entityManager.createQuery(SELECT_FROM_TAG, Tag.class).getResultList();
     }
 
     @Override

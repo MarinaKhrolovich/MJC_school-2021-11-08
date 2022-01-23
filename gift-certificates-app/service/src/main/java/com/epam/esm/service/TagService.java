@@ -1,5 +1,6 @@
 package com.epam.esm.service;
 
+import com.epam.esm.dto.PageDTO;
 import com.epam.esm.dto.TagDTO;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public interface TagService {
      * Get all Tags from the database
      * @return list of tags {@link TagDTO}
      */
-    List<TagDTO> get();
+    List<TagDTO> get(PageDTO pageDTO);
 
     /**
      * Delete Tag from the database according to provided id

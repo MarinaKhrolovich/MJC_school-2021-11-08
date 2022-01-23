@@ -1,5 +1,6 @@
 package com.epam.esm.controller;
 
+import com.epam.esm.dto.PageDTO;
 import com.epam.esm.dto.TagDTO;
 import com.epam.esm.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,8 +43,8 @@ public class TagController {
     }
 
     @GetMapping
-    public List<TagDTO> getTags() {
-        List<TagDTO> tagDTOS = tagService.get();
+    public List<TagDTO> getTags(PageDTO pageDTO) {
+        List<TagDTO> tagDTOS = tagService.get(pageDTO);
         if (!CollectionUtils.isEmpty(tagDTOS)) {
             tagDTOS.forEach(tagDTO -> {
                 int id = tagDTO.getId();

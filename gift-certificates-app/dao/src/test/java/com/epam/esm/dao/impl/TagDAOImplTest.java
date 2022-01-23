@@ -1,5 +1,6 @@
 package com.epam.esm.dao.impl;
 
+import com.epam.esm.bean.Page;
 import com.epam.esm.bean.Tag;
 import com.epam.esm.config.ConfigDAO;
 import com.epam.esm.dao.TagDAO;
@@ -79,7 +80,7 @@ public class TagDAOImplTest {
 
     @Test
     public void get() {
-        assertEquals(EXPECTED_SIZE, tagDAO.get().size());
+        assertEquals(EXPECTED_SIZE, tagDAO.get(new Page(10,0)).size());
     }
 
     @Test

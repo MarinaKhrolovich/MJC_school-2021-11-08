@@ -1,10 +1,13 @@
 package com.epam.esm.service.impl;
 
+import com.epam.esm.bean.Page;
 import com.epam.esm.bean.Tag;
 import com.epam.esm.dao.TagDAO;
+import com.epam.esm.dto.PageDTO;
 import com.epam.esm.dto.TagDTO;
 import com.epam.esm.exception.ResourceAlreadyExistsException;
 import com.epam.esm.exception.ResourceNotFoundException;
+import com.epam.esm.mapper.PageMapperImpl;
 import com.epam.esm.mapper.TagMapperImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -29,6 +32,8 @@ public class TagServiceImplTest {
     TagDAO tagDAO;
     @Mock
     private TagMapperImpl tagMapper;
+    @Mock
+    private PageMapperImpl pageMapper;
 
     public static final String NEW_TAG = "new tag";
     public static final String SECOND_TAG = "second tag";
@@ -113,13 +118,15 @@ public class TagServiceImplTest {
 
     @Test
     public void get() {
-        when(tagDAO.get()).thenReturn(tagList);
+        PageDTO pageDTO = new PageDTO(10, 0);
+        Page page = pageMapper.convertToEntity(pageDTO);
+        when(tagDAO.get(page)).thenReturn(tagList);
         when(tagMapper.convertToDTO(tagExpected)).thenReturn(tagExpectedDTO);
         when(tagMapper.convertToDTO(secondTag)).thenReturn(secondTagDTO);
 
-        assertEquals(tagListDTO, tagService.get());
+        assertEquals(tagListDTO, tagService.get(pageDTO));
 
-        verify(tagDAO).get();
+        verify(tagDAO).get(page);
         verify(tagMapper, times(2)).convertToDTO(any(Tag.class));
         verifyNoMoreInteractions(tagDAO, tagMapper);
     }

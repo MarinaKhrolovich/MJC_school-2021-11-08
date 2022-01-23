@@ -1,5 +1,6 @@
 package com.epam.esm.dao.impl;
 
+import com.epam.esm.bean.Page;
 import com.epam.esm.bean.Tag;
 import com.epam.esm.dao.TagDAO;
 import com.epam.esm.exception.ResourceAlreadyExistsException;
@@ -8,6 +9,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.awt.font.OpenType;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,8 +59,16 @@ public class TagDAOImpl implements TagDAO {
     }
 
     @Override
-    public List<Tag> get() {
-        return entityManager.createQuery(SELECT_FROM_TAG, Tag.class).getResultList();
+    public List<Tag> get(Page page) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
+        CriteriaQuery<Tag> criteriaQuery = criteriaBuilder.createQuery(Tag.class);
+        Root<Tag> root = criteriaQuery.from(Tag.class);
+        criteriaQuery.orderBy(criteriaBuilder.desc(root.get("id")));
+
+        Query query = entityManager.createQuery(criteriaQuery)
+                .setFirstResult(page.getOffset()).setMaxResults(page.getLimit());
+        return query.getResultList();
     }
 
     @Override

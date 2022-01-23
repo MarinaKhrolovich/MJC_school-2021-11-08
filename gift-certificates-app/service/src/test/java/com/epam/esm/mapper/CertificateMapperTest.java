@@ -2,15 +2,13 @@ package com.epam.esm.mapper;
 
 import com.epam.esm.bean.Certificate;
 import com.epam.esm.bean.Tag;
-import com.epam.esm.config.ServiceConfig;
 import com.epam.esm.dto.CertificateDTO;
 import com.epam.esm.dto.CertificateUpdateDTO;
 import com.epam.esm.dto.TagDTO;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
+import org.mapstruct.factory.Mappers;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
@@ -20,7 +18,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {ServiceConfig.class})
 class CertificateMapperTest {
 
     public static final double PRICE_OF_EXPECTED_CERTIFICATE = 10.00;
@@ -28,12 +25,7 @@ class CertificateMapperTest {
     public static final String NEW_CERTIFICATE = "new certificate";
     public static final String NEW_TAG = "new tag";
 
-    private final CertificateMapper certificateMapper;
-
-    @Autowired
-    CertificateMapperTest(CertificateMapper certificateMapper) {
-        this.certificateMapper = certificateMapper;
-    }
+    private final CertificateMapper certificateMapper = Mappers.getMapper(CertificateMapper.class);
 
     private static Certificate certificate;
     private static CertificateDTO certificateDTO;

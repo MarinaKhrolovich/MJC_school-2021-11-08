@@ -3,14 +3,12 @@ package com.epam.esm.mapper;
 import com.epam.esm.bean.Certificate;
 import com.epam.esm.bean.Order;
 import com.epam.esm.bean.User;
-import com.epam.esm.config.ServiceConfig;
 import com.epam.esm.dto.CertificateDTO;
 import com.epam.esm.dto.OrderDTO;
 import com.epam.esm.dto.UserDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
+import org.mapstruct.factory.Mappers;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
@@ -20,7 +18,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {ServiceConfig.class})
 public class OrderMapperTest {
 
     public static final String USER = "new user";
@@ -29,12 +26,7 @@ public class OrderMapperTest {
     public static final int DURATION_OF_CERTIFICATE = 30;
     public static final String NEW_CERTIFICATE = "new certificate";
 
-    private final OrderMapper orderMapper;
-
-    @Autowired
-    OrderMapperTest(OrderMapper orderMapper) {
-        this.orderMapper = orderMapper;
-    }
+    private final OrderMapper orderMapper = Mappers.getMapper(OrderMapper.class);
 
     @Test
     void convertToEntity() {
@@ -48,7 +40,7 @@ public class OrderMapperTest {
         certificateDTO.setPrice(BigDecimal.valueOf(PRICE_OF_CERTIFICATE));
         certificateDTO.setDuration(DURATION_OF_CERTIFICATE);
 
-        List<CertificateDTO> certificateDTOs= new ArrayList<>();
+        List<CertificateDTO> certificateDTOs = new ArrayList<>();
         certificateDTOs.add(certificateDTO);
         OrderDTO orderDTO = new OrderDTO();
         orderDTO.setUser(userDTO);
@@ -65,7 +57,7 @@ public class OrderMapperTest {
 
         assertEquals(firstCertificateDTO.getId(), firstCertificate.getId());
         assertEquals(firstCertificateDTO.getName(), firstCertificate.getName());
-        assertEquals(firstCertificateDTO.getDescription(),firstCertificate.getDescription());
+        assertEquals(firstCertificateDTO.getDescription(), firstCertificate.getDescription());
     }
 
     @Test
@@ -80,7 +72,7 @@ public class OrderMapperTest {
         certificate.setPrice(BigDecimal.valueOf(PRICE_OF_CERTIFICATE));
         certificate.setDuration(DURATION_OF_CERTIFICATE);
 
-        List<Certificate> certificates= new ArrayList<>();
+        List<Certificate> certificates = new ArrayList<>();
         certificates.add(certificate);
         Order order = new Order();
         order.setUser(user);
@@ -98,7 +90,7 @@ public class OrderMapperTest {
 
         assertEquals(firstCertificate.getId(), firstCertificateDTO.getId());
         assertEquals(firstCertificate.getName(), firstCertificateDTO.getName());
-        assertEquals(firstCertificate.getDescription(),firstCertificateDTO.getDescription());
+        assertEquals(firstCertificate.getDescription(), firstCertificateDTO.getDescription());
     }
 
 }

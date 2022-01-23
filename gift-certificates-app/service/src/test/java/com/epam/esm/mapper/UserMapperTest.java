@@ -1,29 +1,21 @@
 package com.epam.esm.mapper;
 
 import com.epam.esm.bean.User;
-import com.epam.esm.config.ServiceConfig;
 import com.epam.esm.dto.UserDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
+import org.mapstruct.factory.Mappers;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {ServiceConfig.class})
 public class UserMapperTest {
 
     public static final String NEW_USER = "new user";
     public static final int ID_USER = 1;
 
-    private final UserMapper userMapper;
-
-    @Autowired
-    UserMapperTest(UserMapper userMapper) {
-        this.userMapper = userMapper;
-    }
+    private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
     @Test
     void convertToEntity() {

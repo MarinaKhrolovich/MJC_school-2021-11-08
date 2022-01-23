@@ -20,6 +20,7 @@ import java.util.Optional;
 public class TagDAOImpl implements TagDAO {
 
     private static final String SELECT_FROM_TAG_WHERE_NAME = "SELECT t FROM Tag t WHERE t.name =:nameParam";
+    public static final String ID = "id";
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -62,7 +63,7 @@ public class TagDAOImpl implements TagDAO {
 
         CriteriaQuery<Tag> criteriaQuery = criteriaBuilder.createQuery(Tag.class);
         Root<Tag> root = criteriaQuery.from(Tag.class);
-        criteriaQuery.orderBy(criteriaBuilder.desc(root.get("id")));
+        criteriaQuery.orderBy(criteriaBuilder.desc(root.get(ID)));
 
         Query query = entityManager.createQuery(criteriaQuery)
                 .setFirstResult(page.getOffset()).setMaxResults(page.getLimit());

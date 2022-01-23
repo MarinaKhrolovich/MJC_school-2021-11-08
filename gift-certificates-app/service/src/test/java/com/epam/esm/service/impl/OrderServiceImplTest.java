@@ -2,11 +2,14 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.bean.Certificate;
 import com.epam.esm.bean.Order;
+import com.epam.esm.bean.Page;
 import com.epam.esm.bean.User;
 import com.epam.esm.dao.OrderDAO;
 import com.epam.esm.dto.OrderDTO;
+import com.epam.esm.dto.PageDTO;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.mapper.OrderMapperImpl;
+import com.epam.esm.mapper.PageMapperImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,9 +36,10 @@ public class OrderServiceImplTest {
     OrderDAO orderDAO;
     @Mock
     private OrderMapperImpl orderMapper;
+    @Mock
+    private PageMapperImpl pageMapper;
 
     public static final double PRICE_OF_ORDER = 10.0;
-
     public static final String LOGIN = "admin";
     public static final String CERTIFICATE_NAME = "certificate";
     public static final int ID_EXISTS = 1;
@@ -124,15 +128,20 @@ public class OrderServiceImplTest {
 
     @Test
     public void get() {
-        when(orderDAO.get()).thenReturn(orderList);
+        PageDTO pageDTO = new PageDTO(10, 0);
+        Page page = new Page(10, 0);
+
+        when(orderDAO.get(page)).thenReturn(orderList);
+        when(pageMapper.convertToEntity(pageDTO)).thenReturn(page);
         when(orderMapper.convertToDTO(orderExpected)).thenReturn(orderExpectedDTO);
         when(orderMapper.convertToDTO(secondOrder)).thenReturn(secondOrderDTO);
 
-        assertEquals(orderListDTO, orderService.get());
+        assertEquals(orderListDTO, orderService.get(pageDTO));
 
-        verify(orderDAO).get();
+        verify(orderDAO).get(page);
+        verify(pageMapper).convertToEntity(pageDTO);
         verify(orderMapper, times(2)).convertToDTO(any(Order.class));
-        verifyNoMoreInteractions(orderDAO, orderMapper);
+        verifyNoMoreInteractions(orderDAO, orderMapper, pageMapper);
     }
 
 }

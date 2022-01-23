@@ -3,7 +3,9 @@ package com.epam.esm.service.impl;
 import com.epam.esm.bean.Order;
 import com.epam.esm.dao.OrderDAO;
 import com.epam.esm.dto.OrderDTO;
+import com.epam.esm.dto.PageDTO;
 import com.epam.esm.mapper.OrderMapper;
+import com.epam.esm.mapper.PageMapper;
 import com.epam.esm.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,11 +19,13 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderDAO orderDAO;
     private final OrderMapper orderMapper;
+    private final PageMapper pageMapper;
 
     @Autowired
-    public OrderServiceImpl(OrderDAO orderDAO, OrderMapper orderMapper) {
+    public OrderServiceImpl(OrderDAO orderDAO, OrderMapper orderMapper, PageMapper pageMapper) {
         this.orderDAO = orderDAO;
         this.orderMapper = orderMapper;
+        this.pageMapper = pageMapper;
     }
 
     @Override
@@ -37,8 +41,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDTO> get() {
-        return orderDAO.get().stream().map(orderMapper::convertToDTO).collect(Collectors.toList());
+    public List<OrderDTO> get(PageDTO pageDTO) {
+        return orderDAO.get(pageMapper.convertToEntity(pageDTO))
+                .stream().map(orderMapper::convertToDTO).collect(Collectors.toList());
     }
 
 }

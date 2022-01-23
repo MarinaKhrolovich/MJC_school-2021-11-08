@@ -2,6 +2,7 @@ package com.epam.esm.dao.impl;
 
 import com.epam.esm.bean.Certificate;
 import com.epam.esm.bean.Order;
+import com.epam.esm.bean.Page;
 import com.epam.esm.config.ConfigDAO;
 import com.epam.esm.dao.CertificateDAO;
 import com.epam.esm.dao.OrderDAO;
@@ -63,7 +64,7 @@ class OrderDAOImplTest {
 
     @Test
     public void get() {
-        assertEquals(EXPECTED_SIZE, orderDAO.get().size());
+        assertEquals(EXPECTED_SIZE, orderDAO.get(new Page(10,0)).size());
     }
 
 }

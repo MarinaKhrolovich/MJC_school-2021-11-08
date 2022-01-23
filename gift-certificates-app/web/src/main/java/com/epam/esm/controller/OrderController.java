@@ -2,6 +2,7 @@ package com.epam.esm.controller;
 
 import com.epam.esm.dto.CertificateDTO;
 import com.epam.esm.dto.OrderDTO;
+import com.epam.esm.dto.PageDTO;
 import com.epam.esm.dto.UserDTO;
 import com.epam.esm.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +47,8 @@ public class OrderController {
     }
 
     @GetMapping
-    public List<OrderDTO> get() {
-        List<OrderDTO> orderDTOS = orderService.get();
+    public List<OrderDTO> get(PageDTO pageDTO) {
+        List<OrderDTO> orderDTOS = orderService.get(pageDTO);
         if (!CollectionUtils.isEmpty(orderDTOS)) {
             orderDTOS.forEach(orderDTO -> {
                 addUserLink(orderDTO.getUser());

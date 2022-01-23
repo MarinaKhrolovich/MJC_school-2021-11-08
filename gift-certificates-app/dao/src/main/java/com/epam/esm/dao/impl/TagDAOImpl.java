@@ -63,6 +63,7 @@ public class TagDAOImpl implements TagDAO {
 
         CriteriaQuery<Tag> criteriaQuery = criteriaBuilder.createQuery(Tag.class);
         Root<Tag> root = criteriaQuery.from(Tag.class);
+        criteriaQuery.select(root);
         criteriaQuery.orderBy(criteriaBuilder.desc(root.get(ID)));
 
         Query query = entityManager.createQuery(criteriaQuery)

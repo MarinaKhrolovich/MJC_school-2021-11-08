@@ -58,6 +58,7 @@ public class OrderDAOImpl implements OrderDAO {
 
         CriteriaQuery<Order> criteriaQuery = criteriaBuilder.createQuery(Order.class);
         Root<Order> root = criteriaQuery.from(Order.class);
+        criteriaQuery.select(root);
         criteriaQuery.orderBy(criteriaBuilder.desc(root.get(ID)));
 
         Query query = entityManager.createQuery(criteriaQuery)

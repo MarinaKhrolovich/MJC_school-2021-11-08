@@ -49,6 +49,7 @@ public class UserDAOImpl implements UserDAO {
 
         CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
         Root<User> root = criteriaQuery.from(User.class);
+        criteriaQuery.select(root);
         criteriaQuery.orderBy(criteriaBuilder.desc(root.get(ID)));
 
         Query query = entityManager.createQuery(criteriaQuery)

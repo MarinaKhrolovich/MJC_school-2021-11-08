@@ -20,6 +20,7 @@ import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Root;
 import java.util.HashSet;
 import java.util.List;
@@ -30,7 +31,7 @@ import java.util.Set;
 @Transactional
 public class CertificateDAOImpl implements CertificateDAO {
 
-    private static final String ID = "id";
+    public static final String ASC = "ASC";
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -62,10 +63,14 @@ public class CertificateDAOImpl implements CertificateDAO {
     @Override
     public List<Certificate> get(Page page, Sort sort, Search search) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-
         CriteriaQuery<Certificate> criteriaQuery = criteriaBuilder.createQuery(Certificate.class);
         Root<Certificate> root = criteriaQuery.from(Certificate.class);
-        criteriaQuery.orderBy(criteriaBuilder.desc(root.get(ID)));
+        criteriaQuery.select(root);
+        if (sort.getOrderBy().equals(ASC)) {
+            criteriaQuery.orderBy(criteriaBuilder.asc(root.get(sort.getSortBy())));
+        } else {
+            criteriaQuery.orderBy(criteriaBuilder.desc(root.get(sort.getSortBy())));
+        }
 
         Query query = entityManager.createQuery(criteriaQuery)
                 .setFirstResult(page.getOffset()).setMaxResults(page.getLimit());

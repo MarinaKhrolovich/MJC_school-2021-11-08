@@ -58,7 +58,7 @@ public class TagController {
         tagService.delete(id);
     }
 
-    @GetMapping("/mostpopular")
+    @GetMapping("/most-popular")
     public TagDTO getTag() {
         return tagService.getMostPopular();
     }

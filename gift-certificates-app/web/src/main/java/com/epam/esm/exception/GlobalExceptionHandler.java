@@ -91,8 +91,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(ResourceHasLinks.class)
-    public ResponseEntity<ErrorResponse> handleException(ResourceHasLinks exception, Locale locale) {
+    @ExceptionHandler(ResourceHasLinksException.class)
+    public ResponseEntity<ErrorResponse> handleException(ResourceHasLinksException exception, Locale locale) {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setStatus(HttpStatus.CONFLICT.value());
         errorResponse.setMessage(messageSource.getMessage(MESSAGE_RESOURCE_HAS_LINKS, new Object[]{}, locale)+
@@ -102,8 +102,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler(ResourceNoLinks.class)
-    public ResponseEntity<ErrorResponse> handleException(ResourceNoLinks exception, Locale locale) {
+    @ExceptionHandler(ResourceNoLinksException.class)
+    public ResponseEntity<ErrorResponse> handleException(ResourceNoLinksException exception, Locale locale) {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
         errorResponse.setMessage(messageSource.getMessage(MESSAGE_RESOURCE_NO_LINKS, new Object[]{}, locale));

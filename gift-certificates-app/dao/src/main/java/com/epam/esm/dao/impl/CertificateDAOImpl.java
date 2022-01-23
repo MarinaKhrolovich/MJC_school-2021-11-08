@@ -7,7 +7,7 @@ import com.epam.esm.bean.Tag;
 import com.epam.esm.dao.CertificateDAO;
 import com.epam.esm.dao.TagDAO;
 import com.epam.esm.exception.ResourceAlreadyExistsException;
-import com.epam.esm.exception.ResourceHasLinks;
+import com.epam.esm.exception.ResourceHasLinksException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
@@ -81,7 +81,7 @@ public class CertificateDAOImpl implements CertificateDAO {
             entityManager.remove(certificate);
             entityManager.flush();
         } catch (PersistenceException exception) {
-            throw new ResourceHasLinks(id);
+            throw new ResourceHasLinksException(id);
         }
     }
 

@@ -2,7 +2,7 @@ package com.epam.esm.dao.impl;
 
 import com.epam.esm.bean.Order;
 import com.epam.esm.dao.OrderDAO;
-import com.epam.esm.exception.ResourceNoLinks;
+import com.epam.esm.exception.ResourceNoLinksException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +36,7 @@ public class OrderDAOImpl implements OrderDAO {
             nativeQuery.setParameter(1, order.getId());
             order.setPrice((BigDecimal) nativeQuery.getSingleResult());
         } catch (PersistenceException exception) {
-            throw new ResourceNoLinks(exception);
+            throw new ResourceNoLinksException(exception);
         }
         return order;
     }

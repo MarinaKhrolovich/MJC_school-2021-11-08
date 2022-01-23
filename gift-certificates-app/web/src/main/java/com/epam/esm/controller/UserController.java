@@ -25,7 +25,7 @@ public class UserController {
     }
 
     @PostMapping
-    UserDTO add(@Valid @RequestBody UserDTO userDTO) {
+    public UserDTO add(@Valid @RequestBody UserDTO userDTO) {
         UserDTO addedDTO = userService.add(userDTO);
         int id = addedDTO.getId();
         addedDTO.add(linkTo(methodOn(UserController.class).get(id)).withSelfRel());
@@ -33,14 +33,14 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    UserDTO get(@PathVariable @Min(1) int id) {
+    public UserDTO get(@PathVariable @Min(1) int id) {
         UserDTO userDTO = userService.get(id);
         userDTO.add(linkTo(methodOn(UserController.class).get(id)).withSelfRel());
         return userDTO;
     }
 
     @GetMapping
-    List<UserDTO> get() {
+    public List<UserDTO> get() {
         List<UserDTO> userDTOS = userService.get();
         if (!CollectionUtils.isEmpty(userDTOS)) {
             userDTOS.forEach(userDTO -> {

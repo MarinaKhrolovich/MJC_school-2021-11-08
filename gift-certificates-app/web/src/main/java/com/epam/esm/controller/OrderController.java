@@ -27,7 +27,7 @@ public class OrderController {
     }
 
     @PostMapping
-    OrderDTO add(@Valid @RequestBody OrderDTO orderDTO) {
+    public OrderDTO add(@Valid @RequestBody OrderDTO orderDTO) {
         OrderDTO addedDTO = orderService.add(orderDTO);
         addUserLink(addedDTO.getUser());
         addCertificateLink(addedDTO.getCertificates());
@@ -35,7 +35,7 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    OrderDTO get(@PathVariable @Min(1) int id) {
+    public OrderDTO get(@PathVariable @Min(1) int id) {
         OrderDTO orderDTO = orderService.get(id);
         orderDTO.add(linkTo(methodOn(OrderController.class).get(id)).withSelfRel());
 
@@ -46,7 +46,7 @@ public class OrderController {
     }
 
     @GetMapping
-    List<OrderDTO> get() {
+    public List<OrderDTO> get() {
         List<OrderDTO> orderDTOS = orderService.get();
         if (!CollectionUtils.isEmpty(orderDTOS)) {
             orderDTOS.forEach(orderDTO -> {

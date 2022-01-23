@@ -1,10 +1,13 @@
 package com.epam.esm.service.impl;
 
+import com.epam.esm.bean.Page;
 import com.epam.esm.bean.User;
 import com.epam.esm.dao.UserDAO;
+import com.epam.esm.dto.PageDTO;
 import com.epam.esm.dto.UserDTO;
 import com.epam.esm.exception.ResourceAlreadyExistsException;
 import com.epam.esm.exception.ResourceNotFoundException;
+import com.epam.esm.mapper.PageMapperImpl;
 import com.epam.esm.mapper.UserMapperImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -29,6 +32,8 @@ public class UserServiceImplTest {
     UserDAO userDAO;
     @Mock
     private UserMapperImpl userMapper;
+    @Mock
+    private PageMapperImpl pageMapper;
 
     public static final String NEW_USER = "new user";
     public static final String SECOND_USER = "second user";
@@ -112,15 +117,20 @@ public class UserServiceImplTest {
 
     @Test
     public void get() {
-        when(userDAO.get()).thenReturn(userList);
+        PageDTO pageDTO = new PageDTO(10, 0);
+        Page page = new Page(10, 0);
+
+        when(userDAO.get(page)).thenReturn(userList);
+        when(pageMapper.convertToEntity(pageDTO)).thenReturn(page);
         when(userMapper.convertToDTO(userExpected)).thenReturn(userExpectedDTO);
         when(userMapper.convertToDTO(secondUser)).thenReturn(secondUserDTO);
 
-        assertEquals(userListDTO, userService.get());
+        assertEquals(userListDTO, userService.get(pageDTO));
 
-        verify(userDAO).get();
+        verify(userDAO).get(page);
+        verify(pageMapper).convertToEntity(pageDTO);
         verify(userMapper, times(2)).convertToDTO(any(User.class));
-        verifyNoMoreInteractions(userDAO, userMapper);
+        verifyNoMoreInteractions(userDAO, userMapper, pageMapper);
     }
 
 }

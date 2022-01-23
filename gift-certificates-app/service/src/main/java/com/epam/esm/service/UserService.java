@@ -1,5 +1,6 @@
 package com.epam.esm.service;
 
+import com.epam.esm.dto.PageDTO;
 import com.epam.esm.dto.UserDTO;
 
 import java.util.List;
@@ -23,6 +24,6 @@ public interface UserService {
      * Get all Users from the database
      * @return list of users {@link UserDTO}
      */
-    List<UserDTO> get();
+    List<UserDTO> get(PageDTO pageDTO);
 
 }

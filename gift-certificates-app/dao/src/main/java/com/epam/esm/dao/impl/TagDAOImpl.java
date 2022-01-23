@@ -12,7 +12,6 @@ import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.awt.font.OpenType;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +19,6 @@ import java.util.Optional;
 @Transactional
 public class TagDAOImpl implements TagDAO {
 
-    private static final String SELECT_FROM_TAG = "SELECT t FROM Tag t";
     private static final String SELECT_FROM_TAG_WHERE_NAME = "SELECT t FROM Tag t WHERE t.name =:nameParam";
 
     @PersistenceContext

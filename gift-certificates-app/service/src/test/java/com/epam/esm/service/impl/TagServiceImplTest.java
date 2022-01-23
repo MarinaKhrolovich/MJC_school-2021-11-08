@@ -119,16 +119,19 @@ public class TagServiceImplTest {
     @Test
     public void get() {
         PageDTO pageDTO = new PageDTO(10, 0);
-        Page page = pageMapper.convertToEntity(pageDTO);
+        Page page = new Page(10, 0);
+
         when(tagDAO.get(page)).thenReturn(tagList);
+        when(pageMapper.convertToEntity(pageDTO)).thenReturn(page);
         when(tagMapper.convertToDTO(tagExpected)).thenReturn(tagExpectedDTO);
         when(tagMapper.convertToDTO(secondTag)).thenReturn(secondTagDTO);
 
         assertEquals(tagListDTO, tagService.get(pageDTO));
 
         verify(tagDAO).get(page);
+        verify(pageMapper).convertToEntity(pageDTO);
         verify(tagMapper, times(2)).convertToDTO(any(Tag.class));
-        verifyNoMoreInteractions(tagDAO, tagMapper);
+        verifyNoMoreInteractions(tagDAO, tagMapper, pageMapper);
     }
 
     @Test

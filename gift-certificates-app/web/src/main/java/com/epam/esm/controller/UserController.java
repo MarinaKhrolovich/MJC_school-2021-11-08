@@ -1,5 +1,6 @@
 package com.epam.esm.controller;
 
+import com.epam.esm.dto.PageDTO;
 import com.epam.esm.dto.UserDTO;
 import com.epam.esm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +41,8 @@ public class UserController {
     }
 
     @GetMapping
-    public List<UserDTO> get() {
-        List<UserDTO> userDTOS = userService.get();
+    public List<UserDTO> get(PageDTO pageDTO) {
+        List<UserDTO> userDTOS = userService.get(pageDTO);
         if (!CollectionUtils.isEmpty(userDTOS)) {
             userDTOS.forEach(userDTO -> {
                 int id = userDTO.getId();

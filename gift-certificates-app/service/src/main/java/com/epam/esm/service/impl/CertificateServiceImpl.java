@@ -45,7 +45,7 @@ public class CertificateServiceImpl implements CertificateService {
 
     @Override
     public List<CertificateDTO> get(SortDTO sort, SearchDTO search) {
-        return certificateDAO.get(sortSearchMapper.сonvertToEntity(sort), sortSearchMapper.сonvertToEntity(search))
+        return certificateDAO.get(sortSearchMapper.convertToEntity(sort), sortSearchMapper.convertToEntity(search))
                 .stream().map(certificateMapper::convertToDTO)
                 .collect(Collectors.toList());
     }

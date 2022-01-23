@@ -27,18 +27,18 @@ public class TagServiceImpl implements TagService {
     @Override
     @Transactional
     public TagDTO add(TagDTO tagDTO) {
-        Tag addedTag = tagDAO.add(tagMapper.сonvertToEntity(tagDTO));
-        return tagMapper.сonvertToDTO(addedTag);
+        Tag addedTag = tagDAO.add(tagMapper.convertToEntity(tagDTO));
+        return tagMapper.convertToDTO(addedTag);
     }
 
     @Override
     public TagDTO get(int id) {
-        return tagMapper.сonvertToDTO(tagDAO.get(id));
+        return tagMapper.convertToDTO(tagDAO.get(id));
     }
 
     @Override
     public List<TagDTO> get() {
-        return tagDAO.get().stream().map(tagMapper::сonvertToDTO).collect(Collectors.toList());
+        return tagDAO.get().stream().map(tagMapper::convertToDTO).collect(Collectors.toList());
     }
 
     @Override
@@ -48,7 +48,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public TagDTO getMostPopular() {
-        return tagMapper.сonvertToDTO(tagDAO.getMostPopular());
+        return tagMapper.convertToDTO(tagDAO.getMostPopular());
     }
 
 }

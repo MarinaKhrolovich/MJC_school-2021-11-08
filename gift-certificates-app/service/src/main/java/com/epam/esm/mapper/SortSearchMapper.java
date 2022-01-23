@@ -9,8 +9,8 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface SortSearchMapper {
 
-    Sort сonvertToEntity(SortDTO sortDTO);
+    Sort convertToEntity(SortDTO sortDTO);
 
-    Search сonvertToEntity(SearchDTO searchDTO);
+    Search convertToEntity(SearchDTO searchDTO);
 
 }

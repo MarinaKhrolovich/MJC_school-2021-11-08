@@ -31,7 +31,7 @@ class TagMapperTest {
         tagDTO.setId(ID_TAG);
         tagDTO.setName(NEW_TAG);
 
-        Tag actualTag = tagMapper.сonvertToEntity(tagDTO);
+        Tag actualTag = tagMapper.convertToEntity(tagDTO);
 
         assertEquals(tagDTO.getId(), actualTag.getId());
         assertEquals(tagDTO.getName(), actualTag.getName());
@@ -43,7 +43,7 @@ class TagMapperTest {
         tag.setId(ID_TAG);
         tag.setName(NEW_TAG);
 
-        TagDTO actualTagDTO = tagMapper.сonvertToDTO(tag);
+        TagDTO actualTagDTO = tagMapper.convertToDTO(tag);
 
         assertEquals(tag.getId(), actualTagDTO.getId());
         assertEquals(tag.getName(), actualTagDTO.getName());

@@ -70,37 +70,37 @@ public class TagServiceImplTest {
     @Test
     public void add() {
         when(tagDAO.add(tagExpected)).thenReturn(tagExpected);
-        when(tagMapper.сonvertToEntity(tagExpectedDTO)).thenReturn(tagExpected);
-        when(tagMapper.сonvertToDTO(tagExpected)).thenReturn(tagExpectedDTO);
+        when(tagMapper.convertToEntity(tagExpectedDTO)).thenReturn(tagExpected);
+        when(tagMapper.convertToDTO(tagExpected)).thenReturn(tagExpectedDTO);
         tagService.add(tagExpectedDTO);
 
         verify(tagDAO).add(tagExpected);
-        verify(tagMapper).сonvertToEntity(tagExpectedDTO);
-        verify(tagMapper).сonvertToDTO(tagExpected);
+        verify(tagMapper).convertToEntity(tagExpectedDTO);
+        verify(tagMapper).convertToDTO(tagExpected);
         verifyNoMoreInteractions(tagDAO, tagMapper);
     }
 
     @Test
     public void addExists() {
         doThrow(new ResourceAlreadyExistsException()).when(tagDAO).add(tagExpected);
-        when(tagMapper.сonvertToEntity(tagExpectedDTO)).thenReturn(tagExpected);
+        when(tagMapper.convertToEntity(tagExpectedDTO)).thenReturn(tagExpected);
 
         assertThrows(ResourceAlreadyExistsException.class, () -> tagService.add(tagExpectedDTO));
 
         verify(tagDAO).add(tagExpected);
-        verify(tagMapper).сonvertToEntity(tagExpectedDTO);
+        verify(tagMapper).convertToEntity(tagExpectedDTO);
         verifyNoMoreInteractions(tagDAO, tagMapper);
     }
 
     @Test
     public void getShouldBeNotNull() {
         when(tagDAO.get(ID_EXISTS)).thenReturn(tagExpected);
-        when(tagMapper.сonvertToDTO(tagExpected)).thenReturn(tagExpectedDTO);
+        when(tagMapper.convertToDTO(tagExpected)).thenReturn(tagExpectedDTO);
 
         assertNotNull(tagService.get(ID_EXISTS));
 
         verify(tagDAO).get(ID_EXISTS);
-        verify(tagMapper).сonvertToDTO(tagExpected);
+        verify(tagMapper).convertToDTO(tagExpected);
         verifyNoMoreInteractions(tagDAO, tagMapper);
     }
 
@@ -114,14 +114,14 @@ public class TagServiceImplTest {
     @Test
     public void get() {
         when(tagDAO.get()).thenReturn(tagList);
-        when(tagMapper.сonvertToDTO(tagExpected)).thenReturn(tagExpectedDTO);
-        when(tagMapper.сonvertToDTO(secondTag)).thenReturn(secondTagDTO);
+        when(tagMapper.convertToDTO(tagExpected)).thenReturn(tagExpectedDTO);
+        when(tagMapper.convertToDTO(secondTag)).thenReturn(secondTagDTO);
 
         assertEquals(tagListDTO, tagService.get());
 
         verify(tagDAO).get();
-        verify(tagMapper,times(2)).сonvertToDTO(any(Tag.class));
-        verifyNoMoreInteractions(tagDAO,tagMapper);
+        verify(tagMapper, times(2)).convertToDTO(any(Tag.class));
+        verifyNoMoreInteractions(tagDAO, tagMapper);
     }
 
     @Test
@@ -130,4 +130,5 @@ public class TagServiceImplTest {
         tagService.delete(ID_DELETE);
         verify(tagDAO).delete(ID_DELETE);
     }
+
 }

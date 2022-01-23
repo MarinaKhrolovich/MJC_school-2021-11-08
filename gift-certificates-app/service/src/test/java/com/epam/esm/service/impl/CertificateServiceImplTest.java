@@ -120,16 +120,16 @@ public class CertificateServiceImplTest {
         Search search = new Search("sport", null, null);
 
         when(certificateDAO.get(any(Sort.class), any(Search.class))).thenReturn(certificateList);
-        when(sortSearchMapper.сonvertToEntity(sortDTO)).thenReturn(sort);
-        when(sortSearchMapper.сonvertToEntity(searchDTO)).thenReturn(search);
+        when(sortSearchMapper.convertToEntity(sortDTO)).thenReturn(sort);
+        when(sortSearchMapper.convertToEntity(searchDTO)).thenReturn(search);
         when(certificateMapper.convertToDTO(certificateExpected)).thenReturn(certificateExpectedDTO);
         when(certificateMapper.convertToDTO(secondCertificate)).thenReturn(secondCertificateDTO);
 
         assertEquals(certificateListDTO, certificateService.get(sortDTO, searchDTO));
 
         verify(certificateDAO).get(any(Sort.class), any(Search.class));
-        verify(sortSearchMapper).сonvertToEntity(sortDTO);
-        verify(sortSearchMapper).сonvertToEntity(searchDTO);
+        verify(sortSearchMapper).convertToEntity(sortDTO);
+        verify(sortSearchMapper).convertToEntity(searchDTO);
         verify(certificateMapper, times(2)).convertToDTO(any(Certificate.class));
         verifyNoMoreInteractions(certificateDAO, certificateMapper, sortSearchMapper);
     }

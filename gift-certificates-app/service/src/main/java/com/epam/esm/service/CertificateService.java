@@ -29,6 +29,7 @@ public interface CertificateService {
     /**
      * Get all Certificates from the database
      *
+     * @param pageDTO is object {@link PageDTO} for pagination
      * @param sort   is object {@link SortDTO}  with parameters for sorting
      * @param search is object {@link SearchDTO} with parameters for searching
      * @return list of certificate {@link CertificateDTO}

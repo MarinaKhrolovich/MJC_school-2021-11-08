@@ -30,6 +30,7 @@ public interface TagService {
     /**
      * Get all Tags from the database
      *
+     * @param pageDTO is object {@link PageDTO} for pagination
      * @return list of tags {@link TagDTO}
      */
     List<TagDTO> get(PageDTO pageDTO);

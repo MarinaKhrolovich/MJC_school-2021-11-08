@@ -25,6 +25,7 @@ public interface OrderService {
     /**
      * Get all Orders from the database
      *
+     * @param pageDTO is object {@link PageDTO} for pagination
      * @return list of orders {@link OrderDTO}
      */
     List<OrderDTO> get(PageDTO pageDTO);

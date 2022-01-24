@@ -25,6 +25,7 @@ public interface UserService {
     /**
      * Get all Users from the database
      *
+     * @param pageDTO is object {@link PageDTO} for pagination
      * @return list of users {@link UserDTO}
      */
     List<UserDTO> get(PageDTO pageDTO);

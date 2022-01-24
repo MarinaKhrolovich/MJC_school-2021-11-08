@@ -68,7 +68,7 @@ public class OrderDAOImpl implements OrderDAO {
     }
 
     @Override
-    public List<Order> getUserOrders(int id) {
+    public List<Order> getUserOrders(int id, Page page) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 
         CriteriaQuery<Order> criteriaQuery = criteriaBuilder.createQuery(Order.class);
@@ -77,7 +77,8 @@ public class OrderDAOImpl implements OrderDAO {
         criteriaQuery.where(criteriaBuilder.equal(root.join(USER).get(ID), id));
         criteriaQuery.orderBy(criteriaBuilder.desc(root.get(ID)));
 
-        Query query = entityManager.createQuery(criteriaQuery);
+        Query query = entityManager.createQuery(criteriaQuery)
+                .setFirstResult(page.getOffset()).setMaxResults(page.getLimit());
 
         return query.getResultList();
     }

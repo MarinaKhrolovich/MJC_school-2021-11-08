@@ -36,6 +36,6 @@ public interface OrderService {
      * @param id is id of Order {@link OrderDTO} to be getting
      * @return list of object {@link OrderDTO}
      */
-    List<OrderDTO> getUserOrders(int id);
+    List<OrderDTO> getUserOrders(int id, PageDTO pageDTO);
 
 }

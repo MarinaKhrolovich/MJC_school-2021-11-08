@@ -13,6 +13,6 @@ public interface OrderDAO {
 
     List<Order> get(Page page);
 
-    List<Order> getUserOrders(int id);
+    List<Order> getUserOrders(int id,Page page);
 
 }

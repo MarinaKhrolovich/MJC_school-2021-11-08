@@ -53,8 +53,8 @@ public class OrderController {
     }
 
     @GetMapping("/users/{id}")
-    public List<OrderDTO> getUserOrder(@PathVariable @Min(1) int id) {
-        List<OrderDTO> orderDTOs = orderService.getUserOrders(id);
+    public List<OrderDTO> getUserOrder(@PathVariable @Min(1) int id, PageDTO pageDTO) {
+        List<OrderDTO> orderDTOs = orderService.getUserOrders(id, pageDTO);
         return getOrderDTOS(orderDTOs);
     }
 

@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-@Transactional
 public class TagDAOImpl implements TagDAO {
 
     private static final String SELECT_FROM_TAG_WHERE_NAME = "SELECT t FROM Tag t WHERE t.name =:nameParam";

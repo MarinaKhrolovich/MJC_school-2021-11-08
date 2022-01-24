@@ -7,6 +7,7 @@ import com.epam.esm.dto.UserDTO;
 import com.epam.esm.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -16,6 +17,7 @@ import java.util.List;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+@Validated
 @RestController
 @RequestMapping("/orders")
 public class OrderController {

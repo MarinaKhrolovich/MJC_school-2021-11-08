@@ -27,7 +27,6 @@ import java.util.Optional;
 import java.util.Set;
 
 @Repository
-@Transactional
 public class CertificateDAOImpl implements CertificateDAO {
 
     public static final String ASC = "ASC";

@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-@Transactional
 public class OrderDAOImpl implements OrderDAO {
 
     private static final String SELECT_SUM_PRICE = "SELECT SUM(certificate.price) as price FROM orders " +

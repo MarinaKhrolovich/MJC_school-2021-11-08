@@ -15,7 +15,6 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CertificateDTO extends RepresentationModel<CertificateDTO> {
 
-    @Min(value = 1L, message = "message.resource.id.min")
     private int id;
 
     @NotBlank(message = "{message.certificate.name.fill}")

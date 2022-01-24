@@ -20,7 +20,6 @@ import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Root;
 import java.util.HashSet;
 import java.util.List;
@@ -32,6 +31,10 @@ import java.util.Set;
 public class CertificateDAOImpl implements CertificateDAO {
 
     public static final String ASC = "ASC";
+    public static final String NAME = "name";
+    public static final String DESCRIPTION = "description";
+    public static final String TAG_LIST = "tagList";
+    public static final String ID = "id";
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -62,14 +65,35 @@ public class CertificateDAOImpl implements CertificateDAO {
 
     @Override
     public List<Certificate> get(Page page, Sort sort, Search search) {
+        Optional<String> tagName = Optional.ofNullable(search.getTagName());
+        Optional<String> certificateName = Optional.ofNullable(search.getCertificateName());
+        Optional<String> descriptionName = Optional.ofNullable(search.getCertificateDescription());
+        Optional<String> orderBy = Optional.ofNullable(sort.getOrderBy());
+        Optional<String> sortBy = Optional.ofNullable(sort.getSortBy());
+
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Certificate> criteriaQuery = criteriaBuilder.createQuery(Certificate.class);
         Root<Certificate> root = criteriaQuery.from(Certificate.class);
         criteriaQuery.select(root);
-        if (sort.getOrderBy().equals(ASC)) {
-            criteriaQuery.orderBy(criteriaBuilder.asc(root.get(sort.getSortBy())));
-        } else {
-            criteriaQuery.orderBy(criteriaBuilder.desc(root.get(sort.getSortBy())));
+
+        tagName.ifPresent(s -> criteriaQuery.where(criteriaBuilder.equal(root.join(TAG_LIST).get(NAME), s)));
+        certificateName.ifPresent(s -> criteriaQuery.where(criteriaBuilder.like(root.get(NAME), s)));
+        descriptionName.ifPresent(s -> criteriaQuery.where(criteriaBuilder.like(root.get(DESCRIPTION), s)));
+
+        criteriaQuery.orderBy(criteriaBuilder.desc(root.get(ID)));
+
+        if (orderBy.isPresent() && sortBy.isPresent()) {
+            if (orderBy.get().equalsIgnoreCase(ASC)) {
+                criteriaQuery.orderBy(criteriaBuilder.asc(root.get(sortBy.get())));
+            } else {
+                criteriaQuery.orderBy(criteriaBuilder.desc(root.get(sortBy.get())));
+            }
+        } else if (sortBy.isPresent()) {
+            criteriaQuery.orderBy(criteriaBuilder.desc(root.get(sortBy.get())));
+        } else if (orderBy.isPresent()) {
+            if (orderBy.get().equalsIgnoreCase(ASC)) {
+                criteriaQuery.orderBy(criteriaBuilder.asc(root.get(ID)));
+            }
         }
 
         Query query = entityManager.createQuery(criteriaQuery)

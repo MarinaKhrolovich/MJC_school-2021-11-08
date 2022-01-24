@@ -12,7 +12,6 @@ import javax.validation.constraints.Size;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO extends RepresentationModel<UserDTO> {
 
-    @Min(value = 1L, message = "message.resource.id.min")
     private int id;
 
     @NotBlank(message = "{message.user.login.fill}")

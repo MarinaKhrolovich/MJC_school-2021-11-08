@@ -59,6 +59,7 @@ public class CertificateServiceImpl implements CertificateService {
     }
 
     @Override
+    @Transactional
     public void delete(int id) {
         certificateDAO.delete(id);
     }

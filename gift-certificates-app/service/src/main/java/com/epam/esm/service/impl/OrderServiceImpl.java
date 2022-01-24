@@ -46,4 +46,10 @@ public class OrderServiceImpl implements OrderService {
                 .stream().map(orderMapper::convertToDTO).collect(Collectors.toList());
     }
 
+    @Override
+    public List<OrderDTO> getUserOrders(int id) {
+        return orderDAO.getUserOrders(id)
+                .stream().map(orderMapper::convertToDTO).collect(Collectors.toList());
+    }
+
 }

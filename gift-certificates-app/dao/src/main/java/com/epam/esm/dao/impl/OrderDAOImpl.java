@@ -27,6 +27,7 @@ public class OrderDAOImpl implements OrderDAO {
             "JOIN order_certificate ON orders.id = order_certificate.order_id " +
             "JOIN certificate ON order_certificate.certificate_id=certificate.id WHERE orders.id =?1";
     private static final String ID = "id";
+    private static final String USER = "user";
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -63,6 +64,21 @@ public class OrderDAOImpl implements OrderDAO {
 
         Query query = entityManager.createQuery(criteriaQuery)
                 .setFirstResult(page.getOffset()).setMaxResults(page.getLimit());
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Order> getUserOrders(int id) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
+        CriteriaQuery<Order> criteriaQuery = criteriaBuilder.createQuery(Order.class);
+        Root<Order> root = criteriaQuery.from(Order.class);
+        criteriaQuery.select(root);
+        criteriaQuery.where(criteriaBuilder.equal(root.join(USER).get(ID), id));
+        criteriaQuery.orderBy(criteriaBuilder.desc(root.get(ID)));
+
+        Query query = entityManager.createQuery(criteriaQuery);
+
         return query.getResultList();
     }
 

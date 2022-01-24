@@ -30,4 +30,12 @@ public interface OrderService {
      */
     List<OrderDTO> get(PageDTO pageDTO);
 
+    /**
+     * Get Order of user from according to provided id
+     *
+     * @param id is id of Order {@link OrderDTO} to be getting
+     * @return list of object {@link OrderDTO}
+     */
+    List<OrderDTO> getUserOrders(int id);
+
 }

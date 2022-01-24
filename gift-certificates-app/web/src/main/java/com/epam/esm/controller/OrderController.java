@@ -49,13 +49,24 @@ public class OrderController {
     @GetMapping
     public List<OrderDTO> get(PageDTO pageDTO) {
         List<OrderDTO> orderDTOS = orderService.get(pageDTO);
-        if (!CollectionUtils.isEmpty(orderDTOS)) {
-            orderDTOS.forEach(orderDTO -> {
+        return getOrderDTOS(orderDTOS);
+    }
+
+    @GetMapping("/users/{id}")
+    public List<OrderDTO> getUserOrder(@PathVariable @Min(1) int id) {
+        List<OrderDTO> orderDTOs = orderService.getUserOrders(id);
+        return getOrderDTOS(orderDTOs);
+    }
+
+    private List<OrderDTO> getOrderDTOS(List<OrderDTO> orderDTOs) {
+        if (!CollectionUtils.isEmpty(orderDTOs)) {
+            orderDTOs.forEach(orderDTO -> {
                 addUserLink(orderDTO.getUser());
                 addCertificateLink(orderDTO.getCertificates());
+                orderDTO.add(linkTo(methodOn(OrderController.class).get(orderDTO.getId())).withSelfRel());
             });
         }
-        return orderDTOS;
+        return orderDTOs;
     }
 
     private void addCertificateLink(List<CertificateDTO> certificates) {

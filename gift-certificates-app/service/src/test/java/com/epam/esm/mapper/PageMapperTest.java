@@ -1,9 +1,7 @@
 package com.epam.esm.mapper;
 
 import com.epam.esm.bean.Page;
-import com.epam.esm.bean.Tag;
 import com.epam.esm.dto.PageDTO;
-import com.epam.esm.dto.TagDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mapstruct.factory.Mappers;
@@ -18,7 +16,7 @@ class PageMapperTest {
 
     @Test
     void convertToEntity() {
-        PageDTO pageDTO = new PageDTO(10,0);
+        PageDTO pageDTO = new PageDTO(10, 0);
 
         Page actualPage = pageMapper.convertToEntity(pageDTO);
 
@@ -28,7 +26,7 @@ class PageMapperTest {
 
     @Test
     void convertToDTO() {
-        Page page = new Page(10,0);
+        Page page = new Page(10, 0);
 
         PageDTO actualPageDTO = pageMapper.convertToDTO(page);
 

@@ -1,6 +1,6 @@
 package com.epam.esm.dto;
 
-import lombok.*;
+import lombok.Data;
 import org.springframework.hateoas.RepresentationModel;
 
 import javax.validation.constraints.NotBlank;

@@ -2,7 +2,7 @@ package com.epam.esm.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.*;
+import lombok.Data;
 import org.springframework.hateoas.RepresentationModel;
 
 import javax.validation.Valid;

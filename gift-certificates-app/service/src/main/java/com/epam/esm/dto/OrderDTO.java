@@ -14,10 +14,10 @@ public class OrderDTO extends RepresentationModel<OrderDTO> {
 
     private int id;
 
-    @NotNull(message="{message.order.user.id.fill}")
+    @NotNull(message = "{message.order.user.id.fill}")
     private UserDTO user;
 
-    @NotNull(message="{message.order.certificate.id.fill}")
+    @NotNull(message = "{message.order.certificate.id.fill}")
     private List<CertificateDTO> certificates;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS", timezone = "UTC")

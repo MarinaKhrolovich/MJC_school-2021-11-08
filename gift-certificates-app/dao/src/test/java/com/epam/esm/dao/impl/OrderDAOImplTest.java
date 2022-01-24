@@ -64,7 +64,7 @@ class OrderDAOImplTest {
 
     @Test
     public void get() {
-        assertEquals(EXPECTED_SIZE, orderDAO.get(new Page(10,0)).size());
+        assertEquals(EXPECTED_SIZE, orderDAO.get(new Page(10, 0)).size());
     }
 
 }

@@ -80,7 +80,7 @@ public class TagDAOImplTest {
 
     @Test
     public void get() {
-        assertEquals(EXPECTED_SIZE, tagDAO.get(new Page(10,0)).size());
+        assertEquals(EXPECTED_SIZE, tagDAO.get(new Page(10, 0)).size());
     }
 
     @Test

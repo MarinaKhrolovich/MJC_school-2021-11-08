@@ -66,6 +66,7 @@ class UserDAOImplTest {
 
     @Test
     public void get() {
-        assertEquals(EXPECTED_SIZE, userDAO.get(new Page(10,0)).size());
+        assertEquals(EXPECTED_SIZE, userDAO.get(new Page(10, 0)).size());
     }
+
 }

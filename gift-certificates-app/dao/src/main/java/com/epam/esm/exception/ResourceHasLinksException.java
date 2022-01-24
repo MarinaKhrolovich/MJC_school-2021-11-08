@@ -1,6 +1,6 @@
 package com.epam.esm.exception;
 
-public class ResourceHasLinksException extends RuntimeException{
+public class ResourceHasLinksException extends RuntimeException {
 
     private int resourceId;
 

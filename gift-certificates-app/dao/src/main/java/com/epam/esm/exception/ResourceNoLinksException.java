@@ -1,6 +1,6 @@
 package com.epam.esm.exception;
 
-public class ResourceNoLinksException extends RuntimeException{
+public class ResourceNoLinksException extends RuntimeException {
 
     public ResourceNoLinksException() {
         super();

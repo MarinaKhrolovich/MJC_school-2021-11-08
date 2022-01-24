@@ -95,7 +95,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleException(ResourceHasLinksException exception, Locale locale) {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setStatus(HttpStatus.CONFLICT.value());
-        errorResponse.setMessage(messageSource.getMessage(MESSAGE_RESOURCE_HAS_LINKS, new Object[]{}, locale)+
+        errorResponse.setMessage(messageSource.getMessage(MESSAGE_RESOURCE_HAS_LINKS, new Object[]{}, locale) +
                 " (id = " + exception.getResourceId() + ")");
         errorResponse.setCode(HttpStatus.CONFLICT.value() + Integer.toString(exception.getResourceId()));
         LOG.error(exception);

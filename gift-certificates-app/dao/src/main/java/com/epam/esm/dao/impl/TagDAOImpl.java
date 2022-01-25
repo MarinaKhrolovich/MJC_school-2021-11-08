@@ -19,6 +19,7 @@ public class TagDAOImpl implements TagDAO {
 
     private static final String SELECT_FROM_TAG_WHERE_NAME = "SELECT t FROM Tag t WHERE t.name =:nameParam";
     private static final String ID = "id";
+    public static final String NAME_PARAM = "nameParam";
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -51,7 +52,7 @@ public class TagDAOImpl implements TagDAO {
     @Override
     public Optional<Tag> get(String name) {
         TypedQuery<Tag> query = entityManager.createQuery(SELECT_FROM_TAG_WHERE_NAME, Tag.class);
-        query.setParameter("nameParam", name);
+        query.setParameter(NAME_PARAM, name);
         return query.getResultStream().findAny();
     }
 

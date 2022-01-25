@@ -16,7 +16,7 @@ import org.springframework.util.CollectionUtils;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -99,7 +99,7 @@ public class CertificateDAOImpl implements CertificateDAO {
             }
         }
 
-        Query query = entityManager.createQuery(criteriaQuery)
+        TypedQuery<Certificate> query = entityManager.createQuery(criteriaQuery)
                 .setFirstResult(page.getOffset()).setMaxResults(page.getLimit());
         return query.getResultList();
     }

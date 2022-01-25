@@ -1,6 +1,9 @@
 package com.epam.esm.bean;
 
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -9,12 +12,9 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
-@Getter
-@Setter
-@ToString
+@Data
 @NoArgsConstructor
 @Table(name = "certificate")
 public class Certificate implements Serializable {
@@ -63,34 +63,6 @@ public class Certificate implements Serializable {
     @PreUpdate
     protected void onUpdate() {
         this.lastUpdateDate = Instant.now().truncatedTo(ChronoUnit.MILLIS);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Certificate that = (Certificate) o;
-
-        if (id != that.id) return false;
-        if (!Objects.equals(name, that.name)) return false;
-        if (!Objects.equals(description, that.description)) return false;
-        if (!Objects.equals(price, that.price)) return false;
-        if (!Objects.equals(duration, that.duration)) return false;
-        if (!Objects.equals(createDate, that.createDate)) return false;
-        return Objects.equals(lastUpdateDate, that.lastUpdateDate);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (price != null ? price.hashCode() : 0);
-        result = 31 * result + (duration != null ? duration.hashCode() : 0);
-        result = 31 * result + (createDate != null ? createDate.hashCode() : 0);
-        result = 31 * result + (lastUpdateDate != null ? lastUpdateDate.hashCode() : 0);
-        return result;
     }
 
 }

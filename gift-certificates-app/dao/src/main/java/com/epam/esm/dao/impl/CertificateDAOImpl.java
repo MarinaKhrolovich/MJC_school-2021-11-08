@@ -64,8 +64,8 @@ public class CertificateDAOImpl implements CertificateDAO {
     @Override
     public List<Certificate> get(Page page, Sort sort, Search search) {
         Optional<String> tagName = Optional.ofNullable(search.getTagName());
-        Optional<String> certificateName = Optional.ofNullable(search.getCertificateName());
-        Optional<String> descriptionName = Optional.ofNullable(search.getCertificateDescription());
+        Optional<String> name = Optional.ofNullable(search.getName());
+        Optional<String> description = Optional.ofNullable(search.getDescription());
         Optional<String> orderBy = Optional.ofNullable(sort.getOrderBy());
         Optional<String> sortBy = Optional.ofNullable(sort.getSortBy());
 
@@ -77,11 +77,11 @@ public class CertificateDAOImpl implements CertificateDAO {
         if (tagName.isPresent()) {
             criteriaQuery.where(criteriaBuilder.equal(root.join(TAG_LIST).get(NAME), tagName.get()));
         }
-        if (certificateName.isPresent()) {
-            criteriaQuery.where(criteriaBuilder.like(root.get(NAME), certificateName.get()));
+        if (name.isPresent()) {
+            criteriaQuery.where(criteriaBuilder.like(root.get(NAME), name.get()));
         }
-        if (descriptionName.isPresent()) {
-            criteriaQuery.where(criteriaBuilder.like(root.get(DESCRIPTION), descriptionName.get()));
+        if (description.isPresent()) {
+            criteriaQuery.where(criteriaBuilder.like(root.get(DESCRIPTION), description.get()));
         }
 
         criteriaQuery.orderBy(criteriaBuilder.desc(root.get(ID)));

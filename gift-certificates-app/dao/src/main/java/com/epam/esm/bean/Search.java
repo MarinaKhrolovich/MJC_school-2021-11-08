@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class Search {
 
     private String tagName;
-    private String certificateName;
-    private String certificateDescription;
+    private String name;
+    private String description;
 
 }

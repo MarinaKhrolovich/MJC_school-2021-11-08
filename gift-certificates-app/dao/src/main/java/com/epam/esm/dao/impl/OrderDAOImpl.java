@@ -6,7 +6,6 @@ import com.epam.esm.dao.OrderDAO;
 import com.epam.esm.exception.ResourceNoLinksException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

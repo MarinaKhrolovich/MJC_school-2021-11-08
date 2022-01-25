@@ -11,7 +11,6 @@ import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.EntityManager;
@@ -75,12 +74,17 @@ public class CertificateDAOImpl implements CertificateDAO {
         Root<Certificate> root = criteriaQuery.from(Certificate.class);
         criteriaQuery.select(root);
 
-        tagName.ifPresent(s -> criteriaQuery.where(criteriaBuilder.equal(root.join(TAG_LIST).get(NAME), s)));
-        certificateName.ifPresent(s -> criteriaQuery.where(criteriaBuilder.like(root.get(NAME), s)));
-        descriptionName.ifPresent(s -> criteriaQuery.where(criteriaBuilder.like(root.get(DESCRIPTION), s)));
+        if (tagName.isPresent()) {
+            criteriaQuery.where(criteriaBuilder.equal(root.join(TAG_LIST).get(NAME), tagName.get()));
+        }
+        if (certificateName.isPresent()) {
+            criteriaQuery.where(criteriaBuilder.like(root.get(NAME), certificateName.get()));
+        }
+        if (descriptionName.isPresent()) {
+            criteriaQuery.where(criteriaBuilder.like(root.get(DESCRIPTION), descriptionName.get()));
+        }
 
         criteriaQuery.orderBy(criteriaBuilder.desc(root.get(ID)));
-
         if (orderBy.isPresent() && sortBy.isPresent()) {
             if (orderBy.get().equalsIgnoreCase(ASC)) {
                 criteriaQuery.orderBy(criteriaBuilder.asc(root.get(sortBy.get())));

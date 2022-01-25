@@ -14,6 +14,8 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(classes = {ConfigDAO.class})
@@ -21,7 +23,6 @@ import static org.junit.jupiter.api.Assertions.*;
         locations = "classpath:properties/application-test.properties")
 @Sql(scripts = "classpath:db_data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(scripts = "classpath:drop.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-@Transactional
 public class TagDAOImplTest {
 
     public static final int ID_EXISTS = 1;
@@ -47,6 +48,7 @@ public class TagDAOImplTest {
     }
 
     @Test
+    @Transactional
     public void add() {
         tagDAO.add(tagExpected);
         Tag tagActual = tagDAO.get(tagExpected.getId());
@@ -75,7 +77,8 @@ public class TagDAOImplTest {
 
     @Test
     public void getByNameShouldBeNull() {
-        assertFalse(tagDAO.get(TAG_NOT_EXISTS).isPresent());
+        Optional<Tag> optionalTag = tagDAO.get(TAG_NOT_EXISTS);
+        assertFalse(optionalTag.isPresent());
     }
 
     @Test
@@ -84,6 +87,7 @@ public class TagDAOImplTest {
     }
 
     @Test
+    @Transactional
     public void delete() {
         tagDAO.delete(ID_DELETE);
         assertThrows(ResourceNotFoundException.class, () -> tagDAO.get(ID_DELETE));

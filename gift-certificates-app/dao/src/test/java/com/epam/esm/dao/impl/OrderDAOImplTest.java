@@ -25,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.*;
         locations = "classpath:properties/application-test.properties")
 @Sql(scripts = "classpath:db_data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(scripts = "classpath:drop.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-@Transactional
 class OrderDAOImplTest {
 
     public static final int ID_EXISTS = 1;
@@ -40,6 +39,7 @@ class OrderDAOImplTest {
     private CertificateDAO certificateDAO;
 
     @Test
+    @Transactional
     public void addExistedCertificate() {
         List<Certificate> certificates = new ArrayList<>();
         certificates.add(certificateDAO.get(ID_EXISTS));

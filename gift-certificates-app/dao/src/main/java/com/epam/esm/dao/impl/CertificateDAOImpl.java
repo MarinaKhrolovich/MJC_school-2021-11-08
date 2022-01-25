@@ -78,10 +78,10 @@ public class CertificateDAOImpl implements CertificateDAO {
             criteriaQuery.where(criteriaBuilder.equal(root.join(TAG_LIST).get(NAME), tagName.get()));
         }
         if (name.isPresent()) {
-            criteriaQuery.where(criteriaBuilder.like(root.get(NAME), name.get()));
+            criteriaQuery.where(criteriaBuilder.like(root.get(NAME), '%'+name.get()+'%'));
         }
         if (description.isPresent()) {
-            criteriaQuery.where(criteriaBuilder.like(root.get(DESCRIPTION), description.get()));
+            criteriaQuery.where(criteriaBuilder.like(root.get(DESCRIPTION), '%'+description.get()+'%'));
         }
 
         criteriaQuery.orderBy(criteriaBuilder.desc(root.get(ID)));

@@ -1,6 +1,7 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.dto.*;
+import com.epam.esm.mapper.CertificateMapper;
 import com.epam.esm.service.CertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
@@ -21,10 +22,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class CertificateController {
 
     private final CertificateService certificateService;
+    private final CertificateMapper certificateMapper;
 
     @Autowired
-    public CertificateController(CertificateService certificateService) {
+    public CertificateController(CertificateService certificateService, CertificateMapper certificateMapper) {
         this.certificateService = certificateService;
+        this.certificateMapper = certificateMapper;
     }
 
     @PostMapping
@@ -67,12 +70,14 @@ public class CertificateController {
     }
 
     @PutMapping("/{id}")
-    public CertificateUpdateDTO putUpdateCertificate(@PathVariable @Min(1) int id,
-                                                     @Valid @RequestBody CertificateUpdateDTO certificate) {
-        CertificateUpdateDTO updateDTO = certificateService.update(id, certificate);
-        updateDTO.add(linkTo(methodOn(CertificateController.class).getCertificate(id)).withSelfRel());
-        setTagLink(updateDTO.getTagList());
-        return updateDTO;
+    public CertificateDTO putUpdateCertificate(@PathVariable @Min(1) int id,
+                                               @Valid @RequestBody CertificateDTO certificateDTO) {
+        CertificateUpdateDTO certificateUpdateDTO =
+                certificateService.update(id, certificateMapper.convertToUpdateDTO(certificateDTO));
+        CertificateDTO certificate = certificateMapper.convertToUpdateEntity(certificateUpdateDTO);
+        certificate.add(linkTo(methodOn(CertificateController.class).getCertificate(id)).withSelfRel());
+        setTagLink(certificate.getTagList());
+        return certificate;
     }
 
     @DeleteMapping("/{id}")

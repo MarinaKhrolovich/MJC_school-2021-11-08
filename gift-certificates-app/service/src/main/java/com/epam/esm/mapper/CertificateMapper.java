@@ -20,4 +20,8 @@ public interface CertificateMapper {
 
     CertificateUpdateDTO convertToUpdateDTO(Certificate certificate);
 
+    CertificateUpdateDTO convertToUpdateDTO(CertificateDTO certificate);
+
+    CertificateDTO convertToUpdateEntity(CertificateUpdateDTO certificate);
+
 }

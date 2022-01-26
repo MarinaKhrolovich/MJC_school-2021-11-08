@@ -18,7 +18,6 @@ import java.util.Locale;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    private final static Logger LOG = LogManager.getLogger(GlobalExceptionHandler.class);
     public static final String MESSAGE_RESOURCE_NOT_FOUND = "message.resource.notFound";
     public static final String MESSAGE_SOMETHING_WRONG = "message.somethingWrong";
     public static final String MESSAGE_RESOURCE_ALREADY_EXISTS = "message.resource.alreadyExists";
@@ -30,7 +29,7 @@ public class GlobalExceptionHandler {
     public static final String MESSAGE_ID_MIN = "message.path.id.min";
     public static final String MESSAGE_RESOURCE_HAS_LINKS = "message.resource.hasLinks";
     public static final String MESSAGE_RESOURCE_NO_LINKS = "message.resource.noLinks";
-
+    private final static Logger LOG = LogManager.getLogger(GlobalExceptionHandler.class);
     private final MessageSource messageSource;
 
     @Autowired
@@ -40,76 +39,58 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception exception, Locale locale) {
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
-        errorResponse.setMessage(messageSource.getMessage(MESSAGE_SOMETHING_WRONG, new Object[]{}, locale));
-        errorResponse.setCode(HttpStatus.BAD_REQUEST.value() + CODE_SOMETHING_WRONG);
-        LOG.error(exception);
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        String message = messageSource.getMessage(MESSAGE_SOMETHING_WRONG, new Object[]{}, locale);
+        return handleExceptionTemplate(exception, HttpStatus.BAD_REQUEST, message, CODE_SOMETHING_WRONG);
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleException(ResourceNotFoundException exception, Locale locale) {
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
-        errorResponse.setMessage(messageSource.getMessage(MESSAGE_RESOURCE_NOT_FOUND, new Object[]{}, locale) +
-                " (id = " + exception.getResourceId() + ")");
-        errorResponse.setCode(HttpStatus.NOT_FOUND.value() + Integer.toString(exception.getResourceId()));
-        LOG.error(exception);
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+        String message = messageSource.getMessage(MESSAGE_RESOURCE_NOT_FOUND, new Object[]{}, locale) +
+                " (id = " + exception.getResourceId() + ")";
+        return handleExceptionTemplate(exception, HttpStatus.NOT_FOUND, message,
+                Integer.toString(exception.getResourceId()));
     }
 
     @ExceptionHandler(ResourceAlreadyExistsException.class)
     public ResponseEntity<ErrorResponse> handleException(ResourceAlreadyExistsException exception, Locale locale) {
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setStatus(HttpStatus.CONFLICT.value());
-        errorResponse.setMessage(messageSource.getMessage(MESSAGE_RESOURCE_ALREADY_EXISTS, new Object[]{}, locale) +
-                " (name = " + exception.getMessage() + ")");
-        errorResponse.setCode(HttpStatus.CONFLICT.value() + CODE_RESOURCE_EXISTS);
-        LOG.error(exception);
-        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+        String message = messageSource.getMessage(MESSAGE_RESOURCE_ALREADY_EXISTS, new Object[]{}, locale) +
+                " (name = " + exception.getMessage() + ")";
+        return handleExceptionTemplate(exception, HttpStatus.CONFLICT, message, CODE_RESOURCE_EXISTS);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleException(MethodArgumentNotValidException exception, Locale locale) {
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
-        errorResponse.setMessage(messageSource.getMessage(fieldErrors.get(0), locale));
-        errorResponse.setCode(HttpStatus.BAD_REQUEST.value() + CODE_RESOURCE_NOT_CHECK);
-        LOG.error(exception);
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        String message = messageSource.getMessage(fieldErrors.get(0), locale);
+        return handleExceptionTemplate(exception, HttpStatus.BAD_REQUEST, message, CODE_RESOURCE_NOT_CHECK);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorResponse> handleException(ConstraintViolationException exception, Locale locale) {
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
-        errorResponse.setMessage(messageSource.getMessage(MESSAGE_ID_MIN, new Object[]{}, locale));
-        errorResponse.setCode(HttpStatus.BAD_REQUEST.value() + CODE_WRONG_PATH_ID);
-        LOG.error(exception);
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        String message = messageSource.getMessage(MESSAGE_ID_MIN, new Object[]{}, locale);
+        return handleExceptionTemplate(exception, HttpStatus.BAD_REQUEST, message, CODE_WRONG_PATH_ID);
     }
 
     @ExceptionHandler(ResourceHasLinksException.class)
     public ResponseEntity<ErrorResponse> handleException(ResourceHasLinksException exception, Locale locale) {
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setStatus(HttpStatus.CONFLICT.value());
-        errorResponse.setMessage(messageSource.getMessage(MESSAGE_RESOURCE_HAS_LINKS, new Object[]{}, locale) +
-                " (id = " + exception.getResourceId() + ")");
-        errorResponse.setCode(HttpStatus.CONFLICT.value() + Integer.toString(exception.getResourceId()));
-        LOG.error(exception);
-        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+        String message = messageSource.getMessage(MESSAGE_RESOURCE_HAS_LINKS, new Object[]{}, locale) +
+                " (id = " + exception.getResourceId() + ")";
+        return handleExceptionTemplate(exception, HttpStatus.CONFLICT, message,
+                Integer.toString(exception.getResourceId()));
     }
 
     @ExceptionHandler(ResourceNoLinksException.class)
     public ResponseEntity<ErrorResponse> handleException(ResourceNoLinksException exception, Locale locale) {
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
-        errorResponse.setMessage(messageSource.getMessage(MESSAGE_RESOURCE_NO_LINKS, new Object[]{}, locale));
-        errorResponse.setCode(HttpStatus.NOT_FOUND.value() + CODE_RESOURCE_NO_LINKS);
+        String message = messageSource.getMessage(MESSAGE_RESOURCE_NO_LINKS, new Object[]{}, locale);
+        return handleExceptionTemplate(exception, HttpStatus.NOT_FOUND, message, CODE_RESOURCE_NO_LINKS);
+    }
+
+    private ResponseEntity<ErrorResponse> handleExceptionTemplate(Exception exception, HttpStatus httpStatus,
+                                                                  String message, String errorCode) {
+        ErrorResponse errorResponse = new ErrorResponse(httpStatus.value(), message,
+                httpStatus.value() + errorCode);
         LOG.error(exception);
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(errorResponse, httpStatus);
     }
 
 }

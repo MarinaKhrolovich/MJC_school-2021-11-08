@@ -26,11 +26,11 @@ import java.util.*;
 @Repository
 public class CertificateDAOImpl implements CertificateDAO {
 
-    public static final String ASC = "ASC";
-    public static final String NAME = "name";
-    public static final String DESCRIPTION = "description";
-    public static final String TAG_LIST = "tagList";
-    public static final String ID = "id";
+    private static final String ASC = "ASC";
+    private static final String NAME = "name";
+    private static final String DESCRIPTION = "description";
+    private static final String TAG_LIST = "tagList";
+    private static final String ID = "id";
 
     @PersistenceContext
     private EntityManager entityManager;

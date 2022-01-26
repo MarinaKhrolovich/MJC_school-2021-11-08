@@ -19,7 +19,7 @@ public class TagDAOImpl implements TagDAO {
 
     private static final String SELECT_FROM_TAG_WHERE_NAME = "SELECT t FROM Tag t WHERE t.name =:nameParam";
     private static final String ID = "id";
-    public static final String NAME_PARAM = "nameParam";
+    private static final String NAME_PARAM = "nameParam";
 
     @PersistenceContext
     private EntityManager entityManager;

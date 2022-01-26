@@ -19,6 +19,7 @@ import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.*;
@@ -61,16 +62,49 @@ public class CertificateDAOImpl implements CertificateDAO {
 
     @Override
     public List<Certificate> get(Page page, Sort sort, Search search) {
-        List<String> tagName = search.getTagName();
-        Optional<String> name = Optional.ofNullable(search.getName());
-        Optional<String> description = Optional.ofNullable(search.getDescription());
-        Optional<String> orderBy = Optional.ofNullable(sort.getOrderBy());
-        Optional<String> sortBy = Optional.ofNullable(sort.getSortBy());
-
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Certificate> criteriaQuery = criteriaBuilder.createQuery(Certificate.class);
         Root<Certificate> root = criteriaQuery.from(Certificate.class);
         criteriaQuery.select(root);
+
+        Optional<Predicate> predicateAnd = createSearchBuilder(search, criteriaBuilder, root);
+        if (predicateAnd.isPresent()) {
+            criteriaQuery.where(predicateAnd.get());
+        }
+
+        Order order = createSortBuilder(sort, criteriaBuilder, root);
+        criteriaQuery.orderBy(order);
+
+        TypedQuery<Certificate> query = entityManager.createQuery(criteriaQuery)
+                .setFirstResult(page.getOffset()).setMaxResults(page.getLimit());
+        return query.getResultList();
+    }
+
+    private Order createSortBuilder(Sort sort, CriteriaBuilder criteriaBuilder, Root<Certificate> root) {
+        Optional<String> orderBy = Optional.ofNullable(sort.getOrderBy());
+        Optional<String> sortBy = Optional.ofNullable(sort.getSortBy());
+        Order order = criteriaBuilder.desc(root.get(ID));
+        if (orderBy.isPresent() && sortBy.isPresent()) {
+            if (orderBy.get().equalsIgnoreCase(ASC)) {
+                order = criteriaBuilder.asc(root.get(sortBy.get()));
+            } else {
+                order = criteriaBuilder.desc(root.get(sortBy.get()));
+            }
+        } else if (sortBy.isPresent()) {
+            order = criteriaBuilder.desc(root.get(sortBy.get()));
+        } else if (orderBy.isPresent()) {
+            if (orderBy.get().equalsIgnoreCase(ASC)) {
+                order = criteriaBuilder.asc(root.get(ID));
+            }
+        }
+        return order;
+    }
+
+    private Optional<Predicate> createSearchBuilder(Search search, CriteriaBuilder criteriaBuilder,
+                                                    Root<Certificate> root) {
+        List<String> tagName = search.getTagName();
+        Optional<String> name = Optional.ofNullable(search.getName());
+        Optional<String> description = Optional.ofNullable(search.getDescription());
 
         List<Predicate> predicates = new ArrayList<>();
         if (!CollectionUtils.isEmpty(tagName)) {
@@ -88,32 +122,14 @@ public class CertificateDAOImpl implements CertificateDAO {
             predicates.add(likeDescription);
         }
 
+        Predicate predicateAnd = null;
         if (!predicates.isEmpty()) {
-            Predicate predicateAnd = predicates.get(0);
+            predicateAnd = predicates.get(0);
             for (int i = 1; i < predicates.size(); i++) {
                 predicateAnd = criteriaBuilder.and(predicateAnd, predicates.get(i));
             }
-            criteriaQuery.where(predicateAnd);
         }
-
-        criteriaQuery.orderBy(criteriaBuilder.desc(root.get(ID)));
-        if (orderBy.isPresent() && sortBy.isPresent()) {
-            if (orderBy.get().equalsIgnoreCase(ASC)) {
-                criteriaQuery.orderBy(criteriaBuilder.asc(root.get(sortBy.get())));
-            } else {
-                criteriaQuery.orderBy(criteriaBuilder.desc(root.get(sortBy.get())));
-            }
-        } else if (sortBy.isPresent()) {
-            criteriaQuery.orderBy(criteriaBuilder.desc(root.get(sortBy.get())));
-        } else if (orderBy.isPresent()) {
-            if (orderBy.get().equalsIgnoreCase(ASC)) {
-                criteriaQuery.orderBy(criteriaBuilder.asc(root.get(ID)));
-            }
-        }
-
-        TypedQuery<Certificate> query = entityManager.createQuery(criteriaQuery)
-                .setFirstResult(page.getOffset()).setMaxResults(page.getLimit());
-        return query.getResultList();
+        return Optional.ofNullable(predicateAnd);
     }
 
     @Override

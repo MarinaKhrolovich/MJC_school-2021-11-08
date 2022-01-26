@@ -119,10 +119,13 @@ public class CertificateServiceImplTest {
         Page page = new Page(10, 0);
 
         SortDTO sortDTO = new SortDTO("DESC", null);
-        SearchDTO searchDTO = new SearchDTO("sport", null, null);
+
+        List<String> tagSearch = new ArrayList<>();
+        tagSearch.add("sport");
+        SearchDTO searchDTO = new SearchDTO(tagSearch, null, null);
 
         Sort sort = new Sort("DESC", null);
-        Search search = new Search("sport", null, null);
+        Search search = new Search(tagSearch, null, null);
 
         when(certificateDAO.get(any(Page.class), any(Sort.class), any(Search.class))).thenReturn(certificateList);
         when(pageMapper.convertToEntity(pageDTO)).thenReturn(page);

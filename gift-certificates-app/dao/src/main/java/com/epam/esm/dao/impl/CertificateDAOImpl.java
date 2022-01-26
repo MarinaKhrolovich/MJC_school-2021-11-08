@@ -61,7 +61,7 @@ public class CertificateDAOImpl implements CertificateDAO {
 
     @Override
     public List<Certificate> get(Page page, Sort sort, Search search) {
-        Optional<String> tagName = Optional.ofNullable(search.getTagName());
+        List<String> tagName = search.getTagName();
         Optional<String> name = Optional.ofNullable(search.getName());
         Optional<String> description = Optional.ofNullable(search.getDescription());
         Optional<String> orderBy = Optional.ofNullable(sort.getOrderBy());
@@ -73,9 +73,11 @@ public class CertificateDAOImpl implements CertificateDAO {
         criteriaQuery.select(root);
 
         List<Predicate> predicates = new ArrayList<>();
-        if (tagName.isPresent()) {
-            Predicate equalTagName = criteriaBuilder.equal(root.join(TAG_LIST).get(NAME), tagName.get());
-            predicates.add(equalTagName);
+        if (!CollectionUtils.isEmpty(tagName)) {
+            for (String tag : tagName) {
+                Predicate equalTagName = criteriaBuilder.equal(root.join(TAG_LIST).get(NAME), tag);
+                predicates.add(equalTagName);
+            }
         }
         if (name.isPresent()) {
             Predicate likeName = criteriaBuilder.like(root.get(NAME), '%' + name.get() + '%');

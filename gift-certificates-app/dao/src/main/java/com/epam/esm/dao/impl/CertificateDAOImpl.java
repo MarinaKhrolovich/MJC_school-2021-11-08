@@ -19,11 +19,9 @@ import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Repository
 public class CertificateDAOImpl implements CertificateDAO {
@@ -74,14 +72,26 @@ public class CertificateDAOImpl implements CertificateDAO {
         Root<Certificate> root = criteriaQuery.from(Certificate.class);
         criteriaQuery.select(root);
 
+        List<Predicate> predicates = new ArrayList<>();
         if (tagName.isPresent()) {
-            criteriaQuery.where(criteriaBuilder.equal(root.join(TAG_LIST).get(NAME), tagName.get()));
+            Predicate equalTagName = criteriaBuilder.equal(root.join(TAG_LIST).get(NAME), tagName.get());
+            predicates.add(equalTagName);
         }
         if (name.isPresent()) {
-            criteriaQuery.where(criteriaBuilder.like(root.get(NAME), '%'+name.get()+'%'));
+            Predicate likeName = criteriaBuilder.like(root.get(NAME), '%' + name.get() + '%');
+            predicates.add(likeName);
         }
         if (description.isPresent()) {
-            criteriaQuery.where(criteriaBuilder.like(root.get(DESCRIPTION), '%'+description.get()+'%'));
+            Predicate likeDescription = criteriaBuilder.like(root.get(DESCRIPTION), '%' + description.get() + '%');
+            predicates.add(likeDescription);
+        }
+
+        if (!predicates.isEmpty()) {
+            Predicate predicateAnd = predicates.get(0);
+            for (int i = 1; i < predicates.size(); i++) {
+                predicateAnd = criteriaBuilder.and(predicateAnd, predicates.get(i));
+            }
+            criteriaQuery.where(predicateAnd);
         }
 
         criteriaQuery.orderBy(criteriaBuilder.desc(root.get(ID)));

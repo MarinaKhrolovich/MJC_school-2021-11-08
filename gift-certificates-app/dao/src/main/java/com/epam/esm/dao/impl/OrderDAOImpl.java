@@ -7,23 +7,20 @@ import com.epam.esm.exception.ResourceNoLinksException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
-import javax.persistence.Query;
+import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public class OrderDAOImpl implements OrderDAO {
 
-    private static final String SELECT_SUM_PRICE = "SELECT SUM(certificate.price) as price FROM orders " +
-            "JOIN order_certificate ON orders.id = order_certificate.order_id " +
-            "JOIN certificate ON order_certificate.certificate_id=certificate.id WHERE orders.id =?1";
+    private static final String SELECT_PRICE_OF_CERTIFICATES = "SELECT SUM(c.price) FROM Certificate c " +
+            "WHERE c.id IN(:idParam)";
     private static final String ID = "id";
     private static final String USER = "user";
 
@@ -33,12 +30,13 @@ public class OrderDAOImpl implements OrderDAO {
     @Override
     public Order add(Order order) {
         try {
+            TypedQuery<BigDecimal> query = entityManager.createQuery(SELECT_PRICE_OF_CERTIFICATES, BigDecimal.class);
+            Object[] idList = order.getCertificates().stream().map(cert -> cert.getId()).toArray();
+            query.setParameter("idParam", Arrays.asList(idList));
+            order.setPrice(query.getSingleResult());
+
             entityManager.persist(order);
             entityManager.flush();
-
-            Query nativeQuery = entityManager.createNativeQuery(SELECT_SUM_PRICE);
-            nativeQuery.setParameter(1, order.getId());
-            order.setPrice((BigDecimal) nativeQuery.getSingleResult());
         } catch (PersistenceException exception) {
             throw new ResourceNoLinksException(exception);
         }

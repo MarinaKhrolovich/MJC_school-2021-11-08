@@ -12,6 +12,7 @@ import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 
 @Data
 public class CertificateUpdateDTO extends RepresentationModel<CertificateUpdateDTO> {
@@ -40,6 +41,6 @@ public class CertificateUpdateDTO extends RepresentationModel<CertificateUpdateD
     private Instant lastUpdateDate;
 
     @Valid
-    private List<TagDTO> tagList;
+    private Set<TagDTO> tagList;
 
 }

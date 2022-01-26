@@ -12,8 +12,8 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -30,17 +30,17 @@ class CertificateMapperTest {
     private static Certificate certificate;
     private static CertificateDTO certificateDTO;
     private static CertificateUpdateDTO certificateUpdateDTO;
-    private static List<TagDTO> tagListDTO;
-    private static List<Tag> tagList;
+    private static Set<TagDTO> tagListDTO;
+    private static Set<Tag> tagList;
 
     @BeforeAll
     public static void initCertificate() {
-        tagList = new ArrayList<>();
+        tagList = new HashSet<>();
         Tag newTag = new Tag();
         newTag.setName(NEW_TAG);
         tagList.add(newTag);
 
-        tagListDTO = new ArrayList<>();
+        tagListDTO = new HashSet<>();
         TagDTO newTagDTO = new TagDTO();
         newTagDTO.setName(NEW_TAG);
         tagListDTO.add(newTagDTO);

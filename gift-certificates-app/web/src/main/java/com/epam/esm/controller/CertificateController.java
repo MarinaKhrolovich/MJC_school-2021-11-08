@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.List;
+import java.util.Set;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -72,7 +73,7 @@ public class CertificateController {
                                                    @RequestBody @Valid CertificateUpdateDTO certificate) {
         CertificateUpdateDTO updateDTO = certificateService.update(id, certificate);
         updateDTO.add(linkTo(methodOn(CertificateController.class).getCertificate(id)).withSelfRel());
-        List<TagDTO> tagList = updateDTO.getTagList();
+        Set<TagDTO> tagList = updateDTO.getTagList();
         if (!CollectionUtils.isEmpty(tagList)) {
             tagList.forEach(tagDTO -> {
                 int tagId = tagDTO.getId();
@@ -87,7 +88,7 @@ public class CertificateController {
         certificateService.delete(id);
     }
 
-    private void setTagLink(List<TagDTO> tagList) {
+    private void setTagLink(Set<TagDTO> tagList) {
         if (!CollectionUtils.isEmpty(tagList)) {
             tagList.forEach(tagDTO -> {
                 int tagId = tagDTO.getId();

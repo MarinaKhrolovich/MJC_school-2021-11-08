@@ -128,7 +128,7 @@ public class CertificateDAOImpl implements CertificateDAO {
         }
     }
 
-    private void addTagIfNotExists(List<Tag> tags) {
+    private void addTagIfNotExists(Set<Tag> tags) {
         if (!CollectionUtils.isEmpty(tags)) {
             for (Tag tag : tags) {
                 Optional<Tag> optionalTag = tagDAO.get(tag.getName());

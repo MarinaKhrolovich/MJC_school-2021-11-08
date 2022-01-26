@@ -9,7 +9,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -40,6 +40,6 @@ public class CertificateDTO extends RepresentationModel<CertificateDTO> {
     private Instant lastUpdateDate;
 
     @Valid
-    private List<TagDTO> tagList;
+    private Set<TagDTO> tagList;
 
 }

@@ -11,7 +11,9 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -52,7 +54,7 @@ public class Certificate implements Serializable {
     )
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private List<Tag> tagList = new ArrayList<>();
+    private Set<Tag> tagList = new HashSet<>();
 
     @PrePersist
     protected void onCreate() {

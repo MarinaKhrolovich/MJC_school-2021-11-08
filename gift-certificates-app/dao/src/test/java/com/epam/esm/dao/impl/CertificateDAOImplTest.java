@@ -14,7 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -43,7 +45,7 @@ public class CertificateDAOImplTest {
 
     @BeforeAll
     public static void initCertificate() {
-        List<Tag> tagList = new ArrayList<>();
+        Set<Tag> tagList = new HashSet<>();
         Tag newTag = new Tag();
         newTag.setName(NEW_TAG);
         tagList.add(newTag);

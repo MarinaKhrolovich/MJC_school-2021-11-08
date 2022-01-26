@@ -16,7 +16,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -57,7 +59,7 @@ public class CertificateServiceImplTest {
 
     @BeforeAll
     static void beforeAll() {
-        List<Tag> tagList = new ArrayList<>();
+        Set<Tag> tagList = new HashSet<>();
         Tag newTag = new Tag();
         newTag.setName(NEW_TAG);
         tagList.add(newTag);
@@ -80,7 +82,7 @@ public class CertificateServiceImplTest {
         certificateList.add(certificateExpected);
         certificateList.add(secondCertificate);
 
-        List<TagDTO> tagListDTO = new ArrayList<>();
+        Set<TagDTO> tagListDTO = new HashSet<>();
         TagDTO newTagDTO = new TagDTO();
         newTagDTO.setName(NEW_TAG);
         tagListDTO.add(newTagDTO);

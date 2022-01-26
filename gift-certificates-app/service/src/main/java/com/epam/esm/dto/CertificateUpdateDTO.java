@@ -17,10 +17,10 @@ import java.util.Set;
 @Data
 public class CertificateUpdateDTO extends RepresentationModel<CertificateUpdateDTO> {
 
-    public static final String NOT_BLANK_FIELD = "^(?!\\s*$).+";
+    private static final String NOT_BLANK_FIELD = "^(?!\\s*$).+";
     private int id;
 
-    @Pattern(regexp = "^(?!\\s*$).+", message = "{message.certificate.name.fill}")
+    @Pattern(regexp = NOT_BLANK_FIELD, message = "{message.certificate.name.fill}")
     @Size(min = 3, max = 100, message = "{message.certificate.name.length}")
     private String name;
 

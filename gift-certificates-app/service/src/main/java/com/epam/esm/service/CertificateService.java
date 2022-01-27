@@ -1,50 +1,54 @@
 package com.epam.esm.service;
 
-import com.epam.esm.bean.Certificate;
-import com.epam.esm.bean.OrderDTO;
-import com.epam.esm.bean.SearchDTO;
-import com.epam.esm.bean.Tag;
+import com.epam.esm.dto.*;
 
 import java.util.List;
 
 /**
  * Service interface responsible for CRUD operation with object Certificate
+ *
  * @author Marina Khrolovich
  */
 public interface CertificateService {
 
     /**
      * Add Certificate to the database according to provided object Certificate
-     * @param certificate is Object {@link Certificate}
+     *
+     * @param certificate is Object {@link CertificateDTO}
      */
-    void add(Certificate certificate);
+    CertificateDTO add(CertificateDTO certificate);
 
     /**
      * Get Certificate from the database according to provided id
-     * @param id is id of Certificate {@link Certificate} to be getting
-     * @return certificate is object {@link Certificate}
+     *
+     * @param id is id of Certificate {@link CertificateDTO} to be getting
+     * @return certificate is object {@link CertificateDTO}
      */
-    Certificate get(int id);
+    CertificateDTO get(int id);
 
     /**
      * Get all Certificates from the database
-     * @param orderDTO is object {@link OrderDTO}  with parameters for sorting
-     * @param searchDTO is object {@link SearchDTO} with parameters for searching
-     * @return list of certificate {@link Certificate}
+     *
+     * @param pageDTO is object {@link PageDTO} for pagination
+     * @param sort   is object {@link SortDTO}  with parameters for sorting
+     * @param search is object {@link SearchDTO} with parameters for searching
+     * @return list of certificate {@link CertificateDTO}
      */
-    List<Certificate> get(OrderDTO orderDTO, SearchDTO searchDTO);
+    List<CertificateDTO> get(PageDTO pageDTO, SortDTO sort, SearchDTO search);
 
     /**
      * Update Certificate at the database according to provided data
-     * @param id is id of Certificate {@link Certificate} to be updating
-     * @param certificate is object {@link Certificate}
-     * @return updated certificate {@link Certificate}
+     *
+     * @param id          is id of Certificate {@link CertificateDTO} to be updating
+     * @param certificate is object {@link CertificateDTO}
+     * @return updated certificate {@link CertificateDTO}
      */
-    Certificate update(int id, Certificate certificate);
+    CertificateUpdateDTO update(int id, CertificateUpdateDTO certificate);
 
     /**
      * Delete Certificate from the database according to provided id
-     * @param id is id of Certificate {@link Certificate} to be deleting
+     *
+     * @param id is id of Certificate {@link CertificateDTO} to be deleting
      */
     void delete(int id);
 

@@ -1,29 +1,27 @@
 package com.epam.esm.dao.impl;
 
+import com.epam.esm.bean.Page;
 import com.epam.esm.bean.Tag;
-import com.epam.esm.config.ConfigTest;
+import com.epam.esm.config.ConfigDAO;
 import com.epam.esm.dao.TagDAO;
 import com.epam.esm.exception.ResourceAlreadyExistsException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlGroup;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@ActiveProfiles("test")
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {ConfigTest.class})
-@SqlGroup({
-        @Sql("classpath:db_schema.sql"),
-        @Sql("classpath:db_data.sql")
-})
+@SpringBootTest(classes = {ConfigDAO.class})
+@TestPropertySource(
+        locations = "classpath:properties/application-test.properties")
+@Sql(scripts = "classpath:db_data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(scripts = "classpath:drop.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 public class TagDAOImplTest {
 
@@ -40,7 +38,6 @@ public class TagDAOImplTest {
     private static Tag tagExpected;
     private static Tag tagExists;
 
-
     @BeforeAll
     public static void initTag() {
         tagExpected = new Tag();
@@ -51,6 +48,7 @@ public class TagDAOImplTest {
     }
 
     @Test
+    @Transactional
     public void add() {
         tagDAO.add(tagExpected);
         Tag tagActual = tagDAO.get(tagExpected.getId());
@@ -73,21 +71,25 @@ public class TagDAOImplTest {
     }
 
     @Test
+    @Transactional
     public void getByNameShouldBeNotNull() {
         assertTrue(tagDAO.get(TAG_EXISTS).isPresent());
     }
 
     @Test
+    @Transactional
     public void getByNameShouldBeNull() {
-        assertFalse(tagDAO.get(TAG_NOT_EXISTS).isPresent());
+        Optional<Tag> optionalTag = tagDAO.get(TAG_NOT_EXISTS);
+        assertFalse(optionalTag.isPresent());
     }
 
     @Test
     public void get() {
-        assertEquals(EXPECTED_SIZE, tagDAO.get().size());
+        assertEquals(EXPECTED_SIZE, tagDAO.get(new Page(10, 0)).size());
     }
 
     @Test
+    @Transactional
     public void delete() {
         tagDAO.delete(ID_DELETE);
         assertThrows(ResourceNotFoundException.class, () -> tagDAO.get(ID_DELETE));

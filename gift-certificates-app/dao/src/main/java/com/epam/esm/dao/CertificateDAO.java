@@ -1,20 +1,21 @@
 package com.epam.esm.dao;
 
 import com.epam.esm.bean.Certificate;
-import com.epam.esm.bean.OrderDTO;
-import com.epam.esm.bean.SearchDTO;
+import com.epam.esm.bean.Page;
+import com.epam.esm.bean.Search;
+import com.epam.esm.bean.Sort;
 
 import java.util.List;
 
 public interface CertificateDAO {
 
-    void add(Certificate certificate);
+    Certificate add(Certificate certificate);
 
     Certificate get(int id);
 
-    List<Certificate> get(OrderDTO orderDTO, SearchDTO searchDTO);
+    List<Certificate> get(Page page, Sort sort, Search search);
 
-    void update(int id, Certificate certificate);
+    Certificate update(int id, Certificate certificate);
 
     void delete(int id);
 

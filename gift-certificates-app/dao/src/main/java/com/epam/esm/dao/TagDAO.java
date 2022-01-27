@@ -1,5 +1,6 @@
 package com.epam.esm.dao;
 
+import com.epam.esm.bean.Page;
 import com.epam.esm.bean.Tag;
 
 import java.util.List;
@@ -7,14 +8,16 @@ import java.util.Optional;
 
 public interface TagDAO {
 
-    void add(Tag tag);
+    Tag add(Tag tag);
 
     Tag get(int id);
 
     Optional<Tag> get(String name);
 
-    List<Tag> get();
+    List<Tag> get(Page page);
 
     void delete(int id);
+
+    Tag getMostPopular();
 
 }

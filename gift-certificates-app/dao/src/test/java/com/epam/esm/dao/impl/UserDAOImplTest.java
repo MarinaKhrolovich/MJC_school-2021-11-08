@@ -38,9 +38,11 @@ class UserDAOImplTest {
     public static void initUser() {
         userExpected = new User();
         userExpected.setLogin(NEW_USER);
+        userExpected.setPassword(NEW_USER);
 
         userExists = new User();
         userExists.setLogin(USER_EXISTS);
+        userExpected.setPassword(NEW_USER);
     }
 
     @Test

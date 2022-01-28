@@ -51,20 +51,24 @@ public class UserServiceImplTest {
     @BeforeAll
     static void beforeAll() {
         userExpected = new User();
-        userExpected.setName(NEW_USER);
+        userExpected.setLogin(NEW_USER);
+        userExpected.setPassword(NEW_USER);
 
         secondUser = new User();
-        secondUser.setName(SECOND_USER);
+        secondUser.setLogin(SECOND_USER);
+        secondUser.setPassword(SECOND_USER);
 
         userList = new ArrayList<>();
         userList.add(userExpected);
         userList.add(secondUser);
 
         userExpectedDTO = new UserDTO();
-        userExpectedDTO.setName(NEW_USER);
+        userExpectedDTO.setLogin(NEW_USER);
+        userExpectedDTO.setPassword(NEW_USER);
 
         secondUserDTO = new UserDTO();
-        secondUserDTO.setName(SECOND_USER);
+        secondUserDTO.setLogin(SECOND_USER);
+        secondUserDTO.setPassword(SECOND_USER);
 
         userListDTO = new ArrayList<>();
         userListDTO.add(userExpectedDTO);

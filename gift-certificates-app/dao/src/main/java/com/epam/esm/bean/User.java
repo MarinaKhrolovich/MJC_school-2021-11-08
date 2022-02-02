@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Data
@@ -30,5 +31,13 @@ public class User implements Serializable {
 
     @Column(name = "surname")
     private String surname;
+
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.LAZY)
+    @CollectionTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id", nullable = false)
+    )
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles;
 
 }

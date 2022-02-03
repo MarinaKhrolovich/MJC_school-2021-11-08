@@ -2,7 +2,7 @@ INSERT INTO tag (id,name)
 VALUES (1,'sport'),
        (2,'massage');
 
-INSERT INTO users (id,login,password)
+INSERT INTO users (id,username,password)
 VALUES (1,'admin','12345678'),
        (2,'guest','87654321');
 

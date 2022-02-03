@@ -16,7 +16,7 @@ public class UserDTO extends RepresentationModel<UserDTO> {
 
     @NotBlank(message = "{message.user.login.fill}")
     @Size(min = 3, max = 45, message = "{message.user.login.length}")
-    private String login;
+    private String username;
 
     @NotBlank(message = "{message.user.password.fill}")
     @Size(min = 8, max = 100, message = "{message.user.password.length}")

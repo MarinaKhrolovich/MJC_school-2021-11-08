@@ -21,12 +21,12 @@ public class UserMapperTest {
     void convertToEntity() {
         UserDTO userDTO = new UserDTO();
         userDTO.setId(ID_USER);
-        userDTO.setLogin(NEW_USER);
+        userDTO.setUsername(NEW_USER);
 
         User actualUser = userMapper.convertToEntity(userDTO);
 
         assertEquals(userDTO.getId(), actualUser.getId());
-        assertEquals(userDTO.getLogin(), actualUser.getLogin());
+        assertEquals(userDTO.getUsername(), actualUser.getUsername());
     }
 
     @Test
@@ -38,7 +38,7 @@ public class UserMapperTest {
         UserDTO actualUserDTO = userMapper.convertToDTO(user);
 
         assertEquals(user.getId(), actualUserDTO.getId());
-        assertEquals(user.getLogin(), actualUserDTO.getLogin());
+        assertEquals(user.getUsername(), actualUserDTO.getUsername());
     }
 
 }

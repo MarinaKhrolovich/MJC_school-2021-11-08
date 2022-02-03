@@ -5,7 +5,6 @@ import com.epam.esm.bean.User;
 import com.epam.esm.dao.UserDAO;
 import com.epam.esm.dto.PageDTO;
 import com.epam.esm.dto.UserDTO;
-import com.epam.esm.exception.ResourceAlreadyExistsException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.mapper.PageMapperImpl;
 import com.epam.esm.mapper.UserMapperImpl;
@@ -51,11 +50,11 @@ public class UserServiceImplTest {
     @BeforeAll
     static void beforeAll() {
         userExpected = new User();
-        userExpected.setLogin(NEW_USER);
+        userExpected.setUsername(NEW_USER);
         userExpected.setPassword(NEW_USER);
 
         secondUser = new User();
-        secondUser.setLogin(SECOND_USER);
+        secondUser.setUsername(SECOND_USER);
         secondUser.setPassword(SECOND_USER);
 
         userList = new ArrayList<>();
@@ -63,41 +62,16 @@ public class UserServiceImplTest {
         userList.add(secondUser);
 
         userExpectedDTO = new UserDTO();
-        userExpectedDTO.setLogin(NEW_USER);
+        userExpectedDTO.setUsername(NEW_USER);
         userExpectedDTO.setPassword(NEW_USER);
 
         secondUserDTO = new UserDTO();
-        secondUserDTO.setLogin(SECOND_USER);
+        secondUserDTO.setUsername(SECOND_USER);
         secondUserDTO.setPassword(SECOND_USER);
 
         userListDTO = new ArrayList<>();
         userListDTO.add(userExpectedDTO);
         userListDTO.add(secondUserDTO);
-    }
-
-    @Test
-    public void add() {
-        when(userDAO.add(userExpected)).thenReturn(userExpected);
-        when(userMapper.convertToEntity(userExpectedDTO)).thenReturn(userExpected);
-        when(userMapper.convertToDTO(userExpected)).thenReturn(userExpectedDTO);
-        userService.add(userExpectedDTO);
-
-        verify(userDAO).add(userExpected);
-        verify(userMapper).convertToEntity(userExpectedDTO);
-        verify(userMapper).convertToDTO(userExpected);
-        verifyNoMoreInteractions(userDAO, userMapper);
-    }
-
-    @Test
-    public void addExists() {
-        doThrow(new ResourceAlreadyExistsException()).when(userDAO).add(userExpected);
-        when(userMapper.convertToEntity(userExpectedDTO)).thenReturn(userExpected);
-
-        assertThrows(ResourceAlreadyExistsException.class, () -> userService.add(userExpectedDTO));
-
-        verify(userDAO).add(userExpected);
-        verify(userMapper).convertToEntity(userExpectedDTO);
-        verifyNoMoreInteractions(userDAO, userMapper);
     }
 
     @Test

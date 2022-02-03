@@ -58,7 +58,7 @@ public class OrderServiceImplTest {
     static void beforeAll() {
         User user = new User();
         user.setId(1);
-        user.setLogin(LOGIN);
+        user.setUsername(LOGIN);
 
         Certificate certificate = new Certificate();
         certificate.setId(1);

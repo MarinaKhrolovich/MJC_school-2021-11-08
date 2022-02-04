@@ -1,5 +1,6 @@
 package com.epam.esm.security;
 
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
@@ -21,7 +22,7 @@ public class JwtTokenFilter extends GenericFilterBean {
                          ServletResponse servletResponse,
                          FilterChain filterChain) throws IOException, ServletException {
         SecurityContextHolder.getContext().setAuthentication(
-                jwtTokenService.getAuthentication((HttpServletRequest) servletRequest).orElse(null));
+                jwtTokenService.getAuthentication((HttpServletRequest) servletRequest));
         filterChain.doFilter(servletRequest, servletResponse);
     }
 

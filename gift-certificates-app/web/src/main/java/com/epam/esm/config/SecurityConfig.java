@@ -1,7 +1,7 @@
 package com.epam.esm.config;
 
-import com.epam.esm.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -9,16 +9,17 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final UserServiceImpl userService;
+    private final UserDetailsService userService;
 
     @Autowired
-    public SecurityConfig(UserServiceImpl userService) {
+    public SecurityConfig(@Qualifier("userServiceImpl") UserDetailsService userService) {
         this.userService = userService;
     }
 
@@ -31,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/certificates/**","/tags/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/certificates/**", "/tags/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

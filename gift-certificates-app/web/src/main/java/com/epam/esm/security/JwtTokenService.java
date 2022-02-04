@@ -1,5 +1,7 @@
 package com.epam.esm.security;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -11,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.Instant;
+import java.util.Date;
 import java.util.Optional;
 
 @Component
@@ -35,15 +39,23 @@ public class JwtTokenService {
         Optional<String> jwtToken = Optional
                 .ofNullable(servletRequest.getHeader(servletRequest.getHeader(JWT_TOKEN_HEADER_NAME)));
         if (jwtToken.isPresent()) {
-            String username = getUsername(jwtToken.get());
-            UserDetails userDetails = userService.loadUserByUsername(username);
-            return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+            String jwtTokenValue = jwtToken.get();
+            if (validateJwtToken(jwtTokenValue)) {
+                String username = getUsername(jwtTokenValue);
+                UserDetails userDetails = userService.loadUserByUsername(username);
+                return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+            }
         }
         return null;
     }
 
     public String getUsername(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+    }
+
+    public boolean validateJwtToken(String token) {
+        Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+        return claimsJws.getBody().getExpiration().after(Date.from(Instant.now()));
     }
 
 }

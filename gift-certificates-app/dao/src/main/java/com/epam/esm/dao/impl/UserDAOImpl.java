@@ -19,7 +19,8 @@ import java.util.Optional;
 public class UserDAOImpl implements UserDAO {
 
     private static final String ID = "id";
-    private static final String SELECT_FROM_USER_WHERE_LOGIN = "SELECT t FROM User t WHERE t.username =:nameParam";
+    private static final String SELECT_FROM_USER_WHERE_USERNAME = "SELECT u FROM User u left join fetch u.authorities" +
+            " WHERE u.username =:nameParam";
     private static final String NAME_PARAM = "nameParam";
 
     @PersistenceContext
@@ -33,7 +34,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public Optional<User> get(String username) {
-        TypedQuery<User> query = entityManager.createQuery(SELECT_FROM_USER_WHERE_LOGIN, User.class);
+        TypedQuery<User> query = entityManager.createQuery(SELECT_FROM_USER_WHERE_USERNAME, User.class);
         query.setParameter(NAME_PARAM, username);
         return query.getResultStream().findAny();
     }

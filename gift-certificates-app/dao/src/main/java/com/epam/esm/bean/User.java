@@ -33,7 +33,7 @@ public class User implements UserDetails {
     @Column(name = "surname")
     private String surname;
 
-    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.LAZY)
     @CollectionTable(
             name = "user_role",
             joinColumns = @JoinColumn(name = "user_id", nullable = false)

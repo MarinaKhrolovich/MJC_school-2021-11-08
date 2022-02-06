@@ -58,7 +58,7 @@ public class OrderDAOImpl implements OrderDAO {
         criteriaQuery.select(root);
         criteriaQuery.orderBy(criteriaBuilder.desc(root.get(ID)));
 
-        Query query = entityManager.createQuery(criteriaQuery)
+        TypedQuery<Order> query = entityManager.createQuery(criteriaQuery)
                 .setFirstResult(page.getOffset()).setMaxResults(page.getLimit());
         return query.getResultList();
     }
@@ -73,7 +73,7 @@ public class OrderDAOImpl implements OrderDAO {
         criteriaQuery.where(criteriaBuilder.equal(root.join(USER).get(ID), id));
         criteriaQuery.orderBy(criteriaBuilder.desc(root.get(ID)));
 
-        Query query = entityManager.createQuery(criteriaQuery)
+        TypedQuery<Order> query = entityManager.createQuery(criteriaQuery)
                 .setFirstResult(page.getOffset()).setMaxResults(page.getLimit());
 
         return query.getResultList();

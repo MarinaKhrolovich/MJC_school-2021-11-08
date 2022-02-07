@@ -1,5 +1,6 @@
 package com.epam.esm.config;
 
+import com.epam.esm.bean.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -31,8 +32,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/certificates/**").permitAll()
+                .antMatchers("/login").permitAll()
+                .antMatchers("/registration").not().fullyAuthenticated()
+                .antMatchers(HttpMethod.GET, "/certificates/**", "/tags/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/users", "/orders").hasAuthority(Role.ADMIN.getAuthority())
                 .anyRequest().authenticated()
                 .and()
                 .logout()

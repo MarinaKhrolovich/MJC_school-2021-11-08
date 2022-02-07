@@ -1,12 +1,16 @@
 package com.epam.esm.dto;
 
+import com.epam.esm.bean.Role;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.Column;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -27,5 +31,7 @@ public class UserDTO extends RepresentationModel<UserDTO> {
 
     @Size(min = 3, max = 45, message = "{message.user.surname.length}")
     private String surname;
+
+    private Set<Role> authorities;
 
 }

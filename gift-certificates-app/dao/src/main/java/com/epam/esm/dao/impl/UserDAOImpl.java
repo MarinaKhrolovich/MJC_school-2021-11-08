@@ -3,11 +3,13 @@ package com.epam.esm.dao.impl;
 import com.epam.esm.bean.Page;
 import com.epam.esm.bean.User;
 import com.epam.esm.dao.UserDAO;
+import com.epam.esm.exception.ResourceAlreadyExistsException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -30,6 +32,16 @@ public class UserDAOImpl implements UserDAO {
     public User get(int id) {
         Optional<User> user = Optional.ofNullable(entityManager.find(User.class, id));
         return user.orElseThrow(() -> new ResourceNotFoundException(id));
+    }
+
+    @Override
+    public User add(User user) {
+        try {
+            entityManager.persist(user);
+        } catch (PersistenceException exception) {
+            throw new ResourceAlreadyExistsException(user.getUsername());
+        }
+        return user;
     }
 
     @Override

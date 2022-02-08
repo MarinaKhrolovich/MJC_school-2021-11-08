@@ -34,14 +34,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/login").permitAll()
+                .antMatchers("/login","logout").permitAll()
                 .antMatchers("/registration").not().fullyAuthenticated()
                 .antMatchers(HttpMethod.GET, "/certificates/**", "/tags/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/users", "/orders").hasAuthority(Role.ADMIN.getAuthority())
-                .anyRequest().authenticated()
-                .and()
-                .logout()
-                .permitAll();
+                .anyRequest().authenticated();
     }
 
     @Override

@@ -22,8 +22,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
-@Qualifier("userServiceImpl")
+@Service("userServiceImpl")
 public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserDAO userDAO;

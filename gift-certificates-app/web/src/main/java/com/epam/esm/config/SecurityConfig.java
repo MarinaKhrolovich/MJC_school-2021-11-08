@@ -1,6 +1,8 @@
 package com.epam.esm.config;
 
 import com.epam.esm.security.JwtTokenFilter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -20,13 +22,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String REGISTRATION_ENDPOINT = "/registration";
     private static final String GET_CERTIFICATES_ENDPOINT = "/certificates/**";
 
+    private final JwtTokenFilter jwtTokenFilter;
+
+    @Autowired
+    public SecurityConfig(JwtTokenFilter jwtTokenFilter) {
+        this.jwtTokenFilter = jwtTokenFilter;
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilterBefore(new JwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers(LOGIN_ENDPOINT, LOGOUT_ENDPOINT).permitAll()
                 .antMatchers(REGISTRATION_ENDPOINT).not().fullyAuthenticated()
@@ -38,6 +47,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public FilterRegistrationBean registration() {
+        FilterRegistrationBean registration = new FilterRegistrationBean(jwtTokenFilter);
+        registration.setEnabled(false);
+        return registration;
     }
 
 }

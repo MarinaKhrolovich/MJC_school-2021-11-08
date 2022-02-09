@@ -5,6 +5,7 @@ import com.epam.esm.security.JwtTokenService;
 import com.epam.esm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.HashMap;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -40,13 +42,17 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public UserDTO login(@Valid @RequestBody UserDTO userDTO) {
+    public ResponseEntity login(@Valid @RequestBody UserDTO userDTO) {
         String username = userDTO.getUsername();
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(username,userDTO.getPassword()));
+                new UsernamePasswordAuthenticationToken(username, userDTO.getPassword()));
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         String token = jwtTokenService.createJwtToken(userDetails);
-        return userDTO;
+
+        HashMap<Object, Object> response = new HashMap<>();
+        response.put("username", username);
+        response.put("token", token);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/registration")

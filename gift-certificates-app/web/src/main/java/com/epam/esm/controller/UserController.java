@@ -29,6 +29,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("authentication.principal.userId == #id || hasAuthority('ADMIN')")
     public UserDTO get(@PathVariable @Min(1) int id) {
         UserDTO userDTO = userService.get(id);
         userDTO.add(linkTo(methodOn(UserController.class).get(id)).withSelfRel());

@@ -6,6 +6,7 @@ import com.epam.esm.dto.PageDTO;
 import com.epam.esm.dto.UserDTO;
 import com.epam.esm.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -49,6 +50,7 @@ public class OrderController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<OrderDTO> get(PageDTO pageDTO) {
         List<OrderDTO> orderDTOS = orderService.get(pageDTO);
         return getOrderDTOS(orderDTOS);

@@ -4,6 +4,7 @@ import com.epam.esm.dto.PageDTO;
 import com.epam.esm.dto.TagDTO;
 import com.epam.esm.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +29,7 @@ public class TagController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public TagDTO addTag(@Valid @RequestBody TagDTO tagDTO) {
         TagDTO addedTag = tagService.add(tagDTO);
         int id = addedTag.getId();
@@ -55,6 +57,7 @@ public class TagController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteTag(@PathVariable @Min(1) int id) {
         tagService.delete(id);
     }

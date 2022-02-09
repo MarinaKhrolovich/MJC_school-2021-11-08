@@ -48,7 +48,7 @@ public class JwtTokenService {
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + expirationSec))
+                .setExpiration(new Date(now.getTime() + expirationSec*1000))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }

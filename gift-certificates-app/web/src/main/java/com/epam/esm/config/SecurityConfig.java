@@ -15,6 +15,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private static final String LOGIN_ENDPOINT = "/login";
+    private static final String LOGOUT_ENDPOINT = "/logout";
+    private static final String REGISTRATION_ENDPOINT = "/registration";
+    private static final String GET_CERTIFICATES_ENDPOINT = "/certificates/**";
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -23,9 +28,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilterBefore(new JwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/login", "/logout").permitAll()
-                .antMatchers("/registration").not().fullyAuthenticated()
-                .antMatchers(HttpMethod.GET, "/certificates/**").permitAll()
+                .antMatchers(LOGIN_ENDPOINT, LOGOUT_ENDPOINT).permitAll()
+                .antMatchers(REGISTRATION_ENDPOINT).not().fullyAuthenticated()
+                .antMatchers(HttpMethod.GET, GET_CERTIFICATES_ENDPOINT).permitAll()
                 .anyRequest().authenticated();
     }
 

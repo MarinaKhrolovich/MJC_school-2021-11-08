@@ -20,6 +20,8 @@ import java.util.Optional;
 @Component
 public class JwtTokenService {
 
+    public static final String AUTHORITIES = "authorities";
+
     @Value("${jwt.token.secret-key:secret}")
     private String secretKey;
 
@@ -43,12 +45,12 @@ public class JwtTokenService {
 
     public String createJwtToken(UserDetails userDetails) {
         Claims claims = Jwts.claims().setSubject(userDetails.getUsername());
-        claims.put("authorities", userDetails.getAuthorities());
+        claims.put(AUTHORITIES, userDetails.getAuthorities());
         Date now = new Date();
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + expirationSec))
+                .setExpiration(new Date(now.getTime() + expirationSec * 1000))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }

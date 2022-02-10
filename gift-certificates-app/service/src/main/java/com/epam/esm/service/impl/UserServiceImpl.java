@@ -28,22 +28,22 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserDAO userDAO;
     private final UserMapper userMapper;
     private final PageMapper pageMapper;
-    private final BCryptPasswordEncoder bCryptPasswordEncoderService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     public UserServiceImpl(UserDAO userDAO, UserMapper userMapper, PageMapper pageMapper,
-                           BCryptPasswordEncoder bCryptPasswordEncoderService) {
+                           BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userDAO = userDAO;
         this.userMapper = userMapper;
         this.pageMapper = pageMapper;
-        this.bCryptPasswordEncoderService = bCryptPasswordEncoderService;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
     @Transactional
     public UserDTO add(UserDTO userDTO) {
         userDTO.setAuthorities(Collections.singleton(Role.USER));
-        userDTO.setPassword(bCryptPasswordEncoderService.encode(userDTO.getPassword()));
+        userDTO.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
         User addedUser = userDAO.add(userMapper.convertToEntity(userDTO));
         return userMapper.convertToDTO(addedUser);
     }

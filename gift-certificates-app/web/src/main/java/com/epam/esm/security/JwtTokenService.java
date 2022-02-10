@@ -61,8 +61,7 @@ public class JwtTokenService {
     }
 
     public Optional<String> getHeader(HttpServletRequest servletRequest) {
-        return Optional
-                .ofNullable(servletRequest.getHeader(tokenHeaderName));
+        return Optional.ofNullable(servletRequest.getHeader(tokenHeaderName));
     }
 
     public String getUsername(String token) {

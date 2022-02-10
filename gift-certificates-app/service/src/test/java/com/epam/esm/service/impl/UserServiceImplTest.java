@@ -5,6 +5,7 @@ import com.epam.esm.bean.User;
 import com.epam.esm.dao.UserDAO;
 import com.epam.esm.dto.PageDTO;
 import com.epam.esm.dto.UserDTO;
+import com.epam.esm.exception.ResourceAlreadyExistsException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.mapper.PageMapperImpl;
 import com.epam.esm.mapper.UserMapperImpl;
@@ -14,9 +15,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -33,6 +37,8 @@ public class UserServiceImplTest {
     private UserMapperImpl userMapper;
     @Mock
     private PageMapperImpl pageMapper;
+    @Mock
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public static final String NEW_USER = "new user";
     public static final String SECOND_USER = "second user";
@@ -75,6 +81,36 @@ public class UserServiceImplTest {
     }
 
     @Test
+    public void add() {
+        when(userDAO.add(userExpected)).thenReturn(userExpected);
+        when(bCryptPasswordEncoder.encode(any(String.class))).thenReturn(NEW_USER);
+        when(userMapper.convertToEntity(userExpectedDTO)).thenReturn(userExpected);
+        when(userMapper.convertToDTO(userExpected)).thenReturn(userExpectedDTO);
+
+        userService.add(userExpectedDTO);
+
+        verify(userDAO).add(userExpected);
+        verify(bCryptPasswordEncoder).encode(any(String.class));
+        verify(userMapper).convertToEntity(userExpectedDTO);
+        verify(userMapper).convertToDTO(userExpected);
+        verifyNoMoreInteractions(userDAO, bCryptPasswordEncoder, userMapper);
+    }
+
+    @Test
+    public void addExists() {
+        doThrow(new ResourceAlreadyExistsException()).when(userDAO).add(userExpected);
+        when(bCryptPasswordEncoder.encode(any(String.class))).thenReturn(NEW_USER);
+        when(userMapper.convertToEntity(userExpectedDTO)).thenReturn(userExpected);
+
+        assertThrows(ResourceAlreadyExistsException.class, () -> userService.add(userExpectedDTO));
+
+        verify(userDAO).add(userExpected);
+        verify(bCryptPasswordEncoder).encode(any(String.class));
+        verify(userMapper).convertToEntity(userExpectedDTO);
+        verifyNoMoreInteractions(userDAO, bCryptPasswordEncoder, userMapper);
+    }
+
+    @Test
     public void getShouldBeNotNull() {
         when(userDAO.get(ID_EXISTS)).thenReturn(userExpected);
         when(userMapper.convertToDTO(userExpected)).thenReturn(userExpectedDTO);
@@ -109,6 +145,20 @@ public class UserServiceImplTest {
         verify(pageMapper).convertToEntity(pageDTO);
         verify(userMapper, times(2)).convertToDTO(any(User.class));
         verifyNoMoreInteractions(userDAO, userMapper, pageMapper);
+    }
+
+    @Test
+    void loadUserByUsername() {
+        when(userDAO.get(NEW_USER)).thenReturn(Optional.ofNullable(userExpected));
+        assertNotNull(userService.loadUserByUsername(NEW_USER));
+        verify(userDAO).get(NEW_USER);
+    }
+
+    @Test
+    void loadUserByUsernameException() {
+        when(userDAO.get(NEW_USER)).thenThrow(UsernameNotFoundException.class);
+        assertThrows(UsernameNotFoundException.class, () -> userService.loadUserByUsername(NEW_USER));
+        verify(userDAO).get(NEW_USER);
     }
 
 }

@@ -27,10 +27,11 @@ public class JwtTokenFilter extends GenericFilterBean {
     public void doFilter(ServletRequest servletRequest,
                          ServletResponse servletResponse,
                          FilterChain filterChain) throws IOException, ServletException {
-        Optional<String> token = jwtTokenService.getHeader((HttpServletRequest) servletRequest);
-        if (token.isPresent()) {
-            SecurityContextHolder.getContext().setAuthentication(
-                    jwtTokenService.getAuthentication(token.get()));
+        Optional<String> optionalToken = jwtTokenService.getHeader((HttpServletRequest) servletRequest);
+        if (optionalToken.isPresent()) {
+            String token = optionalToken.get();
+            jwtTokenService.validateJwtToken(token);
+            SecurityContextHolder.getContext().setAuthentication(jwtTokenService.getAuthentication(token));
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }

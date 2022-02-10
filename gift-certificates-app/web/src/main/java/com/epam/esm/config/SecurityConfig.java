@@ -1,5 +1,6 @@
 package com.epam.esm.config;
 
+import com.epam.esm.security.JwtExceptionHandlerFilter;
 import com.epam.esm.security.JwtTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -23,10 +25,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String GET_CERTIFICATES_ENDPOINT = "/certificates/**";
 
     private final JwtTokenFilter jwtTokenFilter;
+    private final JwtExceptionHandlerFilter jwtExceptionHandlerFilter;
 
     @Autowired
-    public SecurityConfig(JwtTokenFilter jwtTokenFilter) {
+    public SecurityConfig(JwtTokenFilter jwtTokenFilter, JwtExceptionHandlerFilter jwtExceptionHandlerFilter) {
         this.jwtTokenFilter = jwtTokenFilter;
+        this.jwtExceptionHandlerFilter = jwtExceptionHandlerFilter;
     }
 
     @Override
@@ -35,6 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .addFilterBefore(jwtExceptionHandlerFilter, LogoutFilter.class)
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers(LOGIN_ENDPOINT, LOGOUT_ENDPOINT).permitAll()

@@ -1,5 +1,6 @@
 package com.epam.esm.security;
 
+import com.epam.esm.exception.MessageLocal;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import java.time.Instant;
 import java.util.Base64;
 import java.util.Date;
 import java.util.Optional;
@@ -48,19 +48,14 @@ public class JwtTokenService {
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + expirationSec*1000))
+                .setExpiration(new Date(now.getTime() + expirationSec))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
 
     public Authentication getAuthentication(String token) {
-        if (validateJwtToken(token)) {
-            String username = getUsername(token);
-            UserDetails userDetails = userService.loadUserByUsername(username);
-            return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
-        } else {
-            throw new JwtAuthenticationException("The token is expired");
-        }
+        UserDetails userDetails = userService.loadUserByUsername(getUsername(token));
+        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
     public Optional<String> getHeader(HttpServletRequest servletRequest) {
@@ -72,13 +67,15 @@ public class JwtTokenService {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 
-    public boolean validateJwtToken(String token) {
+    public void validateJwtToken(String token) {
         try {
-            Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-            return claimsJws.getBody().getExpiration().after(Date.from(Instant.now()));
+            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+        } catch (ExpiredJwtException e) {
+            throw new JwtAuthenticationException(MessageLocal.MESSAGE_TOKEN_EXPIRED);
         } catch (JwtException | IllegalArgumentException e) {
-            throw new JwtAuthenticationException("Invalid token");
+            throw new JwtAuthenticationException(MessageLocal.MESSAGE_TOKEN_INVALID);
         }
     }
 
 }
+

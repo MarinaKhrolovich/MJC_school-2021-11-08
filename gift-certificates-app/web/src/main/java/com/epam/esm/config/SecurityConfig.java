@@ -20,7 +20,6 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String LOGIN_ENDPOINT = "/login";
-    private static final String LOGOUT_ENDPOINT = "/logout";
     private static final String REGISTRATION_ENDPOINT = "/registration";
     private static final String GET_CERTIFICATES_ENDPOINT = "/certificates/**";
 
@@ -42,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(jwtExceptionHandlerFilter, LogoutFilter.class)
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers(LOGIN_ENDPOINT, LOGOUT_ENDPOINT).permitAll()
+                .antMatchers(LOGIN_ENDPOINT).permitAll()
                 .antMatchers(REGISTRATION_ENDPOINT).not().fullyAuthenticated()
                 .antMatchers(HttpMethod.GET, GET_CERTIFICATES_ENDPOINT).permitAll()
                 .anyRequest().authenticated();

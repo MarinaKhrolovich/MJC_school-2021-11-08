@@ -7,6 +7,7 @@ import com.epam.esm.bean.User;
 import com.epam.esm.dao.OrderDAO;
 import com.epam.esm.dto.OrderDTO;
 import com.epam.esm.dto.PageDTO;
+import com.epam.esm.dto.UserDTO;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.mapper.OrderMapperImpl;
 import com.epam.esm.mapper.PageMapperImpl;
@@ -60,6 +61,10 @@ public class OrderServiceImplTest {
         user.setId(1);
         user.setUsername(LOGIN);
 
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(1);
+        userDTO.setUsername(LOGIN);
+
         Certificate certificate = new Certificate();
         certificate.setId(1);
         certificate.setName(CERTIFICATE_NAME);
@@ -84,9 +89,11 @@ public class OrderServiceImplTest {
         orderList.add(secondOrder);
 
         orderExpectedDTO = new OrderDTO();
+        orderExpectedDTO.setUser(userDTO);
         orderExpectedDTO.setPrice(BigDecimal.valueOf(PRICE_OF_ORDER));
 
         secondOrderDTO = new OrderDTO();
+        secondOrderDTO.setUser(userDTO);
         secondOrderDTO.setPrice(BigDecimal.valueOf(PRICE_OF_ORDER));
 
         orderListDTO = new ArrayList<>();

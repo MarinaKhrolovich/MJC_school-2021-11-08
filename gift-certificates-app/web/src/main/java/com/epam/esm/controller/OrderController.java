@@ -32,6 +32,7 @@ public class OrderController {
     }
 
     @PostMapping
+    @PreAuthorize("#orderDTO.user==null||#orderDTO.user.id.equals(authentication.principal.id)|| hasAuthority('ADMIN')")
     public OrderDTO add(@Valid @RequestBody OrderDTO orderDTO) {
         OrderDTO addedDTO = orderService.add(orderDTO);
         addUserLink(addedDTO.getUser());

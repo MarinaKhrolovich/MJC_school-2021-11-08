@@ -14,7 +14,6 @@ public class OrderDTO extends RepresentationModel<OrderDTO> {
 
     private int id;
 
-    @NotNull(message = "{message.order.user.id.fill}")
     private UserDTO user;
 
     @NotNull(message = "{message.order.certificate.id.fill}")

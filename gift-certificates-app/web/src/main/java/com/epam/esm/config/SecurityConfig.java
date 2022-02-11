@@ -1,5 +1,6 @@
 package com.epam.esm.config;
 
+import com.epam.esm.security.JwtEntryPoint;
 import com.epam.esm.security.JwtExceptionHandlerFilter;
 import com.epam.esm.security.JwtTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +28,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtTokenFilter jwtTokenFilter;
     private final JwtExceptionHandlerFilter jwtExceptionHandlerFilter;
+    private final JwtEntryPoint jwtEntryPoint;
 
     @Autowired
-    public SecurityConfig(JwtTokenFilter jwtTokenFilter, JwtExceptionHandlerFilter jwtExceptionHandlerFilter) {
+    public SecurityConfig(JwtTokenFilter jwtTokenFilter, JwtExceptionHandlerFilter jwtExceptionHandlerFilter,
+                          JwtEntryPoint jwtEntryPoint) {
         this.jwtTokenFilter = jwtTokenFilter;
         this.jwtExceptionHandlerFilter = jwtExceptionHandlerFilter;
+        this.jwtEntryPoint = jwtEntryPoint;
     }
 
     @Override
@@ -46,7 +50,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(LOGIN_ENDPOINT).permitAll()
                 .antMatchers(REGISTRATION_ENDPOINT).not().fullyAuthenticated()
                 .antMatchers(HttpMethod.GET, GET_CERTIFICATES_ENDPOINT).permitAll()
-                .anyRequest().authenticated();
+                .anyRequest().authenticated()
+                .and()
+                .exceptionHandling().authenticationEntryPoint(jwtEntryPoint);
     }
 
     @Override

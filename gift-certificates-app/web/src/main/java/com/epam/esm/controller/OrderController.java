@@ -40,7 +40,7 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    @PostAuthorize("returnObject.user.id.equals(authentication.principal.userId) || hasAuthority('ADMIN')")
+    @PostAuthorize("returnObject.user.id.equals(authentication.principal.id) || hasAuthority('ADMIN')")
     public OrderDTO get(@PathVariable @Min(1) int id) {
         OrderDTO orderDTO = orderService.get(id);
         orderDTO.add(linkTo(methodOn(OrderController.class).get(id)).withSelfRel());
@@ -59,7 +59,7 @@ public class OrderController {
     }
 
     @GetMapping("/users/{id}")
-    @PreAuthorize("authentication.principal.userId == #id || hasAuthority('ADMIN')")
+    @PreAuthorize("authentication.principal.id == #id || hasAuthority('ADMIN')")
     public List<OrderDTO> getUserOrder(@PathVariable @Min(1) int id, PageDTO pageDTO) {
         List<OrderDTO> orderDTOs = orderService.getUserOrders(id, pageDTO);
         return getOrderDTOS(orderDTOs);

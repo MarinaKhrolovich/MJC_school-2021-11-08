@@ -1,10 +1,13 @@
 package com.epam.esm.controller;
 
+import com.epam.esm.bean.User;
 import com.epam.esm.dto.PageDTO;
 import com.epam.esm.dto.UserDTO;
 import com.epam.esm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +32,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("authentication.principal.userId == #id || hasAuthority('ADMIN')")
+    @PreAuthorize("authentication.principal.id == #id || hasAuthority('ADMIN')")
     public UserDTO get(@PathVariable @Min(1) int id) {
         UserDTO userDTO = userService.get(id);
         userDTO.add(linkTo(methodOn(UserController.class).get(id)).withSelfRel());

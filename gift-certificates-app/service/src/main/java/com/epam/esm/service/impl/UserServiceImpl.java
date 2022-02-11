@@ -9,7 +9,6 @@ import com.epam.esm.mapper.PageMapper;
 import com.epam.esm.mapper.UserMapper;
 import com.epam.esm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -62,8 +61,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(@NotNull String username) throws UsernameNotFoundException {
-        return userDAO.get(username).
-                orElseThrow(() -> new UsernameNotFoundException(username));
+        return userMapper.convertToDTO(userDAO.get(username)
+                .orElseThrow(() -> new UsernameNotFoundException(username)));
     }
 
 }

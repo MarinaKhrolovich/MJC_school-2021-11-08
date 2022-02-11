@@ -1,20 +1,19 @@
 package com.epam.esm.dto;
 
 import com.epam.esm.bean.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Column;
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.HashSet;
 import java.util.Set;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserDTO extends RepresentationModel<UserDTO> {
+public class UserDTO extends RepresentationModel<UserDTO> implements UserDetails {
 
     private int id;
 
@@ -33,5 +32,14 @@ public class UserDTO extends RepresentationModel<UserDTO> {
     private String surname;
 
     private Set<Role> authorities;
+
+    @JsonIgnore
+    private boolean accountNonExpired = true;
+    @JsonIgnore
+    private boolean accountNonLocked = true;
+    @JsonIgnore
+    private boolean credentialsNonExpired = true;
+    @JsonIgnore
+    private boolean enabled = true;
 
 }

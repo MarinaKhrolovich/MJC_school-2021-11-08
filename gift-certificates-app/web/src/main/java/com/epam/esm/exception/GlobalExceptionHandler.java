@@ -8,6 +8,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -27,6 +28,7 @@ public class GlobalExceptionHandler {
     public static final String CODE_RESOURCE_NO_LINKS = "004";
     public static final String CODE_UNAUTHORIZED = "005";
     public static final String CODE_FORBIDDEN = "006";
+    public static final String CODE_BAD_CREDENTIALS = "007";
 
     private final static Logger LOG = LogManager.getLogger(GlobalExceptionHandler.class);
     private final MessageSource messageSource;
@@ -94,6 +96,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleException(AccessDeniedException exception, Locale locale) {
         String message = messageSource.getMessage(MessageLocal.MESSAGE_FORBIDDEN, new Object[]{}, locale);
         return handleExceptionTemplate(exception, HttpStatus.FORBIDDEN, message, CODE_FORBIDDEN);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleException(BadCredentialsException exception, Locale locale) {
+        String message = messageSource.getMessage(MessageLocal.MESSAGE_BAD_CREDENTIALS, new Object[]{}, locale);
+        return handleExceptionTemplate(exception, HttpStatus.UNAUTHORIZED, message, CODE_BAD_CREDENTIALS);
     }
 
     private ResponseEntity<ErrorResponse> handleExceptionTemplate(Exception exception, HttpStatus httpStatus,

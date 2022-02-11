@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -24,7 +25,8 @@ public class GlobalExceptionHandler {
     public static final String CODE_RESOURCE_NOT_CHECK = "002";
     public static final String CODE_WRONG_PATH_ID = "003";
     public static final String CODE_RESOURCE_NO_LINKS = "004";
-    public static final String CODE_FORBIDDEN = "005";
+    public static final String CODE_UNAUTHORIZED = "005";
+    public static final String CODE_FORBIDDEN = "006";
 
     private final static Logger LOG = LogManager.getLogger(GlobalExceptionHandler.class);
     private final MessageSource messageSource;
@@ -85,6 +87,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(JwtAuthenticationException.class)
     public ResponseEntity<ErrorResponse> handleException(JwtAuthenticationException exception, Locale locale) {
         String message = messageSource.getMessage(exception.getMessage(), new Object[]{}, locale);
+        return handleExceptionTemplate(exception, HttpStatus.UNAUTHORIZED, message, CODE_UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleException(AccessDeniedException exception, Locale locale) {
+        String message = messageSource.getMessage(MessageLocal.MESSAGE_FORBIDDEN, new Object[]{}, locale);
         return handleExceptionTemplate(exception, HttpStatus.FORBIDDEN, message, CODE_FORBIDDEN);
     }
 

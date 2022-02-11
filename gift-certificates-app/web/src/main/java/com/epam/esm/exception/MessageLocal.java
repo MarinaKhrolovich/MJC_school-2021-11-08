@@ -13,4 +13,6 @@ public interface MessageLocal {
     String MESSAGE_TOKEN_INVALID = "message.token.invalid";
     String MESSAGE_TOKEN_EXPIRED = "message.token.expired";
 
+    String MESSAGE_FORBIDDEN ="message.forbidden";
+
 }

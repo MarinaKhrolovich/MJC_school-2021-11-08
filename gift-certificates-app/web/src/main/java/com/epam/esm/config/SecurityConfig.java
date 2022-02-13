@@ -52,7 +52,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, GET_CERTIFICATES_ENDPOINT).permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .exceptionHandling().authenticationEntryPoint(jwtEntryPoint);
+                .exceptionHandling().authenticationEntryPoint(jwtEntryPoint)
+                .and()
+                .oauth2Login().permitAll();
     }
 
     @Override

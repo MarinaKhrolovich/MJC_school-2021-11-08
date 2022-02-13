@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class Page {
 
     private Integer limit;
+
     private Integer offset;
 
 }

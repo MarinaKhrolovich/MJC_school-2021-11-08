@@ -13,6 +13,7 @@ public class SortDTO {
     public static final String DESC = "DESC";
 
     private String sortBy = ID;
+
     private String orderBy = DESC;
 
 }

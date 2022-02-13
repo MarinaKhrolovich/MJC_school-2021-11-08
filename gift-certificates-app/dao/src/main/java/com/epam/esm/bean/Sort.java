@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class Sort {
 
     private String sortBy;
+
     private String orderBy;
 
 }

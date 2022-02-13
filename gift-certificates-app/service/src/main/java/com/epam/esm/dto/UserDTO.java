@@ -35,10 +35,13 @@ public class UserDTO extends RepresentationModel<UserDTO> implements UserDetails
 
     @JsonIgnore
     private boolean accountNonExpired = true;
+
     @JsonIgnore
     private boolean accountNonLocked = true;
+
     @JsonIgnore
     private boolean credentialsNonExpired = true;
+
     @JsonIgnore
     private boolean enabled = true;
 

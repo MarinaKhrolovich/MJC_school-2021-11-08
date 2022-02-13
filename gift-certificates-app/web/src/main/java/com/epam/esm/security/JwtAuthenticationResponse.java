@@ -8,7 +8,9 @@ import lombok.Data;
 public class JwtAuthenticationResponse {
 
         private int id;
+
         private String username;
+
         private String token;
 
 }

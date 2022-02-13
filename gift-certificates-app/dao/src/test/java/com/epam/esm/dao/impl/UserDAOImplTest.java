@@ -14,6 +14,8 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(classes = {ConfigDAO.class})
@@ -25,9 +27,10 @@ class UserDAOImplTest {
 
     public static final int ID_EXISTS = 1;
     public static final int ID_NOT_EXISTS = 100;
+    public static final int EXPECTED_SIZE = 2;
     public static final String USER_EXISTS = "admin";
     public static final String NEW_USER = "new user";
-    public static final int EXPECTED_SIZE = 2;
+    public static final String USERNAME_EXISTS = "admin";
 
     @Autowired
     private UserDAO userDAO;
@@ -54,8 +57,21 @@ class UserDAOImplTest {
     }
 
     @Test
+    @Transactional
     public void addExists() {
         assertThrows(ResourceAlreadyExistsException.class, () -> userDAO.add(userExists));
+    }
+
+    @Test
+    @Transactional
+    public void getByUsernameShouldBeNotNull() {
+        assertTrue(userDAO.get(USERNAME_EXISTS).isPresent());
+    }
+
+    @Test
+    @Transactional
+    public void getByUsernameShouldBeNull() {
+        assertTrue(userDAO.get(NEW_USER).isEmpty());
     }
 
     @Test

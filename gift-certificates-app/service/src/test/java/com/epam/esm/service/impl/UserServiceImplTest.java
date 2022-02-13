@@ -150,8 +150,13 @@ public class UserServiceImplTest {
     @Test
     void loadUserByUsername() {
         when(userDAO.get(NEW_USER)).thenReturn(Optional.ofNullable(userExpected));
+        when(userMapper.convertToDTO(userExpected)).thenReturn(userExpectedDTO);
+
         assertNotNull(userService.loadUserByUsername(NEW_USER));
+
         verify(userDAO).get(NEW_USER);
+        verify(userMapper).convertToDTO(any(User.class));
+        verifyNoMoreInteractions(userDAO, userMapper);
     }
 
     @Test

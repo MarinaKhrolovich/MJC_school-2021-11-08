@@ -52,9 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, GET_CERTIFICATES_ENDPOINT).permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .exceptionHandling().authenticationEntryPoint(jwtEntryPoint)
-                .and()
-                .oauth2Login().permitAll();
+                .exceptionHandling().authenticationEntryPoint(jwtEntryPoint);
     }
 
     @Override
@@ -64,8 +62,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public FilterRegistrationBean registration(JwtTokenFilter jwtTokenFilter) {
-        FilterRegistrationBean registration = new FilterRegistrationBean(jwtTokenFilter);
+    public FilterRegistrationBean<JwtTokenFilter> registration() {
+        FilterRegistrationBean<JwtTokenFilter> registration = new FilterRegistrationBean<>(jwtTokenFilter);
         registration.setEnabled(false);
         return registration;
     }

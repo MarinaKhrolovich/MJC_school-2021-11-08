@@ -4,6 +4,7 @@ import com.epam.esm.bean.Page;
 import com.epam.esm.bean.User;
 import com.epam.esm.config.ConfigDAO;
 import com.epam.esm.dao.UserDAO;
+import com.epam.esm.exception.ResourceAlreadyExistsException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,16 +31,31 @@ class UserDAOImplTest {
 
     @Autowired
     private UserDAO userDAO;
+    private static User userExpected;
+    private static User userExists;
 
     @BeforeAll
     public static void initUser() {
-        User userExpected = new User();
+        userExpected = new User();
         userExpected.setUsername(NEW_USER);
         userExpected.setPassword(NEW_USER);
 
-        User userExists = new User();
+        userExists = new User();
         userExists.setUsername(USER_EXISTS);
         userExpected.setPassword(NEW_USER);
+    }
+
+    @Test
+    @Transactional
+    void add() {
+        userDAO.add(userExpected);
+        User userActual = userDAO.get(userExpected.getId());
+        assertEquals(userExpected, userActual);
+    }
+
+    @Test
+    public void addExists() {
+        assertThrows(ResourceAlreadyExistsException.class, () -> userDAO.add(userExists));
     }
 
     @Test

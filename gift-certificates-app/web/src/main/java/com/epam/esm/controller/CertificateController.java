@@ -4,6 +4,7 @@ import com.epam.esm.dto.*;
 import com.epam.esm.mapper.CertificateMapper;
 import com.epam.esm.service.CertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +32,7 @@ public class CertificateController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public CertificateDTO addCertificate(@Valid @RequestBody CertificateDTO certificate) {
         CertificateDTO addedDTO = certificateService.add(certificate);
         int id = addedDTO.getId();
@@ -61,6 +63,7 @@ public class CertificateController {
     }
 
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public CertificateUpdateDTO patchUpdateCertificate(@PathVariable @Min(1) int id,
                                                        @Valid @RequestBody CertificateUpdateDTO certificate) {
         CertificateUpdateDTO updateDTO = certificateService.update(id, certificate);
@@ -70,6 +73,7 @@ public class CertificateController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public CertificateDTO putUpdateCertificate(@PathVariable @Min(1) int id,
                                                @Valid @RequestBody CertificateDTO certificateDTO) {
         CertificateUpdateDTO certificateUpdateDTO =
@@ -81,6 +85,7 @@ public class CertificateController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteCertificate(@PathVariable @Min(1) int id) {
         certificateService.delete(id);
     }

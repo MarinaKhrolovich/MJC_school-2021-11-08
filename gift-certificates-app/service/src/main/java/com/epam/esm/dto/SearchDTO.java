@@ -13,7 +13,9 @@ import java.util.List;
 public class SearchDTO {
 
     private List<String> tagName = new ArrayList<>();
+
     private String name;
+
     private String description;
 
 }

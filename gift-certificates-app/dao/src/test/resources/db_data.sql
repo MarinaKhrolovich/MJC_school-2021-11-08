@@ -2,9 +2,9 @@ INSERT INTO tag (id,name)
 VALUES (1,'sport'),
        (2,'massage');
 
-INSERT INTO users (id,login)
-VALUES (1,'admin'),
-       (2,'guest');
+INSERT INTO users (id,username,password)
+VALUES (1,'admin','12345678'),
+       (2,'guest','87654321');
 
 INSERT INTO certificate (id, name, description, price, duration, create_date, last_update_date)
 VALUES (1, 'sport','sport',10.0,30,'2021-12-23','2021-12-23'),

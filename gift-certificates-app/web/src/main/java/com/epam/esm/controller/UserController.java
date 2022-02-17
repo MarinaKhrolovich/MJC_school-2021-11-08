@@ -1,13 +1,19 @@
 package com.epam.esm.controller;
 
+import com.epam.esm.bean.User;
 import com.epam.esm.dto.PageDTO;
 import com.epam.esm.dto.UserDTO;
 import com.epam.esm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.List;
 
@@ -25,15 +31,8 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping
-    public UserDTO add(@Valid @RequestBody UserDTO userDTO) {
-        UserDTO addedDTO = userService.add(userDTO);
-        int id = addedDTO.getId();
-        addedDTO.add(linkTo(methodOn(UserController.class).get(id)).withSelfRel());
-        return addedDTO;
-    }
-
     @GetMapping("/{id}")
+    @PreAuthorize("authentication.principal.id == #id || hasAuthority('ADMIN')")
     public UserDTO get(@PathVariable @Min(1) int id) {
         UserDTO userDTO = userService.get(id);
         userDTO.add(linkTo(methodOn(UserController.class).get(id)).withSelfRel());
@@ -41,6 +40,7 @@ public class UserController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<UserDTO> get(PageDTO pageDTO) {
         List<UserDTO> userDTOS = userService.get(pageDTO);
         if (!CollectionUtils.isEmpty(userDTOS)) {

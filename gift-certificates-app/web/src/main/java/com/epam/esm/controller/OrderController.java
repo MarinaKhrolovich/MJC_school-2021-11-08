@@ -6,6 +6,8 @@ import com.epam.esm.dto.PageDTO;
 import com.epam.esm.dto.UserDTO;
 import com.epam.esm.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +32,7 @@ public class OrderController {
     }
 
     @PostMapping
+    @PreAuthorize("#orderDTO.user==null||#orderDTO.user.id.equals(authentication.principal.id)|| hasAuthority('ADMIN')")
     public OrderDTO add(@Valid @RequestBody OrderDTO orderDTO) {
         OrderDTO addedDTO = orderService.add(orderDTO);
         addUserLink(addedDTO.getUser());
@@ -38,6 +41,7 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
+    @PostAuthorize("returnObject.user.id.equals(authentication.principal.id) || hasAuthority('ADMIN')")
     public OrderDTO get(@PathVariable @Min(1) int id) {
         OrderDTO orderDTO = orderService.get(id);
         orderDTO.add(linkTo(methodOn(OrderController.class).get(id)).withSelfRel());
@@ -49,12 +53,14 @@ public class OrderController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<OrderDTO> get(PageDTO pageDTO) {
         List<OrderDTO> orderDTOS = orderService.get(pageDTO);
         return getOrderDTOS(orderDTOS);
     }
 
     @GetMapping("/users/{id}")
+    @PreAuthorize("authentication.principal.id == #id || hasAuthority('ADMIN')")
     public List<OrderDTO> getUserOrder(@PathVariable @Min(1) int id, PageDTO pageDTO) {
         List<OrderDTO> orderDTOs = orderService.getUserOrders(id, pageDTO);
         return getOrderDTOS(orderDTOs);

@@ -79,8 +79,7 @@ public class TagDAOImplTest {
     @Test
     @Transactional
     public void getByNameShouldBeNull() {
-        Optional<Tag> optionalTag = tagDAO.get(TAG_NOT_EXISTS);
-        assertFalse(optionalTag.isPresent());
+        assertFalse(tagDAO.get(TAG_NOT_EXISTS).isPresent());
     }
 
     @Test

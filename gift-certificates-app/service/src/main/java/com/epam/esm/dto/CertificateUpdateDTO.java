@@ -18,6 +18,7 @@ import java.util.Set;
 public class CertificateUpdateDTO extends RepresentationModel<CertificateUpdateDTO> {
 
     private static final String NOT_BLANK_FIELD = "^(?!\\s*$).+";
+
     private int id;
 
     @Pattern(regexp = NOT_BLANK_FIELD, message = "{message.certificate.name.fill}")

@@ -25,11 +25,11 @@ public class CertificateDTO extends RepresentationModel<CertificateDTO> {
     @Size(min = 3, max = 1000, message = "{message.certificate.description.length}")
     private String description;
 
-    @NotNull(message = "{message.certificate.price.fill")
+    @NotNull(message = "{message.certificate.price.fill}")
     @DecimalMin(value = "0.01", message = "{message.certificate.price.value}")
     private BigDecimal price;
 
-    @NotNull(message = "{message.certificate.duration.fill")
+    @NotNull(message = "{message.certificate.duration.fill}")
     @Min(value = 1, message = "{message.certificate.duration.value}")
     private Integer duration;
 

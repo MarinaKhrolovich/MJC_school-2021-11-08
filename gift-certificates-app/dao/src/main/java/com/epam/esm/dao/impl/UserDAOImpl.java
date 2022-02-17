@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -21,24 +21,34 @@ import java.util.Optional;
 public class UserDAOImpl implements UserDAO {
 
     private static final String ID = "id";
+    private static final String SELECT_FROM_USER_WHERE_USERNAME = "SELECT u FROM User u left join fetch u.authorities" +
+            " WHERE u.username =:nameParam";
+    private static final String NAME_PARAM = "nameParam";
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Override
+    public User get(int id) {
+        Optional<User> user = Optional.ofNullable(entityManager.find(User.class, id));
+        return user.orElseThrow(() -> new ResourceNotFoundException(id));
+    }
 
     @Override
     public User add(User user) {
         try {
             entityManager.persist(user);
         } catch (PersistenceException exception) {
-            throw new ResourceAlreadyExistsException(user.getLogin());
+            throw new ResourceAlreadyExistsException(user.getUsername());
         }
         return user;
     }
 
     @Override
-    public User get(int id) {
-        Optional<User> user = Optional.ofNullable(entityManager.find(User.class, id));
-        return user.orElseThrow(() -> new ResourceNotFoundException(id));
+    public Optional<User> get(String username) {
+        TypedQuery<User> query = entityManager.createQuery(SELECT_FROM_USER_WHERE_USERNAME, User.class);
+        query.setParameter(NAME_PARAM, username);
+        return query.getResultStream().findAny();
     }
 
     @Override
@@ -50,7 +60,7 @@ public class UserDAOImpl implements UserDAO {
         criteriaQuery.select(root);
         criteriaQuery.orderBy(criteriaBuilder.desc(root.get(ID)));
 
-        Query query = entityManager.createQuery(criteriaQuery)
+        TypedQuery<User> query = entityManager.createQuery(criteriaQuery)
                 .setFirstResult(page.getOffset()).setMaxResults(page.getLimit());
         return query.getResultList();
     }

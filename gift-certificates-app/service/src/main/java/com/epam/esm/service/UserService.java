@@ -14,6 +14,7 @@ public interface UserService {
      */
     UserDTO add(UserDTO user);
 
+
     /**
      * Get User from the database according to provided id
      *

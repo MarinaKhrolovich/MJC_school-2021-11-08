@@ -32,7 +32,7 @@ public class OrderMapperTest {
     void convertToEntity() {
         UserDTO userDTO = new UserDTO();
         userDTO.setId(ID_USER);
-        userDTO.setLogin(USER);
+        userDTO.setUsername(USER);
 
         CertificateDTO certificateDTO = new CertificateDTO();
         certificateDTO.setName(NEW_CERTIFICATE);
@@ -50,7 +50,7 @@ public class OrderMapperTest {
 
         assertEquals(orderDTO.getId(), actualOrder.getId());
         assertEquals(orderDTO.getUser().getId(), actualOrder.getUser().getId());
-        assertEquals(orderDTO.getUser().getLogin(), actualOrder.getUser().getLogin());
+        assertEquals(orderDTO.getUser().getUsername(), actualOrder.getUser().getUsername());
 
         CertificateDTO firstCertificateDTO = orderDTO.getCertificates().get(0);
         Certificate firstCertificate = actualOrder.getCertificates().get(0);
@@ -64,7 +64,7 @@ public class OrderMapperTest {
     void convertToDTO() {
         User user = new User();
         user.setId(ID_USER);
-        user.setLogin(USER);
+        user.setUsername(USER);
 
         Certificate certificate = new Certificate();
         certificate.setName(NEW_CERTIFICATE);
@@ -83,7 +83,7 @@ public class OrderMapperTest {
         assertEquals(order.getId(), actualOrder.getId());
         assertEquals(order.getId(), actualOrder.getId());
         assertEquals(order.getUser().getId(), actualOrder.getUser().getId());
-        assertEquals(order.getUser().getLogin(), actualOrder.getUser().getLogin());
+        assertEquals(order.getUser().getUsername(), actualOrder.getUser().getUsername());
 
         Certificate firstCertificate = order.getCertificates().get(0);
         CertificateDTO firstCertificateDTO = actualOrder.getCertificates().get(0);

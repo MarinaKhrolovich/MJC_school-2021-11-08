@@ -4,10 +4,13 @@ import com.epam.esm.bean.Order;
 import com.epam.esm.dao.OrderDAO;
 import com.epam.esm.dto.OrderDTO;
 import com.epam.esm.dto.PageDTO;
+import com.epam.esm.dto.UserDTO;
 import com.epam.esm.mapper.OrderMapper;
 import com.epam.esm.mapper.PageMapper;
 import com.epam.esm.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +34,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderDTO add(OrderDTO orderDTO) {
+        if (orderDTO.getUser() == null) {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            UserDTO userDTO = (UserDTO) authentication.getPrincipal();
+            orderDTO.setUser(userDTO);
+        }
         Order addedOrder = orderDAO.add(orderMapper.convertToEntity(orderDTO));
         return orderMapper.convertToDTO(addedOrder);
     }
